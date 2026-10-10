@@ -42,6 +42,11 @@ assert(pageContent.includes("SolarSystemBackground") && !pageContent.includes("G
 assert(!pageContent.includes("isPaletteOpen") && !pageContent.includes("isTerminalOpen"), "page.tsx contains zero palette state");
 assert(!pageContent.includes("Cmd+K") && !pageContent.includes("Ctrl+K"), "page.tsx contains zero Cmd+K / Ctrl+K keyboard listeners");
 
+const solarContent = fs.readFileSync(path.join(process.cwd(), "src/components/SolarSystemBackground.tsx"), "utf-8");
+assert(solarContent.includes("solarSystemGroup.rotation.x = 0.58") && solarContent.includes("solarSystemGroup.rotation.z = -0.32"), "Solar system uses isometric 3D rotation angles");
+assert(solarContent.includes("opacity-90") && solarContent.includes("bg-[#05060A]/35"), "Solar system uses calibrated visibility and depth vignette");
+assert(solarContent.includes("PointLight(\"#FFF8E7\", 4.5"), "Central Sun features radiant 4.5 intensity starlight illumination");
+
 // ----------------------------------------------------
 // 2. Profile Avatar, Hero Tag Purge & Flashing Dots
 // ----------------------------------------------------

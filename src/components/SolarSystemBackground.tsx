@@ -33,15 +33,15 @@ export function SolarSystemBackground() {
     // Scene & Camera setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      50,
+      48,
       window.innerWidth / window.innerHeight,
       0.1,
       250
     );
 
-    // Elevated overview looking down at the solar system plane
-    camera.position.set(0, isMobile ? 28 : 22, isMobile ? 36 : 30);
-    camera.lookAt(0, -1, 0);
+    // Elevated camera positioned for isometric perspective looking at the center
+    camera.position.set(0, isMobile ? 18 : 16, isMobile ? 36 : 32);
+    camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -61,29 +61,34 @@ export function SolarSystemBackground() {
       return obj;
     };
 
-    // Master Group for smooth solar plane orientation
+    // Master Group configured with classic isometric tilt and depth
     const solarSystemGroup = new THREE.Group();
-    solarSystemGroup.rotation.x = 0.18; // Slight forward tilt for perspective depth
+    solarSystemGroup.rotation.x = 0.58; // Incline orbital plane ~33 degrees
+    solarSystemGroup.rotation.z = -0.32; // Diagonal isometric orientation
     scene.add(solarSystemGroup);
 
-    // 1. Central Star: The Sun
-    const sunRadius = isMobile ? 1.8 : 2.2;
-    const sunGeometry = track(new THREE.SphereGeometry(sunRadius, isMobile ? 16 : 32, isMobile ? 16 : 32));
+    // 1. Radiant Central Star: The Sun in the middle
+    const sunRadius = isMobile ? 2.0 : 2.6;
+    const sunGeometry = track(
+      new THREE.SphereGeometry(sunRadius, isMobile ? 20 : 32, isMobile ? 20 : 32)
+    );
     const sunMaterial = track(
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color("#FFAA00"),
+        color: new THREE.Color("#FFBA08"),
       })
     );
     const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
     solarSystemGroup.add(sunMesh);
 
-    // Sun Corona Glow (Soft Additive Outer Shell)
-    const coronaGeometry = track(new THREE.SphereGeometry(sunRadius * 1.35, isMobile ? 12 : 24, isMobile ? 12 : 24));
+    // Sun Corona Glow (Pulsating Additive Outer Aura)
+    const coronaGeometry = track(
+      new THREE.SphereGeometry(sunRadius * 1.45, isMobile ? 16 : 28, isMobile ? 16 : 28)
+    );
     const coronaMaterial = track(
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color("#FF8800"),
+        color: new THREE.Color("#FF6B00"),
         transparent: true,
-        opacity: 0.28,
+        opacity: 0.45,
         blending: THREE.AdditiveBlending,
         side: THREE.BackSide,
       })
@@ -91,33 +96,60 @@ export function SolarSystemBackground() {
     const coronaMesh = new THREE.Mesh(coronaGeometry, coronaMaterial);
     solarSystemGroup.add(coronaMesh);
 
-    // Solar Lighting: PointLight at the Sun illuminates all planetary surfaces
-    const sunLight = new THREE.PointLight("#FFF5E0", 3.2, 120, 0.4);
+    // Outer Solar Flare Halo Sprite
+    const haloCanvas = document.createElement("canvas");
+    haloCanvas.width = 64;
+    haloCanvas.height = 64;
+    const haloCtx = haloCanvas.getContext("2d");
+    if (haloCtx) {
+      const gradient = haloCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      gradient.addColorStop(0, "rgba(255, 230, 150, 0.8)");
+      gradient.addColorStop(0.3, "rgba(255, 140, 0, 0.35)");
+      gradient.addColorStop(0.7, "rgba(255, 80, 0, 0.1)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+      haloCtx.fillStyle = gradient;
+      haloCtx.fillRect(0, 0, 64, 64);
+    }
+    const haloTexture = track(new THREE.CanvasTexture(haloCanvas));
+    const haloMat = track(
+      new THREE.SpriteMaterial({
+        map: haloTexture,
+        transparent: true,
+        opacity: 0.65,
+        blending: THREE.AdditiveBlending,
+      })
+    );
+    const haloSprite = new THREE.Sprite(haloMat);
+    haloSprite.scale.set(sunRadius * 4.2, sunRadius * 4.2, 1);
+    solarSystemGroup.add(haloSprite);
+
+    // Solar Illumination: Radiant PointLight illuminating all orbiting planets
+    const sunLight = new THREE.PointLight("#FFF8E7", 4.5, 150, 0.35);
     solarSystemGroup.add(sunLight);
 
-    const ambientLight = new THREE.AmbientLight("#1C233D", 0.45);
+    const ambientLight = new THREE.AmbientLight("#1A2238", 0.55);
     scene.add(ambientLight);
 
-    // 2. Canonical Planetary Definitions
+    // 2. Canonical Planetary Definitions with Isometric Depth
     const planetsData: PlanetDef[] = [
-      { name: "Mercury", radius: 0.26, distance: 4.6, speed: 1.40, color: "#A8A29E" },
-      { name: "Venus", radius: 0.42, distance: 6.6, speed: 1.05, color: "#E0B368" },
-      { name: "Earth", radius: 0.46, distance: 9.0, speed: 0.85, color: "#0284C7", hasMoon: true },
-      { name: "Mars", radius: 0.32, distance: 11.5, speed: 0.65, color: "#E11D48" },
-      { name: "Jupiter", radius: 1.10, distance: 15.2, speed: 0.42, color: "#D97706" },
+      { name: "Mercury", radius: 0.32, distance: 4.8, speed: 1.35, color: "#A8A29E" },
+      { name: "Venus", radius: 0.50, distance: 7.0, speed: 1.05, color: "#E0B368" },
+      { name: "Earth", radius: 0.55, distance: 9.6, speed: 0.85, color: "#0284C7", hasMoon: true },
+      { name: "Mars", radius: 0.40, distance: 12.2, speed: 0.65, color: "#E11D48" },
+      { name: "Jupiter", radius: 1.25, distance: 16.0, speed: 0.42, color: "#D97706" },
       {
         name: "Saturn",
-        radius: 0.90,
-        distance: 19.4,
+        radius: 1.05,
+        distance: 20.4,
         speed: 0.32,
         color: "#FBBF24",
         hasRing: true,
-        ringInner: 1.25,
-        ringOuter: 2.20,
+        ringInner: 1.45,
+        ringOuter: 2.65,
         ringColor: "#FDE68A",
       },
-      { name: "Uranus", radius: 0.62, distance: 23.4, speed: 0.22, color: "#06B6D4" },
-      { name: "Neptune", radius: 0.58, distance: 27.2, speed: 0.16, color: "#3B82F6" },
+      { name: "Uranus", radius: 0.75, distance: 24.6, speed: 0.22, color: "#06B6D4" },
+      { name: "Neptune", radius: 0.70, distance: 28.6, speed: 0.16, color: "#3B82F6" },
     ];
 
     interface PlanetRuntime {
@@ -129,12 +161,12 @@ export function SolarSystemBackground() {
     }
 
     const planetRuntimes: PlanetRuntime[] = [];
-    const sphereSegments = isMobile ? 12 : 24;
+    const sphereSegments = isMobile ? 16 : 28;
 
     planetsData.forEach((pData, index) => {
-      // Orbit Path Line (Holographic Cyberpunk Trajectory Ring)
+      // Holographic Orbit Trajectory Ring (Noticeable glowing isometric ellipses)
       const orbitPoints: THREE.Vector3[] = [];
-      const segments = 64;
+      const segments = 96;
       for (let i = 0; i <= segments; i++) {
         const theta = (i / segments) * Math.PI * 2;
         orbitPoints.push(
@@ -146,30 +178,30 @@ export function SolarSystemBackground() {
         new THREE.LineBasicMaterial({
           color: index % 2 === 0 ? "#00F0FF" : "#38BDF8",
           transparent: true,
-          opacity: 0.18,
+          opacity: 0.38,
           blending: THREE.AdditiveBlending,
         })
       );
       const orbitLine = new THREE.LineLoop(orbitGeom, orbitMat);
       solarSystemGroup.add(orbitLine);
 
-      // Planet Group for individual orbital rotation
+      // Planet Group for individual orbital revolution
       const planetGroup = new THREE.Group();
       solarSystemGroup.add(planetGroup);
 
-      // Planet Mesh
+      // Planet Mesh with standard lighting and material depth
       const pGeom = track(new THREE.SphereGeometry(pData.radius, sphereSegments, sphereSegments));
       const pMat = track(
         new THREE.MeshStandardMaterial({
           color: new THREE.Color(pData.color),
-          roughness: 0.7,
+          roughness: 0.6,
           metalness: 0.1,
         })
       );
       const pMesh = new THREE.Mesh(pGeom, pMat);
 
-      // Initial distributed position along orbit
-      const initialAngle = (index / planetsData.length) * Math.PI * 2 + index * 0.7;
+      // Distributed initial orbital angle
+      const initialAngle = (index / planetsData.length) * Math.PI * 2 + index * 0.8;
       pMesh.position.set(
         Math.cos(initialAngle) * pData.distance,
         0,
@@ -177,38 +209,38 @@ export function SolarSystemBackground() {
       );
       planetGroup.add(pMesh);
 
-      // Saturn Rings
+      // Saturn Rings with 3D axial tilt
       if (pData.hasRing && pData.ringInner && pData.ringOuter) {
         const ringGeom = track(
-          new THREE.RingGeometry(pData.ringInner, pData.ringOuter, isMobile ? 32 : 64)
+          new THREE.RingGeometry(pData.ringInner, pData.ringOuter, isMobile ? 40 : 64)
         );
         const ringMat = track(
           new THREE.MeshStandardMaterial({
             color: new THREE.Color(pData.ringColor || "#FDE68A"),
             side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.65,
-            roughness: 0.8,
+            opacity: 0.75,
+            roughness: 0.7,
           })
         );
         const ringMesh = new THREE.Mesh(ringGeom, ringMat);
-        ringMesh.rotation.x = Math.PI * 0.45; // Realistic tilted planetary ring
-        ringMesh.rotation.y = Math.PI * 0.10;
+        ringMesh.rotation.x = Math.PI * 0.45;
+        ringMesh.rotation.y = Math.PI * 0.12;
         pMesh.add(ringMesh);
       }
 
       // Earth's Moon
       let moonMesh: THREE.Mesh | undefined;
       if (pData.hasMoon) {
-        const moonGeom = track(new THREE.SphereGeometry(0.12, 10, 10));
+        const moonGeom = track(new THREE.SphereGeometry(0.16, 12, 12));
         const moonMat = track(
           new THREE.MeshStandardMaterial({
             color: new THREE.Color("#CBD5E1"),
-            roughness: 0.9,
+            roughness: 0.8,
           })
         );
         moonMesh = new THREE.Mesh(moonGeom, moonMat);
-        moonMesh.position.set(0.85, 0.1, 0);
+        moonMesh.position.set(1.0, 0.15, 0);
         pMesh.add(moonMesh);
       }
 
@@ -221,8 +253,8 @@ export function SolarSystemBackground() {
       });
     });
 
-    // 3. Ambient Distant Starfield (Calm, twinkling cosmic stars)
-    const starCount = isMobile ? 600 : 1400;
+    // 3. Ambient Distant Cosmic Starfield
+    const starCount = isMobile ? 800 : 1600;
     const starGeom = track(new THREE.BufferGeometry());
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
@@ -233,12 +265,12 @@ export function SolarSystemBackground() {
 
     for (let i = 0; i < starCount; i++) {
       const i3 = i * 3;
-      const radiusDist = 50 + Math.random() * 90;
+      const radiusDist = 55 + Math.random() * 95;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
 
       starPositions[i3] = radiusDist * Math.sin(phi) * Math.cos(theta);
-      starPositions[i3 + 1] = radiusDist * Math.cos(phi) * 0.7; // Flatter cosmic disk
+      starPositions[i3 + 1] = radiusDist * Math.cos(phi) * 0.65;
       starPositions[i3 + 2] = radiusDist * Math.sin(phi) * Math.sin(theta);
 
       const colorPick = Math.random();
@@ -259,11 +291,11 @@ export function SolarSystemBackground() {
 
     const starMat = track(
       new THREE.PointsMaterial({
-        size: isMobile ? 1.5 : 2.0,
+        size: isMobile ? 1.6 : 2.2,
         sizeAttenuation: true,
         vertexColors: true,
         transparent: true,
-        opacity: 0.35,
+        opacity: 0.45,
         depthWrite: false,
       })
     );
@@ -287,7 +319,7 @@ export function SolarSystemBackground() {
     };
     document.addEventListener("visibilitychange", handleVisibility);
 
-    // Animation Loop: Steady, calm orbits with zero parallax jumps
+    // Animation Loop: Isometric planetary revolution with authentic 3D depth
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -299,35 +331,38 @@ export function SolarSystemBackground() {
       const elapsed = clock.getElapsedTime();
 
       if (!prefersReducedMotion) {
-        // Calm rotation of the central star and corona
-        sunMesh.rotation.y += delta * 0.15;
-        coronaMesh.rotation.y -= delta * 0.08;
+        // Central Sun axial rotation and corona breathing pulse
+        sunMesh.rotation.y += delta * 0.18;
+        coronaMesh.rotation.y -= delta * 0.10;
 
-        // Subtle corona breathing pulse
-        const pulse = 1 + Math.sin(elapsed * 1.5) * 0.03;
+        const pulse = 1 + Math.sin(elapsed * 1.8) * 0.04;
         coronaMesh.scale.set(pulse, pulse, pulse);
+        haloSprite.scale.set(
+          sunRadius * 4.2 * (1 + Math.sin(elapsed * 1.2) * 0.03),
+          sunRadius * 4.2 * (1 + Math.sin(elapsed * 1.2) * 0.03),
+          1
+        );
 
-        // Update each planet's orbital position and axial spin
+        // Planetary orbital revolution along isometric track
         planetRuntimes.forEach((p) => {
-          // Orbital advance: speed factor tuned for smooth, pleasant motion
-          p.currentAngle += delta * p.data.speed * 0.22;
+          p.currentAngle += delta * p.data.speed * 0.24;
           p.mesh.position.x = Math.cos(p.currentAngle) * p.data.distance;
           p.mesh.position.z = Math.sin(p.currentAngle) * p.data.distance;
 
           // Planetary axial spin
-          p.mesh.rotation.y += delta * 0.6;
+          p.mesh.rotation.y += delta * 0.65;
 
-          // Moon orbit around Earth
+          // Moon revolution around Earth
           if (p.moonMesh) {
-            const moonAngle = elapsed * 2.2;
-            p.moonMesh.position.x = Math.cos(moonAngle) * 0.85;
-            p.moonMesh.position.z = Math.sin(moonAngle) * 0.85;
+            const moonAngle = elapsed * 2.5;
+            p.moonMesh.position.x = Math.cos(moonAngle) * 1.0;
+            p.moonMesh.position.z = Math.sin(moonAngle) * 1.0;
           }
         });
 
-        // Gentle, calm galactic drift of the entire system
-        solarSystemGroup.rotation.y = elapsed * 0.008;
-        starField.rotation.y = elapsed * 0.002;
+        // Gentle cosmic drift
+        solarSystemGroup.rotation.y = elapsed * 0.006;
+        starField.rotation.y = elapsed * 0.0015;
       }
 
       renderer.render(scene, camera);
@@ -355,11 +390,11 @@ export function SolarSystemBackground() {
       aria-hidden="true"
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden no-print"
     >
-      {/* 3D Solar System Canvas (dimmed for high text contrast) */}
-      <div ref={containerRef} className="absolute inset-0 opacity-45" />
+      {/* 3D Isometric Solar System Canvas (High visibility 90% opacity) */}
+      <div ref={containerRef} className="absolute inset-0 opacity-90" />
 
-      {/* Deep Space Dark Scrim guaranteeing 100% pure contrast for foreground text */}
-      <div className="absolute inset-0 bg-[#05060A]/80 pointer-events-none" />
+      {/* Subtle depth vignette wash preserving text contrast without hiding 3D space */}
+      <div className="absolute inset-0 bg-[#05060A]/35 pointer-events-none" />
     </div>
   );
 }

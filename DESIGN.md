@@ -33,12 +33,13 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 - **Profile Avatar**: Framed profile portrait with cyber cyan rim glow (purged of flashing dots or redundant tags).
 - **Semi-Fullscreen Modal**: Expansive `max-w-6xl` responsive dialog with two-column space utilization and dedicated frosted cards for Problem, Solution, and Impact.
 
-## Background Simulation: 3D Solar System
-1. **Central Star (The Sun)**: Glowing emissive core (`#FFAA00`) with soft additive corona aura and point light illumination.
-2. **8 Orbiting Planets**: Mercury, Venus, Earth (with orbiting Moon), Mars, Jupiter, Saturn (with tilted rings), Uranus, and Neptune orbiting at Keplerian-proportional speeds.
-3. **Holographic Trajectory Rails**: Delicate cyan and starlight orbital rings showing planetary flight paths.
-4. **Calm Steady Orbit**: Stable elevated camera coordinates with calm planetary rotation and zero parallax displacement, keeping reading comfortable.
-5. **Distant Starfield**: 1,400 ambient stars providing celestial depth.
+## Background Simulation: Isometric 3D Solar System
+1. **Isometric Projection & Depth**: Orbital plane inclined at ~33 degrees with diagonal orientation, turning circular orbits into dynamic isometric ellipses with true 3D spatial depth.
+2. **Central Star (The Sun in the Middle)**: Radiant emissive core (`#FFBA08`) with pulsating additive corona halo, outer starlight lens aura, and 4.5 intensity PointLight illumination casting day/night terminator lines across orbiting bodies.
+3. **8 Orbiting Planets**: Mercury, Venus, Earth (with Moon), Mars, Jupiter, Saturn (with tilted rings), Uranus, and Neptune revolving in 3D depth, sweeping in front of and behind the Sun.
+4. **Holographic Trajectory Rails**: Glowing starlight cyan and blue orbital paths with enhanced visibility (`0.38` opacity) outlining planetary flight tracks.
+5. **Calibrated Scrim & Contrast**: 90% canvas visibility paired with a subtle depth vignette wash (`bg-[#05060A]/35`), allowing the celestial motion to shine through between the solid 95% alloy UI cards.
+6. **Distant Starfield**: 1,600 ambient stars providing atmospheric cosmic scale.
 
 ## Typography
 - **Primary Family**: IBM Plex Sans, self-hosted locally via `@fontsource/ibm-plex-sans` (zero external runtime network calls).
