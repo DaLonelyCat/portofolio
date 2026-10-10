@@ -75,10 +75,19 @@ export const portfolioData: PortfolioData = {
       problem:
         "Small businesses struggle with manual daily sales reconciliation, inventory discrepancies, and convoluted checkout interfaces.",
       solution:
-        "Engineered an offline-capable, intuitive cashier interface with rapid transaction processing, automated sales auditing, and structured receipt generation.",
+        "Engineered an offline-capable, intuitive React & Electron cashier interface with an embedded Express/Node API, local JSON/CSV persistent logging, and structured receipt generation.",
       impact:
-        "Automated daily bookkeeping and reduced checkout transaction duration for retail and beverage operations.",
-      tags: ["Java", "POS Architecture", "Cashier System", "Financial Logging"],
+        "Automated daily bookkeeping and reduced checkout transaction duration for retail and beverage operations with zero-cloud dependency.",
+      tags: [
+        "React 19",
+        "TypeScript",
+        "Node.js",
+        "Express.js",
+        "Electron",
+        "Tailwind CSS",
+        "POS Architecture",
+        "Financial Logging",
+      ],
       repoUrl: "https://github.com/dalonelycat",
       featured: true,
     },

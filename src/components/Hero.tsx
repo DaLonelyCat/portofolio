@@ -125,7 +125,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                     <div className="h-full bg-cyber-cyan w-[96%]" />
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                    <span>Java POS • Next.js • Android Studio</span>
+                    <span>React/Electron POS • Next.js • Android</span>
                     <span>CNN & Unity</span>
                   </div>
                 </div>
