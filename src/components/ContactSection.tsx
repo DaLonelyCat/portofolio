@@ -45,17 +45,17 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                 Available for design system architectures, frontend engineering missions, and full-time product roles. Transmit your brief directly.
               </p>
 
-              {/* Email Terminal Box with Copy & Send in Yellow */}
-              <div className="inline-flex flex-col sm:flex-row items-center gap-2 p-2 bg-black/95 border border-yellow-500/40 clip-corner-sm shadow-[0_0_20px_rgba(255,230,0,0.15)] max-w-lg w-full">
-                <span className="text-xs sm:text-sm font-mono text-cyber-yellow px-2 truncate w-full sm:w-auto text-center sm:text-left font-bold">
+              {/* Email Terminal Box with Responsive Copy & Send */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-2.5 bg-black/90 border border-yellow-500/30 clip-corner-sm max-w-lg w-full">
+                <span className="text-xs sm:text-sm font-mono text-cyber-yellow px-2 truncate w-full sm:w-auto text-center sm:text-left font-bold select-all">
                   {personal.socials.email}
                 </span>
 
-                <div className="flex items-center gap-2 w-full sm:w-auto justify-center ml-auto">
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:ml-auto">
                   <button
                     onClick={handleCopy}
                     type="button"
-                    className="flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs font-bold bg-zinc-900 hover:bg-zinc-800 border border-yellow-500/30 text-slate-200 hover:text-cyber-yellow clip-corner-sm transition-colors"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 font-mono text-xs font-bold bg-zinc-900 hover:bg-zinc-800 border border-yellow-500/30 text-slate-200 hover:text-cyber-yellow clip-corner-sm transition-colors min-h-[40px] sm:min-h-0"
                     aria-label="Copy email address"
                   >
                     {copied ? (
@@ -68,7 +68,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
 
                   <a
                     href={`mailto:${personal.socials.email}`}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs font-bold bg-cyber-yellow hover:bg-cyber-yellowHover text-black clip-corner-sm shadow-neon-yellow transition-all"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 font-mono text-xs font-bold bg-cyber-yellow hover:bg-cyber-yellowHover text-black clip-corner-sm shadow-neon-yellow transition-all min-h-[40px] sm:min-h-0"
                   >
                     <span>TRANSMIT</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />

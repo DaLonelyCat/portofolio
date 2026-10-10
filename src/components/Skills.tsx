@@ -26,8 +26,8 @@ export function SkillsSection({ categories }: SkillsProps) {
           </p>
         </div>
 
-        {/* 3-Column High-Density Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Responsive 4-Column Grid for all 4 Competency Domains */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {categories.map((cat, idx) => {
             const moduleCode = `SYS_MOD_0${idx + 1}`;
             return (

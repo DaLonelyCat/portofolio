@@ -37,29 +37,31 @@ export function Projects({ projects, categories }: ProjectsProps) {
             </p>
           </div>
 
-          {/* Tactical Category Filter Protocols */}
-          <div className="flex flex-wrap gap-1 p-1 bg-black/80 border border-yellow-500/30 clip-corner-sm backdrop-blur-md">
-            {categories.map((category) => {
-              const isActive = selectedCategory === category;
-              const label =
-                category === "All"
-                  ? "ALL_SYSTEMS"
-                  : category.toUpperCase().replace(/\s+/g, "_");
-              return (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`font-mono text-[11px] px-3 py-1 transition-all clip-corner-sm ${
-                    isActive
-                      ? "bg-cyber-yellow text-black font-bold shadow-neon-yellow-sm"
-                      : "text-slate-400 hover:text-cyber-yellow hover:bg-yellow-500/10"
-                  }`}
-                  aria-pressed={isActive}
-                >
-                  [{label}]
-                </button>
-              );
-            })}
+          {/* Tactical Category Filter Protocols (Horizontal Scroll on Mobile, Wrapped on Desktop) */}
+          <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+            <div className="inline-flex flex-nowrap md:flex-wrap gap-1 p-1 bg-black/70 border border-yellow-500/25 clip-corner-sm backdrop-blur-md min-w-full md:min-w-0">
+              {categories.map((category) => {
+                const isActive = selectedCategory === category;
+                const label =
+                  category === "All"
+                    ? "ALL_SYSTEMS"
+                    : category.toUpperCase().replace(/\s+/g, "_");
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`font-mono text-[11px] px-3 py-1.5 whitespace-nowrap transition-all clip-corner-sm shrink-0 ${
+                      isActive
+                        ? "bg-cyber-yellow text-black font-bold shadow-neon-yellow-sm"
+                        : "text-slate-400 hover:text-cyber-yellow hover:bg-yellow-500/10"
+                    }`}
+                    aria-pressed={isActive}
+                  >
+                    [{label}]
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 

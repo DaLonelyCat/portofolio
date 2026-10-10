@@ -396,7 +396,8 @@ SPECIALIZATIONS:
         {/* Interactive Command Input Line */}
         <div className="p-3 bg-black/95 border-t border-yellow-500/30 flex items-center gap-2">
           <div className="flex items-center gap-1 text-cyber-yellow font-mono text-xs font-bold shrink-0">
-            <span>user@dalonelycat:~$</span>
+            <span className="hidden sm:inline">user@dalonelycat:~$</span>
+            <span className="sm:hidden inline text-cyber-yellow">&gt;_</span>
           </div>
 
           <input
@@ -405,17 +406,18 @@ SPECIALIZATIONS:
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type 'help', 'dossiers', 'connectomics', or 'agentic'..."
-            className="flex-1 bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder:text-slate-600 caret-cyber-yellow"
+            placeholder="Type 'help', 'dossiers', 'connectomics'..."
+            className="flex-1 bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder:text-slate-600 caret-cyber-yellow min-w-0"
             autoComplete="off"
             spellCheck={false}
           />
 
           <button
             onClick={() => handleCommand(input)}
-            className="hidden sm:flex items-center gap-1 px-2.5 py-1 bg-cyber-yellow hover:bg-cyber-yellowHover text-black font-mono text-[11px] font-bold clip-corner-sm transition-colors"
+            className="flex items-center gap-1 px-2 py-1 bg-cyber-yellow hover:bg-cyber-yellowHover text-black font-mono text-[11px] font-bold clip-corner-sm transition-colors shrink-0"
+            aria-label="Execute Command"
           >
-            <span>EXEC</span>
+            <span className="hidden sm:inline">EXEC</span>
             <CornerDownLeft className="w-3 h-3" />
           </button>
         </div>

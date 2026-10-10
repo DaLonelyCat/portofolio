@@ -54,8 +54,8 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-cyber-void text-slate-100 cyber-grid">
-      {/* CRT Scanline Overlay Texture */}
-      <div className="fixed inset-0 scanlines pointer-events-none z-30 opacity-35" />
+      {/* Subtle CRT Scanline Overlay Texture (Gentle on Eyes, Hidden on Mobile) */}
+      <div className="hidden sm:block fixed inset-0 scanlines pointer-events-none z-30 opacity-4" />
 
       {/* Printable Resume Header (visible only when printing) */}
       <div className="hidden print:block p-8 border-b border-gray-300 mb-6">

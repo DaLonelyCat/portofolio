@@ -29,49 +29,49 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               <span className="text-cyber-cyan text-[11px] hidden sm:inline">PROBLEM_SOLVER_AT_CORE</span>
             </div>
 
-            {/* Headline with Cyberpunk Yellow & Cyan Treatment */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white mb-4 leading-[0.98]">
+            {/* Headline with Crisp Gradient Treatment (Zero Eye-Straining Halo) */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4 leading-[1.15] sm:leading-[1.05]">
               <span className="text-slate-100">TURNING RAW </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-yellow via-cyber-cyan to-cyber-magenta neon-text-yellow">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-sky-300 to-teal-300">
                 IDEAS INTO
               </span>
-              <br />
-              <span className="text-slate-200">EXECUTABLE </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-teal-200 neon-text-cyan">
+              <br className="hidden sm:inline" />
+              <span className="text-slate-200"> EXECUTABLE </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-teal-300">
                 REALITY.
               </span>
             </h1>
 
             {/* Bio / Value proposition */}
-            <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-xl leading-relaxed mb-6 font-normal">
               {personal.bio}
             </p>
 
             {/* Telemetry metadata chips */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 font-mono text-xs text-slate-400 mb-6">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-cyan-500/30 text-cyber-cyan clip-corner-sm">
-                <Crosshair className="w-3.5 h-3.5" />
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 font-mono text-[11px] sm:text-xs text-slate-400 mb-6">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/60 border border-sky-500/30 text-sky-300 clip-corner-sm">
+                <Crosshair className="w-3.5 h-3.5 shrink-0" />
                 <span>BINUS // CS (MINOR: MULTIMEDIA)</span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-yellow-500/30 text-cyber-yellow clip-corner-sm">
-                <Cpu className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/60 border border-amber-500/30 text-amber-300 clip-corner-sm">
+                <Cpu className="w-3.5 h-3.5 shrink-0" />
                 <span>GPA: 3.30 / 4.00</span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-magenta-500/30 text-cyber-magenta clip-corner-sm">
-                <Zap className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/60 border border-rose-500/30 text-rose-300 clip-corner-sm">
+                <Zap className="w-3.5 h-3.5 shrink-0" />
                 <span>CFO_FRUQITA // EX_FOUNDER_MYBEANS</span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-teal-500/40 text-teal-300 clip-corner-sm">
-                <Activity className="w-3.5 h-3.5 text-teal-400" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/60 border border-teal-500/35 text-teal-300 clip-corner-sm">
+                <Activity className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                 <span>R&D: 3D_FLY_CONNECTOMICS // AGENTIC_AI</span>
               </div>
             </div>
 
-            {/* Call to Actions with High-Voltage Yellow */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+            {/* Call to Actions - Full width touch targets on mobile, row on tablet/desktop */}
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center md:justify-start gap-2.5 sm:gap-3">
               <a
                 href="#projects"
-                className="inline-flex items-center gap-2 px-5 py-2.5 font-mono font-bold text-xs uppercase bg-cyber-yellow hover:bg-cyber-yellowHover text-black clip-corner shadow-neon-yellow transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] font-mono font-bold text-xs uppercase bg-cyber-yellow hover:bg-cyber-yellowHover text-black clip-corner shadow-neon-yellow transition-all duration-200 active:scale-[0.98]"
               >
                 <span>ACCESS_DOSSIERS</span>
                 <ArrowDown className="w-3.5 h-3.5" />
@@ -82,7 +82,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onPrintCV}
-                className="inline-flex items-center gap-2 px-4 py-2.5 font-mono font-medium text-xs uppercase cyber-panel text-slate-200 hover:text-cyber-cyan clip-corner hover:border-cyber-cyan transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] font-mono font-medium text-xs uppercase cyber-panel text-slate-200 hover:text-cyber-cyan clip-corner hover:border-cyber-cyan transition-all duration-200"
               >
                 <Printer className="w-3.5 h-3.5 text-cyber-cyan" />
                 <span>EXPORT_CV (PDF)</span>
@@ -90,7 +90,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
 
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 px-4 py-2.5 font-mono font-medium text-xs uppercase cyber-panel text-slate-200 hover:text-cyber-yellow clip-corner hover:border-cyber-yellow transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] font-mono font-medium text-xs uppercase cyber-panel text-slate-200 hover:text-cyber-yellow clip-corner hover:border-cyber-yellow transition-all duration-200"
               >
                 <Mail className="w-3.5 h-3.5 text-cyber-yellow" />
                 <span>OPEN_COMMS</span>
