@@ -5,7 +5,7 @@ A personal portfolio and interactive engineering dossier for Christian Emanuel I
 
 ## Dial Settings
 - **ENERGY**: 2 (Focused, confident, real engineering showcase)
-- **RHYTHM**: 3 (Varied compositions: flight deck hero with telemetry HUD, core engineering project directory with category filter rail, 3-column research frontiers grid, operational flight log, 4-column systems matrix, comms uplink console)
+- **RHYTHM**: 3 (Varied compositions: flight deck hero with telemetry HUD, core engineering project directory with category filter rail, 3-column research frontiers grid, operational flight log, 4-column systems matrix, comms uplink console, semi-fullscreen project modal)
 - **MOTION**: 2 (Interactive 3D Solar System with canonical planetary orbits and calm celestial drift; zero dizzying parallax displacement)
 
 ## Theme & Palette
@@ -30,7 +30,8 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 - **HUD Navigation**: Dual-state fluid navigation bar with seamless scroll transformation: spans full width across the viewport at the top of the page, and fluidly morphs into a centered floating capsule pill with frosted glass depth (`backdrop-blur-2xl`), cyan starlight borders, and top specular reflection highlights upon scrolling. Flashing dot removed for clean typography.
 - **Surface Panels**: `rounded-2xl` and `rounded-3xl` alloy cards with subtle hairline borders (`border-white/10`) and neon hover states.
 - **Pill Badges & Tags**: Monospace status chips (`[ PRODUCTION CORE ]`, `[ CURRENT ]`, `[ MATRIX // 01 ]`) with translucent neon badges.
-- **Profile Avatar**: Framed profile portrait with cyber cyan rim glow and live online beacon.
+- **Profile Avatar**: Framed profile portrait with cyber cyan rim glow (purged of flashing dots or redundant tags).
+- **Semi-Fullscreen Modal**: Expansive `max-w-6xl` responsive dialog with two-column space utilization and dedicated frosted cards for Problem, Solution, and Impact.
 
 ## Background Simulation: 3D Solar System
 1. **Central Star (The Sun)**: Glowing emissive core (`#FFAA00`) with soft additive corona aura and point light illumination.
@@ -45,18 +46,18 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 - **Hierarchy**: Guided by font scale, tracking, and structural hierarchy.
 
 ## Layout Narrative Flow
-1. **Flight Deck Hero**: Profile picture with cyber frame, "Hello, I'm Christian" headline, status beacon, bio, and Station Telemetry HUD module.
-2. **Engineering Projects**: Primary directory with category filter rail, year markers, and UniCash POS highlighted with `PRODUCTION CORE`.
+1. **Flight Deck Hero**: Profile picture with cyber frame, "Hello, I'm Christian" headline, bio, action buttons, and Station Telemetry HUD module.
+2. **Engineering Projects**: Primary directory with category filter rail, year markers, conversational "View Details" buttons, and UniCash POS highlighted with `PRODUCTION CORE`.
 3. **Research Frontiers**: 3-column grid covering Connectomics, Agentic AI, and Multimedia.
 4. **Operational Flight Log**: Detailed career timeline covering venture leadership, financial oversight, and software engineering.
 5. **Systems Competencies**: 4-column capability matrix.
-6. **Comms Uplink**: Direct email console with one-click copy and messaging actions.
+6. **Comms Uplink**: Direct email console and official platform vector logos (GitHub, LinkedIn, CV PDF).
 7. **Colophon Footer**: Minimal cyber footer with edge deployment status.
 
 ## Design Decisions & Verification
-- **Personalized & Direct Hero**: Christian's profile picture and direct "Hello, I'm Christian" greeting create an authentic, grounded introduction without corny quotes.
-- **Solar System Background**: Canonical 3D planets and holographic orbit rings enhance the space theme while preserving optimal performance and readability.
-- **Readability Solved**: High-opacity dark containers eliminate previous legibility issues.
-- **Unified Engineering Showcase**: UniCash POS badged with `PRODUCTION CORE` in the primary directory.
+- **Direct & Grounded Hero**: Removed all flashing dots, Hero tags, and corny one-liners to focus purely on Christian's identity, headline, and bio.
+- **Conversational Action Copy**: Replaced "Dossier" with "View Details" for intuitive everyday browsing.
+- **Semi-Fullscreen Detail View**: Expanded modal dialog to `max-w-6xl` to comfortably display rich technical overviews, problem/solution breakdowns, and high-resolution screenshots.
+- **Repository Link Hygiene**: Verified that project source links exclusively navigate to valid individual repositories rather than general profile pages.
 - **No Em Dashes**: Pure standard punctuation with colons, commas, and parentheses.
-- **Zero Terminal Remnants**: Verified clean codebase without command line or terminal components.
+- **Zero Terminal Remnants**: Clean codebase without command line or terminal components.

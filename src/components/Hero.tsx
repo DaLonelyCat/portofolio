@@ -16,42 +16,32 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Mission Narrative & Actions */}
           <div className="lg:col-span-7">
-            {/* Cyber Profile Identity Header */}
-            <div className="flex items-center gap-5 mb-6">
-              <div className="relative group shrink-0">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-cyan-400/60 shadow-[0_0_25px_rgba(0,240,255,0.3)] bg-[#0B0D16]">
-                  <img
-                    src={personal.avatar || "/avatar.jpg"}
-                    alt={personal.name}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-cyan-400 border-2 border-[#05060A] shadow-[0_0_8px_#00F0FF] animate-pulse" />
+            {/* Profile Identity Header (No Hero tags, no flashing dots) */}
+            <div className="flex items-center gap-5 mb-8">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-cyan-400/60 shadow-[0_0_25px_rgba(0,240,255,0.3)] bg-[#0B0D16] shrink-0">
+                <img
+                  src={personal.avatar || "/avatar.jpg"}
+                  alt={personal.name}
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
 
               <div>
-                {/* Cyber Status Beacon */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 font-mono text-[11px] mb-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#00F0FF]" />
-                  <span>ORBITAL UPLINK // SYSTEM ONLINE</span>
+                <div className="text-sm sm:text-base font-normal text-white">
+                  {personal.name}
                 </div>
-                <div className="text-xs font-mono text-slate-400">
+                <div className="text-xs font-mono text-slate-400 mt-0.5">
                   {personal.role} • {personal.location.split("(")[0].trim()}
                 </div>
               </div>
             </div>
 
             {/* Display Headline in Pure High-Contrast White */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.12] mb-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.12] mb-6">
               Hello, I&rsquo;m Christian
             </h1>
 
-            {/* Sub-headline */}
-            <p className="text-lg sm:text-xl font-light text-cyan-400/90 tracking-tight leading-relaxed mb-6">
-              Builder and problem solver turning cool ideas into working software.
-            </p>
-
-            {/* Bio in High-Contrast Slate */}
+            {/* Bio in High-Contrast Slate (One-liner purged) */}
             <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed mb-8">
               {personal.bio}
             </p>

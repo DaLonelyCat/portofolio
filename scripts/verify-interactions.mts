@@ -21,7 +21,7 @@ function assert(condition: boolean, testName: string, details: string = "") {
 }
 
 // ----------------------------------------------------
-// 1. Terminal, Old Galaxy & Featured Case Study Removal
+// 1. Removals & Replacements Test
 // ----------------------------------------------------
 console.log("--- 1. Removals & Replacements Test ---");
 
@@ -43,9 +43,9 @@ assert(!pageContent.includes("isPaletteOpen") && !pageContent.includes("isTermin
 assert(!pageContent.includes("Cmd+K") && !pageContent.includes("Ctrl+K"), "page.tsx contains zero Cmd+K / Ctrl+K keyboard listeners");
 
 // ----------------------------------------------------
-// 2. Profile Avatar & Hero Headline Greeting
+// 2. Profile Avatar, Hero Tag Purge & Flashing Dots
 // ----------------------------------------------------
-console.log("\n--- 2. Profile Avatar & Greeting Test ---");
+console.log("\n--- 2. Profile Avatar & Hero Purge Test ---");
 
 const avatarFileExists = fs.existsSync(path.join(process.cwd(), "public/avatar.jpg"));
 assert(avatarFileExists, "Profile image exists at public/avatar.jpg");
@@ -53,8 +53,10 @@ assert(avatarFileExists, "Profile image exists at public/avatar.jpg");
 const heroContent = fs.readFileSync(path.join(process.cwd(), "src/components/Hero.tsx"), "utf-8");
 assert(heroContent.includes("avatar.jpg") || heroContent.includes("personal.avatar"), "Hero renders Christian's profile picture");
 assert(heroContent.includes("Hello, I&rsquo;m Christian") || heroContent.includes("Hello, I'm Christian"), "Hero features 'Hello, I'm Christian' headline");
-assert(!heroContent.includes("I build solutions to problems I encountered while studying and running my business."), "Corny quote banner completely removed from Hero");
-assert(heroContent.includes("Station Telemetry") && heroContent.includes("ORBITAL UPLINK"), "Hero includes Cyberpunk Station Telemetry and Status Beacon");
+assert(!heroContent.includes("ORBITAL UPLINK"), "Hero tags and beacons purged completely");
+assert(!heroContent.includes("Builder and problem solver turning cool ideas into working software."), "Corny one-liner purged from Hero");
+assert(!heroContent.includes("animate-pulse"), "Flashing dots with animate-pulse purged from Hero");
+assert(heroContent.includes("Station Telemetry"), "Hero includes Cyberpunk Station Telemetry HUD");
 
 // ----------------------------------------------------
 // 3. Cyber Layout & Section Navigation Anchors
@@ -78,23 +80,44 @@ assert(skillsContent.includes('id="skills"') && skillsContent.includes("Systems 
 
 const contactContent = fs.readFileSync(path.join(process.cwd(), "src/components/ContactSection.tsx"), "utf-8");
 assert(contactContent.includes('id="contact"') && contactContent.includes("Comms Uplink"), "Contact component mounts #contact comms uplink");
+assert(!contactContent.includes("animate-pulse"), "Flashing dots with animate-pulse purged from ContactSection");
+assert(contactContent.includes("viewBox=\"0 0 24 24\"") && contactContent.includes("GitHub") && contactContent.includes("LinkedIn"), "ContactSection includes official platform vector SVG logos");
 
 // ----------------------------------------------------
-// 4. UniCash POS Production Core Showcase in Projects
+// 4. Projects Directory & Conversational Button Label
 // ----------------------------------------------------
-console.log("\n--- 4. UniCash POS Core Integration Test ---");
+console.log("\n--- 4. Projects Directory & Button Test ---");
 
 const projectsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
 assert(projectsContent.includes("PRODUCTION CORE"), "UniCash POS is badged as PRODUCTION CORE in project directory");
+assert(projectsContent.includes("View Details"), "Project button renamed to conversational 'View Details'");
+assert(!projectsContent.includes("<span>Dossier</span>"), "Old 'Dossier' button label completely removed");
 
 const unicashProject = portfolioData.projects.find((p) => p.id === "unicash-pos");
 assert(!!unicashProject, "UniCash POS exists in project dataset");
 assert(unicashProject?.screenshots?.length === 5, "UniCash POS has all 5 screenshots intact", `Count: ${unicashProject?.screenshots?.length}`);
 
 // ----------------------------------------------------
-// 5. Project Archive Category Filtering Logic
+// 5. Semi-Fullscreen Project Modal & Repo URL Guard
 // ----------------------------------------------------
-console.log("\n--- 5. Project Archive Filtering Test ---");
+console.log("\n--- 5. Semi-Fullscreen Modal & Repo Link Test ---");
+
+const modalContent = fs.readFileSync(path.join(process.cwd(), "src/components/ProjectModal.tsx"), "utf-8");
+assert(modalContent.includes("max-w-6xl"), "ProjectModal utilizes semi-fullscreen max-w-6xl container");
+assert(modalContent.includes("isValidRepo"), "ProjectModal validates repoUrl to avoid linking to root profile");
+
+// Verify that all project repoUrls point to dedicated repository endpoints
+portfolioData.projects.forEach((p) => {
+  if (p.repoUrl) {
+    const isProfileOnly = /^https?:\/\/(www\.)?github\.com\/[^/]+\/?$/i.test(p.repoUrl);
+    assert(!isProfileOnly, `Project ${p.id} repoUrl points to a specific repo, not just profile`, p.repoUrl);
+  }
+});
+
+// ----------------------------------------------------
+// 6. Project Archive Category Filtering Logic
+// ----------------------------------------------------
+console.log("\n--- 6. Project Archive Filtering Test ---");
 
 function filterProjects(category: string) {
   if (category === "All") return portfolioData.projects;
@@ -114,9 +137,9 @@ const webProjects = filterProjects("Web App");
 assert(webProjects.length > 0 && webProjects.every(p => p.category === "Web App"), "Filter 'Web App' isolates web apps", `Count: ${webProjects.length}`);
 
 // ----------------------------------------------------
-// 6. Project Modal Interactive Flow
+// 7. Project Modal Interactive Flow
 // ----------------------------------------------------
-console.log("\n--- 6. Project Modal Flow Test ---");
+console.log("\n--- 7. Project Modal Flow Test ---");
 
 let modalProject: any = null;
 function openModal(p: any) { modalProject = p; }
@@ -129,9 +152,9 @@ closeModal();
 assert(modalProject === null, "Closing modal resets active project state");
 
 // ----------------------------------------------------
-// 7. Contact Copy Email Interaction
+// 8. Contact Copy Email Interaction
 // ----------------------------------------------------
-console.log("\n--- 7. Contact Copy Email Test ---");
+console.log("\n--- 8. Contact Copy Email Test ---");
 
 let copiedState = false;
 function simulateCopyEmail(email: string) {
@@ -143,9 +166,9 @@ const copiedValue = simulateCopyEmail(portfolioData.personal.socials.email);
 assert(copiedState && copiedValue === "christian.emanuel.08@gmail.com", "Copy Email button writes correct email and triggers feedback");
 
 // ----------------------------------------------------
-// 8. Mobile Navigation Drawer Toggle
+// 9. Mobile Navigation Drawer Toggle
 // ----------------------------------------------------
-console.log("\n--- 8. Mobile Navigation Drawer Test ---");
+console.log("\n--- 9. Mobile Navigation Drawer Test ---");
 
 let isMobileMenuOpen = false;
 function toggleMobileMenu() { isMobileMenuOpen = !isMobileMenuOpen; }
@@ -157,9 +180,9 @@ toggleMobileMenu();
 assert(!isMobileMenuOpen, "Clicking close button closes mobile drawer");
 
 // ----------------------------------------------------
-// 9. CV Route & Resource
+// 10. CV Route & Resource
 // ----------------------------------------------------
-console.log("\n--- 9. CV Route & Assets Test ---");
+console.log("\n--- 10. CV Route & Assets Test ---");
 
 const cvPageExists = fs.existsSync(path.join(process.cwd(), "src/app/cv/page.tsx"));
 assert(cvPageExists, "CV route page exists at src/app/cv/page.tsx");
@@ -175,7 +198,7 @@ console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);
 console.log("=================================================");
 
 if (passedTests === totalTests) {
-  console.log("ALL INTERACTIVE, SOLAR SYSTEM & PROFILE CHECKS VERIFIED SUCCESSFULLY!\n");
+  console.log("ALL INTERACTIVE, MODAL & LINK HYGIENE CHECKS VERIFIED SUCCESSFULLY!\n");
   process.exit(0);
 } else {
   console.error("SOME TESTS FAILED!\n");
