@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { portfolioData } from "@/data/portfolio";
+import { Project } from "@/types/portfolio";
 import { Navbar } from "@/components/Navbar";
 import { CyberHudRail } from "@/components/CyberHudRail";
 import { Hero } from "@/components/Hero";
@@ -11,10 +12,33 @@ import { ExperienceSection } from "@/components/Experience";
 import { SkillsSection } from "@/components/Skills";
 import { ContactSection } from "@/components/ContactSection";
 import { Toast } from "@/components/Toast";
+import { TacticalTerminal } from "@/components/TacticalTerminal";
+import { ProjectModal } from "@/components/ProjectModal";
 
 export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [cliSelectedProject, setCliSelectedProject] = useState<Project | null>(null);
+
+  // Global Cmd+K / Ctrl+K listener
+  useEffect(() => {
+    const handleGlobalKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsTerminalOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleGlobalKey);
+    return () => window.removeEventListener("keydown", handleGlobalKey);
+  }, []);
+
+  const handleOpenProjectFromCli = (projectId: string) => {
+    const found = portfolioData.projects.find((p) => p.id === projectId);
+    if (found) {
+      setCliSelectedProject(found);
+    }
+  };
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -49,7 +73,11 @@ export default function Home() {
 
       {/* Floating Glass Navigation */}
       <div className="no-print">
-        <Navbar personal={portfolioData.personal} onPrintCV={handleExportCV} />
+        <Navbar
+          personal={portfolioData.personal}
+          onPrintCV={handleExportCV}
+          onOpenCLI={() => setIsTerminalOpen(true)}
+        />
         <CyberHudRail />
       </div>
 
@@ -69,6 +97,20 @@ export default function Home() {
           onPrintCV={handleExportCV}
         />
       </main>
+
+      {/* Tactical CLI Terminal (Cmd+K) */}
+      <TacticalTerminal
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        onOpenProject={handleOpenProjectFromCli}
+        onShowToast={showToast}
+      />
+
+      {/* Project Modal Triggered From CLI */}
+      <ProjectModal
+        project={cliSelectedProject}
+        onClose={() => setCliSelectedProject(null)}
+      />
 
       {/* Feedback Toast */}
       <Toast

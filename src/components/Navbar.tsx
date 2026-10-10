@@ -7,9 +7,10 @@ import { PersonalInfo } from "../types/portfolio";
 interface NavbarProps {
   personal: PersonalInfo;
   onPrintCV: () => void;
+  onOpenCLI?: () => void;
 }
 
-export function Navbar({ personal, onPrintCV }: NavbarProps) {
+export function Navbar({ personal, onPrintCV, onOpenCLI }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -69,6 +70,22 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
 
         {/* Actions (Desktop) */}
         <div className="hidden md:flex items-center gap-2">
+          {/* Tactical CLI Button */}
+          {onOpenCLI && (
+            <button
+              onClick={onOpenCLI}
+              type="button"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-black/80 hover:bg-yellow-500/10 border border-yellow-500/40 hover:border-cyber-yellow text-[11px] font-mono text-cyber-yellow clip-corner-sm transition-all shadow-neon-yellow-sm group"
+              title="Open Tactical CLI (Cmd+K / Ctrl+K)"
+            >
+              <Terminal className="w-3.5 h-3.5 text-cyber-yellow group-hover:animate-pulse" />
+              <span className="font-bold">CLI</span>
+              <kbd className="hidden lg:inline text-[9px] px-1 py-0.2 bg-zinc-900 border border-yellow-500/30 text-slate-300 rounded-none">
+                ⌘K
+              </kbd>
+            </button>
+          )}
+
           {/* Quick Telemetry Pill */}
           <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-black/60 border border-yellow-500/30 text-[10px] font-mono text-cyber-yellow clip-corner-sm">
             <Zap className="w-3 h-3 text-cyber-yellow animate-pulse" />
@@ -143,6 +160,19 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
               </a>
             ))}
             <div className="pt-2 border-t border-yellow-500/20 flex flex-col gap-2">
+              {onOpenCLI && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenCLI();
+                  }}
+                  className="flex items-center justify-center gap-2 font-mono text-xs font-bold bg-black/80 border border-yellow-500/40 text-cyber-yellow py-2 clip-corner-sm hover:bg-yellow-500/10 transition-colors"
+                >
+                  <Terminal className="w-4 h-4 text-cyber-yellow" />
+                  <span>OPEN_TACTICAL_CLI</span>
+                </button>
+              )}
               <a
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}

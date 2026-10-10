@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Brain, Bot, Gamepad2, Sparkles, TrendingUp, Cpu, Network, Layers, ArrowUpRight } from "lucide-react";
+import { SynapticCanvas } from "./SynapticCanvas";
 
 export function FrontierFocus() {
   const tracks = [
@@ -66,6 +67,9 @@ export function FrontierFocus() {
 
   return (
     <section id="frontiers" className="py-8 md:py-12 relative overflow-hidden">
+      {/* Interactive Synaptic & Multi-Agent Particle Canvas */}
+      <SynapticCanvas />
+
       {/* Background ambient accent */}
       <div className="max-w-[1600px] mx-auto px-4 sm:px-8 xl:px-12 relative z-10">
         {/* Section Header */}
