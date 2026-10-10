@@ -57,8 +57,8 @@ export const portfolioData: PortfolioData = {
       screenshots: [
         {
           src: "/projects/unicash-cashier.png",
-          label: "Cashier Terminal",
-          caption: "Cashier terminal interface with active order ticket panel and menu catalog",
+          label: "Cashier Interface",
+          caption: "Cashier checkout interface with active order ticket panel and menu catalog",
         },
         {
           src: "/projects/unicash-dashboard.png",

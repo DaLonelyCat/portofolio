@@ -9,14 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        page: "#121316",
-        surface: "#1A1B20",
-        surfaceHover: "#22242B",
-        rule: "#2C2D35",
-        ink: "#F0EFEB",
-        muted: "#A3A1A8",
-        accent: "#E07A5F",
-        accentHover: "#C9664D",
+        page: "#090A10",        // Interstellar void background
+        surface: "#11131E",     // Deep-space observatory surface
+        surfaceHover: "#181B2B",// Elevated hover state
+        rule: "#222638",        // Celestial hairline borders
+        ink: "#F0F2F8",         // Crisp starlight primary text
+        muted: "#949AB0",       // Cosmic dust secondary text
+        accent: "#E07A5F",      // Solar flare / pulsar copper-amber
+        accentHover: "#C9664D", // Accent hover state
       },
       fontFamily: {
         sans: [

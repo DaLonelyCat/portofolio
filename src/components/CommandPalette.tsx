@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { portfolioData } from "../data/portfolio";
 
-interface TacticalTerminalProps {
+interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenProject: (projectId: string) => void;
@@ -16,12 +16,12 @@ interface LogEntry {
   text: string;
 }
 
-export function TacticalTerminal({
+export function CommandPalette({
   isOpen,
   onClose,
   onOpenProject,
   onShowToast,
-}: TacticalTerminalProps) {
+}: CommandPaletteProps) {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number>(-1);
@@ -29,7 +29,7 @@ export function TacticalTerminal({
     {
       id: "init-1",
       type: "system",
-      text: "Portfolio Terminal [Easter Egg]",
+      text: "Command Palette [Cmd+K]",
     },
     {
       id: "init-2",
@@ -97,8 +97,8 @@ export function TacticalTerminal({
   skills                List skills and competencies
   cv                    Open Curriculum Vitae
   contact               Copy email to clipboard
-  clear                 Clear terminal history
-  exit                  Close terminal`,
+  clear                 Clear output history
+  exit                  Close palette`,
         });
         break;
 
@@ -267,18 +267,18 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Interactive Terminal"
+      aria-label="Command Palette"
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-surface text-ink border border-rule font-mono text-xs flex flex-col max-h-[80vh] overflow-hidden shadow-2xl"
+        className="relative w-full max-w-2xl bg-surface/95 backdrop-blur-md text-ink border border-rule font-mono text-xs flex flex-col max-h-[80vh] overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Bar */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-rule bg-page/80 text-muted">
           <div className="flex items-center gap-2">
-            <span className="text-ink font-medium">terminal</span>
+            <span className="text-ink font-medium">palette</span>
             <span>•</span>
             <span className="text-muted">press ESC to exit</span>
           </div>
@@ -286,7 +286,7 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
           <button
             onClick={onClose}
             className="text-muted hover:text-ink p-1 transition-colors"
-            aria-label="Close terminal"
+            aria-label="Close palette"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />

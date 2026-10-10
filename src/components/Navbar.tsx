@@ -6,7 +6,7 @@ import { PersonalInfo } from "../types/portfolio";
 interface NavbarProps {
   personal: PersonalInfo;
   onPrintCV: () => void;
-  onOpenCLI?: () => void;
+  onOpenPalette?: () => void;
 }
 
 export function Navbar({ personal, onPrintCV }: NavbarProps) {

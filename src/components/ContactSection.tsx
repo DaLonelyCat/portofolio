@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { PersonalInfo } from "../types/portfolio";
-import { SectionHeader } from "./SectionHeader";
 
 interface ContactSectionProps {
   personal: PersonalInfo;
@@ -23,25 +22,22 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
   return (
     <section id="contact" className="py-16 md:py-24 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          number="06"
-          category="Inquiries & Transmission"
-          title="Direct Contact"
-          description="Available for software engineering opportunities, builder roles, and collaborations."
-        />
-
-        <div className="border border-rule p-6 sm:p-10 bg-surface">
+        {/* Dedicated Direct Action Container */}
+        <div className="border border-rule p-6 sm:p-10 bg-surface/85 backdrop-blur-sm">
           <div className="max-w-2xl">
-            <h4 className="text-xl sm:text-3xl font-light text-ink tracking-tight mb-4">
+            <span className="text-xs text-accent font-mono uppercase tracking-wider block mb-2">
+              Direct Inquiries
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-light text-ink tracking-tight mb-4">
               Let&rsquo;s talk about building software together.
-            </h4>
+            </h2>
             <p className="text-sm text-muted leading-relaxed mb-8">
-              Whether you are discussing engineering roles, product development, or new technology ventures, feel free to reach out directly by email.
+              Whether you are discussing engineering opportunities, product development, or new technology ventures, feel free to reach out directly by email.
             </p>
 
             {/* Email Box */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3 border border-rule bg-page mb-8">
-              <span className="text-sm sm:text-base text-ink font-normal px-2 truncate select-all">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3 border border-rule bg-page/90 mb-8">
+              <span className="text-sm sm:text-base text-ink font-normal px-2 truncate select-all font-mono">
                 {personal.socials.email}
               </span>
 

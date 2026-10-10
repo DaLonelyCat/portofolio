@@ -14,7 +14,7 @@ export function Footer() {
           </div>
 
           <div className="text-muted/80">
-            Typeset in IBM Plex Sans. Deployed via Cloudflare Pages edge.
+            Typeset in IBM Plex Sans. Deep Space Observatory • Cloudflare Pages edge.
           </div>
         </div>
       </div>

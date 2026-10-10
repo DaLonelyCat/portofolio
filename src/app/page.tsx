@@ -14,13 +14,13 @@ import { SkillsSection } from "@/components/Skills";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
-import { TacticalTerminal } from "@/components/TacticalTerminal";
+import { CommandPalette } from "@/components/CommandPalette";
 import { ProjectModal } from "@/components/ProjectModal";
 
-const ConnectomeBackground = dynamic(
+const GalaxyBackground = dynamic(
   () =>
-    import("@/components/ConnectomeBackground").then(
-      (mod) => mod.ConnectomeBackground
+    import("@/components/GalaxyBackground").then(
+      (mod) => mod.GalaxyBackground
     ),
   { ssr: false }
 );
@@ -28,25 +28,25 @@ const ConnectomeBackground = dynamic(
 export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
-  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const [cliSelectedProject, setCliSelectedProject] = useState<Project | null>(null);
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+  const [selectedModalProject, setSelectedModalProject] = useState<Project | null>(null);
 
-  // Global Cmd+K / Ctrl+K listener for the quiet terminal easter egg
+  // Global Cmd+K / Ctrl+K listener for the quick command palette
   useEffect(() => {
     const handleGlobalKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setIsTerminalOpen((prev) => !prev);
+        setIsPaletteOpen((prev) => !prev);
       }
     };
     window.addEventListener("keydown", handleGlobalKey);
     return () => window.removeEventListener("keydown", handleGlobalKey);
   }, []);
 
-  const handleOpenProjectFromCli = (projectId: string) => {
+  const handleOpenProjectFromPalette = (projectId: string) => {
     const found = portfolioData.projects.find((p) => p.id === projectId);
     if (found) {
-      setCliSelectedProject(found);
+      setSelectedModalProject(found);
     }
   };
 
@@ -68,8 +68,8 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-page text-ink selection:bg-rule selection:text-ink font-sans">
-      {/* Interactive Three.js Background Canvas */}
-      <ConnectomeBackground />
+      {/* Interactive Three.js Galaxy Background Canvas */}
+      <GalaxyBackground />
 
       <div className="relative z-10">
         {/* Printable Resume Header (visible only when printing) */}
@@ -91,7 +91,7 @@ export default function Home() {
           <Navbar
             personal={portfolioData.personal}
             onPrintCV={handleExportCV}
-            onOpenCLI={() => setIsTerminalOpen(true)}
+            onOpenPalette={() => setIsPaletteOpen(true)}
           />
         </div>
 
@@ -117,18 +117,18 @@ export default function Home() {
         <Footer />
       </div>
 
-      {/* Interactive Terminal (Cmd+K Easter Egg) */}
-      <TacticalTerminal
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-        onOpenProject={handleOpenProjectFromCli}
+      {/* Interactive Command Palette (Cmd+K Easter Egg) */}
+      <CommandPalette
+        isOpen={isPaletteOpen}
+        onClose={() => setIsPaletteOpen(false)}
+        onOpenProject={handleOpenProjectFromPalette}
         onShowToast={showToast}
       />
 
-      {/* Project Modal Triggered From Terminal */}
+      {/* Project Modal Triggered From Command Palette */}
       <ProjectModal
-        project={cliSelectedProject}
-        onClose={() => setCliSelectedProject(null)}
+        project={selectedModalProject}
+        onClose={() => setSelectedModalProject(null)}
       />
 
       {/* Notification Toast */}

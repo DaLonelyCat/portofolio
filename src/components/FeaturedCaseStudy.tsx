@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Project } from "../types/portfolio";
-import { SectionHeader } from "./SectionHeader";
 
 interface FeaturedCaseStudyProps {
   project: Project;
@@ -16,15 +15,29 @@ export function FeaturedCaseStudy({ project }: FeaturedCaseStudyProps) {
   return (
     <section id="case-study" className="py-16 md:py-24 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          number="02"
-          category="Featured Production Case Study"
-          title={project.title}
-          description="A custom point of sale and financial accounting system built from scratch to streamline daily operations at Fruqita."
-        />
+        {/* Featured Dossier Header Banner */}
+        <div className="mb-10 pb-6 border-b border-rule flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <span className="text-xs text-accent font-mono uppercase tracking-wider block mb-1">
+              Production Core Case Study
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-light text-ink tracking-tight">
+              {project.title}
+            </h2>
+            <p className="text-sm text-muted mt-2 max-w-2xl leading-relaxed">
+              Custom point-of-sale and financial transaction tracking system built from scratch to streamline cashier workflows and operational accounting at Fruqita.
+            </p>
+          </div>
+
+          <div className="shrink-0 flex items-center gap-2 text-xs font-mono text-muted bg-surface/80 px-3 py-1.5 border border-rule">
+            <span className="text-accent">2026</span>
+            <span>•</span>
+            <span>Fruqita Operations</span>
+          </div>
+        </div>
 
         {/* Screenshot Showcase Container */}
-        <div className="border border-rule bg-surface overflow-hidden mb-10">
+        <div className="border border-rule bg-surface/85 backdrop-blur-sm overflow-hidden mb-10">
           {/* Screenshot Navigation Tabs */}
           <div className="flex flex-wrap items-center border-b border-rule bg-page/60">
             {screenshots.map((shot, idx) => {
@@ -69,28 +82,28 @@ export function FeaturedCaseStudy({ project }: FeaturedCaseStudyProps) {
 
         {/* Deep Dive Breakdown Columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          <div className="p-5 border border-rule bg-surface">
-            <h4 className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
+          <div className="p-5 border border-rule bg-surface/85 backdrop-blur-sm">
+            <h3 className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
               Operational Problem
-            </h4>
+            </h3>
             <p className="text-sm text-muted leading-relaxed">
               {project.problem}
             </p>
           </div>
 
-          <div className="p-5 border border-rule bg-surface">
-            <h4 className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
+          <div className="p-5 border border-rule bg-surface/85 backdrop-blur-sm">
+            <h3 className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
               Software Solution
-            </h4>
+            </h3>
             <p className="text-sm text-muted leading-relaxed">
               {project.solution}
             </p>
           </div>
 
-          <div className="p-5 border border-rule bg-surface">
-            <h4 className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
+          <div className="p-5 border border-rule bg-surface/85 backdrop-blur-sm">
+            <h3 className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
               Business Outcome
-            </h4>
+            </h3>
             <p className="text-sm text-muted leading-relaxed">
               {project.impact}
             </p>
@@ -98,7 +111,7 @@ export function FeaturedCaseStudy({ project }: FeaturedCaseStudyProps) {
         </div>
 
         {/* Stack Highlights */}
-        <div className="mt-6 p-4 border border-rule bg-surface/60 flex flex-wrap items-center justify-between gap-4">
+        <div className="mt-6 p-4 border border-rule bg-surface/70 backdrop-blur-sm flex flex-wrap items-center justify-between gap-4">
           <span className="text-xs text-muted">Architecture & Tech Stack:</span>
           <div className="flex flex-wrap gap-1.5">
             {project.tags.map((tag) => (

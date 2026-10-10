@@ -14,18 +14,18 @@ html {
 }
 
 body {
-  background-color: #121316;
-  color: #F0EFEB;
+  background-color: #090A10;
+  color: #F0F2F8;
   font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
 }
 
 ::selection {
-  background-color: #2C2D35;
-  color: #F0EFEB;
+  background-color: #222638;
+  color: #F0F2F8;
 }
 
-/* Subtle tactile texture overlay */
+/* Subtle stardust texture overlay */
 .texture-overlay {
   position: fixed;
   inset: 0;
@@ -33,7 +33,7 @@ body {
   height: 100%;
   background-image: url('/noise.svg');
   background-repeat: repeat;
-  opacity: 0.035;
+  opacity: 0.03;
   pointer-events: none;
   z-index: 40;
 }
@@ -44,19 +44,19 @@ body {
   outline-offset: 2px !important;
 }
 
-/* Restrained dark scrollbar */
+/* Deep space restrained scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #121316;
+  background: #090A10;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2C2D35;
+  background: #222638;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #A3A1A8;
+  background: #949AB0;
 }
 
 /* Print Stylesheet for clean CV output */

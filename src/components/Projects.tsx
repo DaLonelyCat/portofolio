@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Project, ProjectCategory } from "../types/portfolio";
-import { SectionHeader } from "./SectionHeader";
 import { ProjectModal } from "./ProjectModal";
 
 interface ProjectsProps {
@@ -27,39 +26,49 @@ export function Projects({ projects, categories }: ProjectsProps) {
   return (
     <section id="projects" className="py-16 md:py-24 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          number="03"
-          category="Software Archive"
-          title="Project Index"
-          description="Chronological record of shipped desktop applications, web platforms, and interactive systems."
-        />
+        {/* Integrated Directory Toolbar */}
+        <div className="mb-10 pb-6 border-b border-rule flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div>
+            <div className="flex items-baseline gap-3 mb-1">
+              <h2 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
+                Project Index
+              </h2>
+              <span className="text-xs text-muted font-mono">
+                ({filteredProjects.length} {filteredProjects.length === 1 ? "entry" : "entries"})
+              </span>
+            </div>
+            <p className="text-xs text-muted max-w-lg">
+              Chronological ledger of shipped desktop applications, web platforms, and utilities.
+            </p>
+          </div>
 
-        {/* Category Filters */}
-        <div className="w-full overflow-x-auto pb-4 mb-8">
-          <div className="flex items-center gap-2 min-w-max">
-            {categories.map((category) => {
-              const isActive = selectedCategory === category;
-              return (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`text-xs px-3.5 py-2 min-h-[38px] transition-colors border ${
-                    isActive
-                      ? "bg-accent text-page border-accent font-medium"
-                      : "bg-surface text-muted border-rule hover:border-ink hover:text-ink"
-                  }`}
-                  aria-pressed={isActive}
-                >
-                  {category}
-                </button>
-              );
-            })}
+          {/* Integrated Filter Pills */}
+          <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="flex items-center gap-1.5 min-w-max bg-surface/85 backdrop-blur-sm p-1 border border-rule">
+              {categories.map((category) => {
+                const isActive = selectedCategory === category;
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`text-xs px-3 py-1.5 min-h-[38px] transition-colors ${
+                      isActive
+                        ? "bg-accent text-page font-medium"
+                        : "text-muted hover:text-ink hover:bg-surfaceHover/50"
+                    }`}
+                    aria-pressed={isActive}
+                  >
+                    {category}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* Year-Grouped Project Index */}
         {filteredProjects.length === 0 ? (
-          <div className="p-12 text-center border border-rule bg-surface">
+          <div className="p-12 text-center border border-rule bg-surface/80 backdrop-blur-sm">
             <p className="text-sm text-muted">
               No archive entries match the selected category.
             </p>
@@ -95,9 +104,9 @@ export function Projects({ projects, categories }: ProjectsProps) {
                           <span className="text-xs text-accent block mb-1">
                             {project.category}
                           </span>
-                          <h4 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors">
+                          <h3 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors">
                             {project.title}
-                          </h4>
+                          </h3>
                         </div>
 
                         <div className="md:w-5/12">

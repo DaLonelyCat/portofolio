@@ -12,7 +12,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
   return (
     <section id="hero" className="pt-28 pb-16 md:pt-36 md:pb-24 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Full-Width Large Display Headline */}
+        {/* Full-Width Large Display Headline (Clean Standalone) */}
         <div className="mb-8 max-w-4xl">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ink leading-[1.08]">
             Builder and problem solver turning cool ideas into working software.
@@ -44,7 +44,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
 
               <a
                 href="#projects"
-                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] text-xs sm:text-sm font-normal text-ink bg-surface border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
+                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] text-xs sm:text-sm font-normal text-ink bg-surface/85 backdrop-blur-sm border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
               >
                 View project archive
               </a>
@@ -54,24 +54,22 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onPrintCV}
-                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] text-xs sm:text-sm font-normal text-ink bg-surface border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
+                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] text-xs sm:text-sm font-normal text-ink bg-surface/85 backdrop-blur-sm border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
               >
                 Read CV
               </a>
 
               <a
                 href="#contact"
-                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] text-xs sm:text-sm font-normal text-ink bg-surface border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
+                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] text-xs sm:text-sm font-normal text-ink bg-surface/85 backdrop-blur-sm border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
               >
                 Email me
               </a>
             </div>
-
-
           </div>
 
           {/* Right Column: Background Snapshot */}
-          <div className="lg:col-span-5 bg-surface border border-rule p-6 lg:p-7">
+          <div className="lg:col-span-5 bg-surface/85 backdrop-blur-sm border border-rule p-6 lg:p-7">
             <h2 className="text-xs font-normal uppercase tracking-wider text-muted mb-4 pb-2 border-b border-rule">
               Background Overview
             </h2>

@@ -44,7 +44,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-surface border border-rule p-5 sm:p-8 text-left my-4 max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-surface/95 backdrop-blur-md border border-rule p-5 sm:p-8 text-left my-4 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

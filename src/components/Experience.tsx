@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Experience, EducationItem } from "../types/portfolio";
-import { SectionHeader } from "./SectionHeader";
 
 interface ExperienceProps {
   experiences: Experience[];
@@ -13,12 +12,17 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
   return (
     <section id="experience" className="py-16 md:py-24 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          number="04"
-          category="Work & Roles"
-          title="Operational History"
-          description="Leadership, financial planning, and direct software engineering across ventures."
-        />
+        {/* Asymmetric Section Header */}
+        <div className="mb-10 pb-6 border-b border-rule flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
+              Operational History
+            </h2>
+          </div>
+          <span className="text-xs text-muted max-w-md sm:text-right">
+            Leadership, financial oversight, and software engineering across ventures.
+          </span>
+        </div>
 
         {/* Roles List */}
         <div className="divide-y divide-rule border-b border-rule mb-16">
@@ -29,9 +33,9 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                 <span className="text-xs text-muted block mb-1">
                   {exp.period} • {exp.location}
                 </span>
-                <h4 className="text-lg font-normal text-ink">
+                <h3 className="text-lg font-normal text-ink">
                   {exp.role}
-                </h4>
+                </h3>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-sm text-accent font-medium">{exp.company}</span>
                   {exp.current && (
@@ -61,7 +65,7 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                   {exp.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="text-xs px-2.5 py-0.5 border border-rule bg-surface text-muted"
+                      className="text-xs px-2.5 py-0.5 border border-rule bg-surface/80 text-muted"
                     >
                       {tech}
                     </span>
@@ -74,15 +78,15 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
 
         {/* Education Subsection */}
         <div>
-          <h4 className="text-xs font-normal uppercase tracking-wider text-muted mb-6 pb-2 border-b border-rule">
+          <h3 className="text-xs font-normal uppercase tracking-wider text-muted mb-6 pb-2 border-b border-rule">
             Formal Academic Background
-          </h4>
+          </h3>
           <div className="divide-y divide-rule border-b border-rule">
             {education.map((edu, idx) => (
               <div key={idx} className="py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                 <div className="lg:col-span-4">
                   <span className="text-xs text-muted block mb-1">{edu.period}</span>
-                  <h5 className="text-base font-normal text-ink">{edu.institution}</h5>
+                  <h4 className="text-base font-normal text-ink">{edu.institution}</h4>
                 </div>
                 <div className="lg:col-span-8">
                   <p className="text-sm text-ink font-medium">{edu.degree}</p>
