@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Terminal, X, CornerDownLeft, Sparkles, Crosshair, ChevronRight } from "lucide-react";
 import { portfolioData } from "../data/portfolio";
 
 interface TacticalTerminalProps {
@@ -13,7 +12,7 @@ interface TacticalTerminalProps {
 
 interface LogEntry {
   id: string;
-  type: "system" | "input" | "output" | "error" | "ascii";
+  type: "system" | "input" | "output" | "error";
   text: string;
 }
 
@@ -30,31 +29,28 @@ export function TacticalTerminal({
     {
       id: "init-1",
       type: "system",
-      text: "SYS://TACTICAL_CLI v4.2 [ONLINE] • SECURE_CHANNEL_READY",
+      text: "Portfolio Terminal [Easter Egg]",
     },
     {
       id: "init-2",
       type: "system",
-      text: "Type 'help' for instructions, 'dossiers' to list projects, or 'connectomics' / 'agentic' for R&D telemetry.",
+      text: "Type 'help' for available commands, or 'projects' to view projects.",
     },
   ]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // Focus on open
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 80);
     }
   }, [isOpen]);
 
-  // Auto-scroll logs
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 
-  // Global shortcut listeners (Cmd+K, Ctrl+K, Escape)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -77,13 +73,12 @@ export function TacticalTerminal({
     const trimmed = rawCmd.trim();
     if (!trimmed) return;
 
-    // Record history
     setHistory((prev) => [...prev, trimmed]);
     setHistoryIdx(-1);
 
     const newLogs: LogEntry[] = [
       ...logs,
-      { id: `in-${Date.now()}`, type: "input", text: `>_ ${trimmed}` },
+      { id: `in-${Date.now()}`, type: "input", text: `> ${trimmed}` },
     ];
 
     const [cmd, ...args] = trimmed.toLowerCase().split(/\s+/);
@@ -94,29 +89,27 @@ export function TacticalTerminal({
         newLogs.push({
           id: `out-${Date.now()}`,
           type: "output",
-          text: `AVAILABLE TACTICAL INSTRUCTIONS:
-  dossiers / projects   - Enumerate all software dossiers & case studies
-  open <id | num>       - Launch case study dossier modal (e.g., 'open 1' or 'open unicash-pos')
-  connectomics / fly    - Inspect 3D fruit fly brain scan research telemetry
-  agentic / ai          - Inspect autonomous multi-agent trading & task engine
-  multimedia            - Display Minor in Multimedia specializations (UI/UX, Game Dev)
-  skills                - Output technical cyberware capabilities
-  cv                    - Open verified Curriculum Vitae dossier
-  contact               - Copy direct comms frequency & transmit uplink
-  clear                 - Flush terminal buffer
-  exit                  - Terminate CLI session`,
+          text: `Available commands:
+  projects              List all projects
+  open <id | number>    Open project overview modal (e.g. 'open 1' or 'open unicash-pos')
+  connectomics          View research notes on 3D fruit fly brain scans
+  agentic               View notes on agentic AI
+  skills                List skills and competencies
+  cv                    Open Curriculum Vitae
+  contact               Copy email to clipboard
+  clear                 Clear terminal history
+  exit                  Close terminal`,
         });
         break;
 
-      case "dossiers":
       case "projects": {
         const listText = portfolioData.projects
-          .map((p, i) => `  [${i + 1}] ${p.id.padEnd(26)} [${p.category.toUpperCase()}] // ${p.title}`)
+          .map((p, i) => `  [${i + 1}] ${p.id.padEnd(22)} (${p.category}) - ${p.title}`)
           .join("\n");
         newLogs.push({
           id: `out-${Date.now()}`,
           type: "output",
-          text: `REGISTERED DOSSIERS (${portfolioData.projects.length} CASE FILES):\n${listText}\n\n-> Type 'open <number>' or 'open <id>' to launch full inspection modal.`,
+          text: `Projects (${portfolioData.projects.length} entries):\n${listText}\n\nType 'open <number>' or 'open <id>' to inspect details.`,
         });
         break;
       }
@@ -126,7 +119,7 @@ export function TacticalTerminal({
           newLogs.push({
             id: `err-${Date.now()}`,
             type: "error",
-            text: "ERROR: Specify project number or ID. Example: 'open 1' or 'open unicash-pos'",
+            text: "Usage: open <project-number> or open <project-id>",
           });
           break;
         }
@@ -145,7 +138,7 @@ export function TacticalTerminal({
           newLogs.push({
             id: `out-${Date.now()}`,
             type: "output",
-            text: `LAUNCHING DOSSIER // [${project.id.toUpperCase()}] ...`,
+            text: `Opening overview for ${project.title}...`,
           });
           onClose();
           onOpenProject(project.id);
@@ -153,7 +146,7 @@ export function TacticalTerminal({
           newLogs.push({
             id: `err-${Date.now()}`,
             type: "error",
-            text: `ERROR: No dossier found with identifier '${argStr}'. Type 'dossiers' to list all.`,
+            text: `No project found matching '${argStr}'. Type 'projects' to list all.`,
           });
         }
         break;
@@ -164,61 +157,23 @@ export function TacticalTerminal({
       case "brain":
         newLogs.push({
           id: `out-${Date.now()}`,
-          type: "ascii",
-          text: `===========================================================
-[ R&D TELEMETRY // 3D DROSOPHILA CONNECTOMICS ]
-===========================================================
-TARGET:       Drosophila melanogaster (Fruit Fly Whole Brain)
-MODALITY:     High-Throughput 3D Volumetric Electron Microscopy
-NETWORK:      ~140,000 Neurons • ~50,000,000 Synaptic Junctions
-OBJECTIVE:    Decipher biological circuit graphs, synaptic plasticity,
-              and translate structural connectomes into next-gen
-              bio-inspired artificial intelligence paradigms.
-STATUS:       Active Exploration & Graph Analysis (2026)
-===========================================================`,
+          type: "output",
+          text: `Connectomics Research Notes:
+Topic:   3D electron microscopy scans and synaptic circuits of Drosophila melanogaster.
+Status:  Currently learning.
+Focus:   Studying whole-brain datasets to understand biological neural wiring and synaptic connectivity graphs.`,
         });
         break;
 
       case "agentic":
       case "ai":
-      case "trading":
-        newLogs.push({
-          id: `out-${Date.now()}`,
-          type: "ascii",
-          text: `===========================================================
-[ SYSTEM ARCHITECTURE // AGENTIC AI ENGINE ]
-===========================================================
-  [Market Telemetry Ingestion] ----> [Quantitative Strategy Agent]
-                                                 |
-  [User Task Stream / Calendar] ---> [Task Orchestration Agent]
-                                                 |
-  [Enterprise Ledger / Fruqita] ---> [Operations Dispatcher]
-                                                 |
-                                     v
-                       [Self-Correcting LLM Loop]
-                                     |
-                       v                           v
-              [Automated Execution]      [Real-time Alert Uplink]
-
-DOMAINS:  • Quantitative Algorithmic Stock Trading
-          • Daily Task Scheduling & Workflow Automation
-          • Autonomous Venture Operations Management
-STATUS:   Active Architecture & Tool-Calling Pipeline (2026)
-===========================================================`,
-        });
-        break;
-
-      case "multimedia":
-      case "minor":
         newLogs.push({
           id: `out-${Date.now()}`,
           type: "output",
-          text: `ACADEMIC ACCREDITATION: Minor in Multimedia (Bina Nusantara University)
-SPECIALIZATIONS:
-  1. UI/UX Architecture & Ergonomics (Tactical Cyber HUD, WCAG AA, Design Systems)
-  2. Game Design & Programming (Unity C#, 2D/3D physics, collision controllers)
-  3. Multimedia Understanding & Perception (Computer graphics, sensory WebXR)
-  4. Rapid Interactive Prototyping (Figma tokens, 60fps canvas engines)`,
+          text: `Agentic AI Systems Notes:
+Topic:   Autonomous multi-agent architectures and tool-calling loops.
+Status:  Currently learning.
+Focus:   Investigating coordination patterns, state management, and workflow automation for practical tasks.`,
         });
         break;
 
@@ -226,14 +181,14 @@ SPECIALIZATIONS:
         const skillsText = portfolioData.skillCategories
           .map(
             (c) =>
-              `[ ${c.title.toUpperCase()} ]\n` +
-              c.skills.map((s) => `  • ${s.name.padEnd(30)} -> ${s.context}`).join("\n")
+              `${c.title}:\n` +
+              c.skills.map((s) => `  • ${s.name} (${s.context})`).join("\n")
           )
           .join("\n\n");
         newLogs.push({
           id: `out-${Date.now()}`,
           type: "output",
-          text: `CYBERWARE COMPETENCY MATRIX:\n\n${skillsText}`,
+          text: `Competencies:\n\n${skillsText}`,
         });
         break;
       }
@@ -243,7 +198,7 @@ SPECIALIZATIONS:
         newLogs.push({
           id: `out-${Date.now()}`,
           type: "output",
-          text: "TRANSMITTING CV DOSSIER... Opening viewer in new tab.",
+          text: "Opening Curriculum Vitae in a new tab...",
         });
         window.open("/cv", "_blank");
         break;
@@ -255,10 +210,7 @@ SPECIALIZATIONS:
         newLogs.push({
           id: `out-${Date.now()}`,
           type: "output",
-          text: `DIRECT TRANSMISSION UPLINK:
-  Email:    ${portfolioData.personal.socials.email} (Copied to clipboard!)
-  GitHub:   ${portfolioData.personal.socials.github}
-  LinkedIn: ${portfolioData.personal.socials.linkedin}`,
+          text: `Email: ${portfolioData.personal.socials.email} (Copied to clipboard)`,
         });
         break;
 
@@ -277,7 +229,7 @@ SPECIALIZATIONS:
         newLogs.push({
           id: `err-${Date.now()}`,
           type: "error",
-          text: `UNKNOWN INSTRUCTION: '${trimmed}'. Type 'help' to review valid commands.`,
+          text: `Command not recognized: '${trimmed}'. Type 'help' to see valid commands.`,
         });
         break;
     }
@@ -315,76 +267,61 @@ SPECIALIZATIONS:
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Tactical Command Palette"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-150"
+      aria-label="Interactive Terminal"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-3xl bg-[#090b14]/98 border-2 border-cyber-yellow/60 clip-corner shadow-[0_0_50px_rgba(255,230,0,0.25)] flex flex-col max-h-[85vh] overflow-hidden"
+        className="relative w-full max-w-2xl bg-ink text-paper border border-rule/30 font-mono text-xs flex flex-col max-h-[80vh] overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top Header Bar */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-black/90 border-b border-yellow-500/25 font-mono text-xs select-none">
+        {/* Header Bar */}
+        <div className="flex items-center justify-between px-4 py-2 border-b border-rule/20 bg-ink/90 text-muted">
           <div className="flex items-center gap-2">
-            <Terminal className="w-4 h-4 text-cyber-yellow" />
-            <span className="text-white font-bold tracking-wider">TACTICAL_CLI // SYS_SHELL</span>
-            <span className="hidden sm:inline text-slate-500">//</span>
-            <span className="hidden sm:inline text-cyber-cyan text-[11px]">[ESC to Exit]</span>
+            <span className="text-paper">terminal</span>
+            <span>•</span>
+            <span>press ESC to exit</span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="hidden sm:flex items-center gap-1 text-[10px] text-teal-400 font-bold bg-teal-500/10 px-2 py-0.5 border border-teal-500/30 clip-corner-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-              SESSION: ROOT
-            </span>
-            <button
-              onClick={onClose}
-              className="p-1 text-slate-400 hover:text-cyber-yellow hover:bg-white/5 clip-corner-sm transition-colors"
-              aria-label="Close terminal"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="text-muted hover:text-paper p-1 transition-colors"
+            aria-label="Close terminal"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        {/* Scrollable Output Terminal */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-2 font-mono text-xs text-slate-200 select-text min-h-[280px]">
+        {/* Output */}
+        <div className="flex-1 p-4 overflow-y-auto space-y-1.5 min-h-[260px] select-text">
           {logs.map((log) => {
             if (log.type === "system") {
               return (
-                <div key={log.id} className="text-cyber-yellow/80 leading-relaxed">
+                <div key={log.id} className="text-muted">
                   {log.text}
                 </div>
               );
             }
             if (log.type === "input") {
               return (
-                <div key={log.id} className="text-cyber-cyan font-bold leading-relaxed">
+                <div key={log.id} className="text-paper font-bold">
                   {log.text}
                 </div>
               );
             }
             if (log.type === "error") {
               return (
-                <div key={log.id} className="text-cyber-magenta font-semibold leading-relaxed">
+                <div key={log.id} className="text-red-400">
                   {log.text}
                 </div>
-              );
-            }
-            if (log.type === "ascii") {
-              return (
-                <pre
-                  key={log.id}
-                  className="text-teal-300 bg-black/60 p-2.5 border border-teal-500/20 clip-corner-sm overflow-x-auto whitespace-pre font-mono text-[11px] leading-tight"
-                >
-                  {log.text}
-                </pre>
               );
             }
             return (
               <pre
                 key={log.id}
-                className="text-slate-300 whitespace-pre-wrap leading-relaxed font-mono"
+                className="whitespace-pre-wrap font-mono text-paper/90 leading-relaxed"
               >
                 {log.text}
               </pre>
@@ -393,33 +330,20 @@ SPECIALIZATIONS:
           <div ref={bottomRef} />
         </div>
 
-        {/* Interactive Command Input Line */}
-        <div className="p-3 bg-black/95 border-t border-yellow-500/30 flex items-center gap-2">
-          <div className="flex items-center gap-1 text-cyber-yellow font-mono text-xs font-bold shrink-0">
-            <span className="hidden sm:inline">user@dalonelycat:~$</span>
-            <span className="sm:hidden inline text-cyber-yellow">&gt;_</span>
-          </div>
-
+        {/* Input */}
+        <div className="p-3 border-t border-rule/20 bg-ink flex items-center gap-2">
+          <span className="text-paper select-none">&gt;</span>
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type 'help', 'dossiers', 'connectomics'..."
-            className="flex-1 bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder:text-slate-600 caret-cyber-yellow min-w-0"
+            placeholder="Type 'help' or 'projects'..."
+            className="flex-1 bg-transparent text-paper font-mono text-xs focus:outline-none placeholder:text-muted/60"
             autoComplete="off"
             spellCheck={false}
           />
-
-          <button
-            onClick={() => handleCommand(input)}
-            className="flex items-center gap-1 px-2 py-1 bg-cyber-yellow hover:bg-cyber-yellowHover text-black font-mono text-[11px] font-bold clip-corner-sm transition-colors shrink-0"
-            aria-label="Execute Command"
-          >
-            <span className="hidden sm:inline">EXEC</span>
-            <CornerDownLeft className="w-3 h-3" />
-          </button>
         </div>
       </div>
     </div>

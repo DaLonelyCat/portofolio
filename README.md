@@ -1,31 +1,29 @@
-# Cyberpunk Neon Portfolio & CV for Cloudflare
+# Portfolio and Curriculum Vitae
 
-A modern, high-performance web portfolio and interactive CV for a **Software Engineer & Tech Builder**, crafted with an authentic **Cyberpunk neon aesthetic** featuring Electric Cyan, Neon Magenta, Acid Amber, chamfered HUD geometry, and CRT scanlines. Built for instant static export deployment on **Cloudflare Pages / Workers**.
+A personal portfolio and interactive CV for Christian Emanuel Ikajaya, Computer Science student at Bina Nusantara University, CFO at Fruqita, and software builder. Designed in a calm editorial style with a warm paper and dark ink aesthetic. Built for static export deployment on Cloudflare Pages and Workers.
 
 ---
 
-## Visual Design & Aesthetics
+## Design System
 
-- **Void Black Foundation**: `#030308` background with dark tech carbon `#080911` and `#0d0f1a` surfaces.
-- **Neon Color Triad**:
-  - **Electric Cyan (`#00f0ff`)**: Primary telemetry, active focus rings, and glowing neon edges.
-  - **Neon Magenta (`#ff0055`)**: High-energy CTA buttons, alert badges, and laser highlights.
-  - **Acid Yellow (`#ffe600`)**: Technical status codes, coordinates, and telemetry badges.
-  - **Matrix Green (`#00ff9f`)**: Real-time system online beacon.
-- **Tactical HUD Geometry**: Chamfered cut corners (`clip-corner`), corner crosshairs (`+`), and monospace telemetry tags (`SYS://ONLINE`, `CASE_FILE // 01`).
-- **Retro-Futuristic CRT Scanlines**: Subtle background scanline overlay with restrained opacity.
-- **WCAG AA Compliance**: High-contrast typography and neon focus outlines for full keyboard accessibility.
+- **Paper Foundation**: `#F6F1E7` background with `#1C1A17` dark ink text.
+- **Muted Contrast**: `#5B554B` for secondary captions, metadata, and dates (6.54:1 contrast ratio, WCAG AA compliant).
+- **Hairline Rules**: `#D9D1C1` borders providing structural layout without heavy container cards.
+- **Rust Accent**: `#8F3B1F` highlighting interactive links, focus states, and primary actions (6.60:1 contrast ratio).
+- **Typography**: IBM Plex Sans in light (300) and regular (400) weights.
+- **Accessibility**: Full keyboard navigation support (Tab, Enter, Escape) and high-contrast focus rings.
 
 ---
 
 ## Features
 
-1. **HUD Navigation Dock**: Tactical telemetry badge, section jump anchors, mobile drawer menu, and quick comms link.
-2. **Featured Case Dossiers**: Interactive protocol filtering (`[ ALL_SYSTEMS ]`, `[ PRODUCT_DESIGN ]`, etc.) with an accessible modal dialog for deep-dive problem/solution/impact overviews.
-3. **Operational Logs Timeline**: Chronological CV career history with glowing data nodes and accomplishment telemetry.
-4. **Cyberware Competency Matrix**: Categorized skills breakdown (Design, Code, Workflow) with contextual descriptions and power status nodes.
-5. **Encrypted Comms Uplink**: Instant clipboard copy with cyberpunk feedback toast notification and direct `mailto:` transmission.
-6. **Print-Friendly Mode**: Built-in `@media print` stylesheet that strips dark backgrounds and formats a clean black-and-white physical/PDF CV when pressing "Export CV (PDF)" or `Ctrl+P` / `Cmd+P`.
+1. **Editorial Presentation**: Clear background summary and narrative bio.
+2. **Learning & Research**: Overview of active studies in 3D Drosophila brain connectomics, agentic AI, and multimedia systems.
+3. **Selected Work Index**: Filterable project catalog with deep-dive problem, solution, and impact dialogs.
+4. **Experience & Education**: Chronological record of operational roles and academic coursework.
+5. **Direct Contact**: Instant clipboard email copy with visual confirmation and mailto dispatch.
+6. **CV Viewer**: Dedicated `/cv` route embedding the curriculum vitae with quick print and download actions.
+7. **Terminal Easter Egg**: Quiet command palette accessible via `Ctrl+K` or `⌘K`.
 
 ---
 
@@ -34,22 +32,26 @@ A modern, high-performance web portfolio and interactive CV for a **Software Eng
 ```
 ├── src/
 │   ├── app/
-│   │   ├── globals.css         # Glassmorphism utilities, scrollbars, and print styles
-│   │   ├── layout.tsx          # Meta tags, SEO, and OpenGraph configuration
-│   │   └── page.tsx            # Main single-page portfolio layout
+│   │   ├── globals.css         # Baseline typography, focus indicators, and print styles
+│   │   ├── layout.tsx          # Font configuration, meta tags, and OpenGraph data
+│   │   ├── page.tsx            # Single-page editorial portfolio
+│   │   └── cv/page.tsx         # CV reader and PDF viewer
 │   ├── components/
-│   │   ├── Navbar.tsx          # Floating header with mobile responsive drawer
-│   │   ├── Hero.tsx            # Introduction, bio summary, and quick CTAs
-│   │   ├── Projects.tsx        # Filterable project gallery
-│   │   ├── ProjectModal.tsx    # Accessible modal dialog for case studies
-│   │   ├── Experience.tsx      # Interactive career history & education
-│   │   ├── Skills.tsx          # Categorized competency matrix
-│   │   ├── ContactSection.tsx  # Direct email copy, social links, and footer
-│   │   └── Toast.tsx           # Accessible notification toast
+│   │   ├── Navbar.tsx          # Clean header with responsive drawer
+│   │   ├── Hero.tsx            # Overview and background snapshot
+│   │   ├── Learning.tsx        # Active learning topics
+│   │   ├── Projects.tsx        # Filterable project index
+│   │   ├── ProjectModal.tsx    # Accessible project overview modal
+│   │   ├── Experience.tsx      # Work history and formal education
+│   │   ├── Skills.tsx          # Categorized competency lists
+│   │   ├── ContactSection.tsx  # Direct email copy and links
+│   │   ├── TacticalTerminal.tsx # Hidden terminal easter egg
+│   │   └── Toast.tsx           # Notification toast
 │   ├── types/
 │   │   └── portfolio.ts        # TypeScript data definitions
 │   └── data/
-│       └── portfolio.ts        # Central data source for all personal and CV information
+│       └── portfolio.ts        # Central data source for personal, project, and CV information
+├── DESIGN.md                   # Design system documentation
 ├── package.json
 ├── tailwind.config.ts
 └── next.config.mjs
@@ -57,20 +59,7 @@ A modern, high-performance web portfolio and interactive CV for a **Software Eng
 
 ---
 
-## Customizing Your Information
-
-All portfolio content is decoupled from components and stored in a single typed configuration file:
-👉 **`src/data/portfolio.ts`**
-
-To personalize:
-1. Update `personal.name`, `personal.role`, `personal.bio`, and `personal.socials` with your information.
-2. Edit or add projects in `projects` array with your case studies, screenshots, and live demo URLs.
-3. Update your work history in `experiences` array and degree info in `education`.
-4. Adjust skills in `skillCategories` to match your core capabilities.
-
----
-
-## Development & Deployment
+## Development and Deployment
 
 ### Local Development
 ```bash
@@ -79,10 +68,8 @@ npm run dev
 ```
 Open [http://localhost:2010](http://localhost:2010) in your browser.
 
-### Deploying to Cloudflare Pages / Workers
-1. Push your repository to **GitHub**.
-2. Connect your repo in the [Cloudflare Dashboard](https://dash.cloudflare.com/) under **Workers & Pages**.
+### Deploying to Cloudflare Pages
+1. Push your repository to GitHub.
+2. Connect your repository in the Cloudflare Dashboard under Workers and Pages.
 3. Build command: `npm run build`
 4. Output directory: `out`
-5. Your portfolio is served instantly across Cloudflare's global edge network!
-

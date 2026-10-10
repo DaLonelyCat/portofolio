@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Cpu, Zap, Activity } from "lucide-react";
 import { SkillCategory } from "../types/portfolio";
 
 interface SkillsProps {
@@ -10,67 +9,46 @@ interface SkillsProps {
 
 export function SkillsSection({ categories }: SkillsProps) {
   return (
-    <section id="skills" className="py-8 md:py-12 relative">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 xl:px-12">
+    <section id="skills" className="py-16 md:py-20 border-b border-rule">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 text-cyber-yellow font-mono text-xs font-semibold uppercase tracking-wider mb-1">
-            <Cpu className="w-3.5 h-3.5 text-cyber-yellow" />
-            <span>// CYBERWARE // TECHNICAL_CAPABILITIES</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            NEURAL MODULES & STACK
+        <div className="mb-10 pb-6 border-b border-rule">
+          <h2 className="text-xs font-normal uppercase tracking-wider text-muted mb-2">
+            Competencies
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-xl">
-            Multi-domain proficiencies spanning systemic interface architecture, high-performance web engineering, and automated developer operations.
+          <h3 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
+            Skills & Technical Focus
+          </h3>
+          <p className="text-sm text-muted mt-1 max-w-xl">
+            Software development, systems architecture, and business operations.
           </p>
         </div>
 
-        {/* Responsive 4-Column Grid for all 4 Competency Domains */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {categories.map((cat, idx) => {
-            const moduleCode = `SYS_MOD_0${idx + 1}`;
-            return (
-              <div
-                key={idx}
-                className="flex flex-col justify-between p-4 sm:p-5 cyber-panel clip-corner border-yellow-500/20 hover:border-cyber-yellow"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-yellow-500/15">
-                    <span className="font-mono text-xs font-bold text-cyber-yellow tracking-wider">
-                      [{moduleCode}]
-                    </span>
-                    <div className="flex items-center gap-1 font-mono text-[10px] text-cyber-yellow font-bold">
-                      <Zap className="w-3 h-3 text-cyber-yellow animate-pulse" />
-                      <span>LVL: MAX</span>
-                    </div>
-                  </div>
+        {/* 2-Column Grouped Definition Lists */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {categories.map((cat, idx) => (
+            <div key={idx} className="pb-4">
+              <h4 className="text-base font-normal text-ink mb-1 pb-2 border-b border-rule">
+                {cat.title}
+              </h4>
+              <p className="text-xs text-muted leading-relaxed mb-4">
+                {cat.description}
+              </p>
 
-                  <h3 className="text-base font-bold text-white mb-1">{cat.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">{cat.description}</p>
-
-                  <div className="space-y-2">
-                    {cat.skills.map((skill, sIdx) => (
-                      <div
-                        key={sIdx}
-                        className="p-2.5 bg-black/60 border border-yellow-500/15 clip-corner-sm hover:border-cyber-yellow/60 hover:bg-yellow-500/5 transition-colors"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono text-xs font-bold text-slate-100">
-                            {skill.name}
-                          </span>
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyber-yellow shadow-[0_0_6px_#ffe600]" />
-                        </div>
-                        <p className="font-mono text-[10px] text-slate-400 mt-0.5">
-                          {skill.context}
-                        </p>
-                      </div>
-                    ))}
+              <dl className="divide-y divide-rule/60">
+                {cat.skills.map((skill, sIdx) => (
+                  <div key={sIdx} className="py-2.5 flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                    <dt className="text-sm font-normal text-ink">
+                      {skill.name}
+                    </dt>
+                    <dd className="text-xs text-muted sm:text-right">
+                      {skill.context}
+                    </dd>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                ))}
+              </dl>
+            </div>
+          ))}
         </div>
       </div>
     </section>

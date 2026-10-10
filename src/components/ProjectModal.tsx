@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { X, ExternalLink, Github, Figma, CheckCircle, Terminal, Crosshair } from "lucide-react";
 import { Project } from "../types/portfolio";
 
 interface ProjectModalProps {
@@ -35,106 +34,95 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#090b14] border-2 border-cyber-yellow/40 clip-corner p-5 sm:p-7 shadow-[0_0_40px_rgba(255,230,0,0.18)] text-left my-6 max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-paper border border-rule p-6 sm:p-8 text-left my-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* HUD Corner Accents */}
-        <div className="absolute top-2 left-2 text-[10px] font-mono text-yellow-500/40 select-none">
-          +--[ HUD.DOSSIER_VIEW ]
-        </div>
-        <div className="absolute bottom-2 right-2 text-[10px] font-mono text-yellow-500/40 select-none">
-          [ AUTH: VERIFIED ]--+
-        </div>
-
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 pb-4 border-b border-yellow-500/20 pt-1">
+        <div className="flex items-start justify-between gap-4 pb-4 border-b border-rule">
           <div>
-            <div className="flex items-center gap-2 mb-1.5 font-mono text-xs">
-              <span className="px-2 py-0.5 bg-cyber-yellow/15 text-cyber-yellow font-bold border border-cyber-yellow/40 clip-corner-sm">
-                {project.category.toUpperCase()}
-              </span>
-              <span className="text-cyber-yellow font-bold">YEAR: {project.year}</span>
-              <span className="text-slate-500">// ID: {project.id}</span>
+            <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-muted">
+              <span className="text-accent font-normal">{project.category}</span>
+              <span>•</span>
+              <span>{project.year}</span>
             </div>
-            <h2 id="modal-title" className="text-xl sm:text-2xl font-black tracking-tight text-white">
+            <h2 id="modal-title" className="text-2xl font-light text-ink tracking-tight">
               {project.title}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-0.5">{project.tagline}</p>
+            <p className="text-sm text-muted mt-1 leading-relaxed">{project.tagline}</p>
           </div>
 
           <button
             onClick={onClose}
-            aria-label="Close case study dialog"
-            className="p-1.5 text-slate-400 hover:text-cyber-yellow hover:bg-white/5 transition-colors clip-corner-sm"
+            aria-label="Close project details"
+            className="p-2 text-muted hover:text-ink border border-transparent hover:border-rule transition-colors shrink-0"
           >
-            <X className="w-5 h-5" />
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
-        {/* Content sections with compact spacing */}
-        <div className="py-4 space-y-4">
-          {/* Overview */}
+        {/* Content */}
+        <div className="py-6 space-y-6">
           <div>
-            <div className="flex items-center gap-1.5 font-mono text-xs text-cyber-yellow uppercase tracking-wider mb-1.5">
-              <Terminal className="w-3.5 h-3.5" />
-              <span>// SYSTEM_OVERVIEW</span>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed bg-black/40 p-3 border border-yellow-500/15 clip-corner-sm">
+            <h3 className="text-xs uppercase tracking-wider text-muted mb-2 font-normal">
+              Overview
+            </h3>
+            <p className="text-sm text-ink leading-relaxed">
               {project.overview}
             </p>
           </div>
 
-          {/* Problem & Solution Grid */}
           {(project.problem || project.solution) && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {project.problem && (
-                <div className="p-3 bg-black/60 border border-cyber-magenta/30 clip-corner-sm">
-                  <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-cyber-magenta mb-1">
-                    [ CHALLENGE_VECTOR ]
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">{project.problem}</p>
+                <div className="p-4 border border-rule bg-paper">
+                  <h4 className="text-xs uppercase tracking-wider text-muted mb-1.5 font-normal">
+                    Challenge
+                  </h4>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    {project.problem}
+                  </p>
                 </div>
               )}
+
               {project.solution && (
-                <div className="p-3 bg-black/60 border border-cyber-cyan/30 clip-corner-sm">
-                  <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-cyber-cyan mb-1">
-                    [ IMPLEMENTED_ARCHITECTURE ]
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">{project.solution}</p>
+                <div className="p-4 border border-rule bg-paper">
+                  <h4 className="text-xs uppercase tracking-wider text-muted mb-1.5 font-normal">
+                    Solution
+                  </h4>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    {project.solution}
+                  </p>
                 </div>
               )}
             </div>
           )}
 
-          {/* Impact in Yellow */}
           {project.impact && (
-            <div className="p-3 bg-cyber-yellow/10 border border-cyber-yellow/30 clip-corner-sm">
-              <div className="flex items-start gap-2">
-                <Crosshair className="w-4 h-4 text-cyber-yellow shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-cyber-yellow mb-0.5">
-                    // QUANTIFIABLE_IMPACT
-                  </div>
-                  <p className="text-xs text-slate-100 leading-relaxed">{project.impact}</p>
-                </div>
-              </div>
+            <div className="p-4 border border-rule">
+              <h4 className="text-xs uppercase tracking-wider text-muted mb-1 font-normal">
+                Outcome
+              </h4>
+              <p className="text-sm text-ink leading-relaxed">
+                {project.impact}
+              </p>
             </div>
           )}
 
-          {/* Technology stack */}
           <div>
-            <div className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-              // TELEMETRY_STACK
-            </div>
+            <h4 className="text-xs uppercase tracking-wider text-muted mb-2 font-normal">
+              Technologies
+            </h4>
             <div className="flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-mono text-[11px] px-2 py-0.5 bg-black/80 border border-yellow-500/25 text-cyber-yellow clip-corner-sm"
+                  className="text-xs px-2.5 py-1 border border-rule text-muted"
                 >
                   {tag}
                 </span>
@@ -143,49 +131,43 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
         </div>
 
-        {/* Footer / Links */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-yellow-500/20">
-          <div className="flex items-center gap-2">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-black bg-cyber-yellow hover:bg-cyber-yellowHover px-3.5 py-1.5 clip-corner-sm transition-all shadow-neon-yellow-sm"
-              >
-                <span>LAUNCH_INTERFACE</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            )}
+        {/* Actions */}
+        <div className="pt-4 border-t border-rule flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {project.repoUrl && (
               <a
                 href={project.repoUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-300 hover:text-white bg-black/80 hover:bg-zinc-800 px-3 py-1.5 clip-corner-sm border border-yellow-500/20 transition-colors"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-normal text-paper bg-accent hover:bg-accentHover transition-colors focus-visible:outline-accent"
               >
-                <Github className="w-3.5 h-3.5" />
-                <span>SOURCE</span>
+                <span>View source on GitHub</span>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
               </a>
             )}
-            {project.figmaUrl && (
+
+            {project.liveUrl && (
               <a
-                href={project.figmaUrl}
+                href={project.liveUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-300 hover:text-white bg-black/80 hover:bg-zinc-800 px-3 py-1.5 clip-corner-sm border border-yellow-500/20 transition-colors"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-normal text-ink border border-rule hover:border-ink transition-colors focus-visible:outline-accent"
               >
-                <Figma className="w-3.5 h-3.5" />
-                <span>FIGMA_TOKENS</span>
+                <span>Download / Live release</span>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
               </a>
             )}
           </div>
 
           <button
             onClick={onClose}
-            className="font-mono text-xs text-slate-400 hover:text-cyber-yellow px-2 py-1 transition-colors"
+            className="px-4 py-2 text-xs text-muted hover:text-ink transition-colors"
           >
-            DISMISS [ESC]
+            Close
           </button>
         </div>
       </div>
