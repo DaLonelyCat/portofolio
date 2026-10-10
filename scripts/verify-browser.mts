@@ -122,6 +122,14 @@ async function runBrowserTests() {
     assert(!atAGlanceText.includes("(Game Dev, Graphics & UX)"), "At a Glance purged of '(Game Dev, Graphics & UX)'");
     assert(atAGlanceText.includes("Completed Minor in Multimedia") && atAGlanceText.includes("Entrepreneurship Track Enrichment Program"), "At a Glance features Completed Minor and Entrepreneurship Track Enrichment Program");
 
+    // Test Custom Rocket Pointer
+    console.log("\n--- Testing Custom Rocket Pointer ---");
+    await desktopPage.mouse.move(400, 300);
+    await desktopPage.waitForTimeout(200);
+    const rocketSvg = desktopPage.locator("svg path[d*='M 3,3']");
+    const isRocketSvgPresent = (await rocketSvg.count()) > 0;
+    assert(isRocketSvgPresent, "Custom rocket ship vector pointer is rendered on desktop");
+
     // Test Category Filtering
     console.log("\n--- Testing Right-Side Vertical Filter Rail ---");
     const desktopFilterBtn = desktopPage.locator("aside button:has-text('Desktop Application')");
@@ -217,6 +225,8 @@ async function runBrowserTests() {
     console.log("\n--- 2. Mobile Viewport (390x844) ---");
     const mobilePage = await browser.newPage({
       viewport: { width: 390, height: 844 },
+      hasTouch: true,
+      isMobile: true,
     });
 
     await mobilePage.goto(`http://localhost:${port}/`, { waitUntil: "networkidle" });
@@ -242,6 +252,11 @@ async function runBrowserTests() {
 
     const scrollYAfterNav = await mobilePage.evaluate(() => window.scrollY);
     assert(scrollYAfterNav > 100, "Mobile drawer link navigates to target section", `ScrollY: ${scrollYAfterNav}`);
+
+    // Verify Custom Rocket Pointer is Suppressed on Mobile Touch
+    const mobileRocketSvg = mobilePage.locator("svg path[d*='M 3,3']");
+    const isMobileRocketPresent = (await mobileRocketSvg.count()) === 0;
+    assert(isMobileRocketPresent, "Custom rocket ship pointer is cleanly suppressed on mobile touch viewports");
 
     // Capture Mobile Screenshots
     const mobileViewScreenshotPath = path.join(screenshotsDir, "mobile-viewport.png");

@@ -59,6 +59,18 @@ body {
   background: #00F0FF;
 }
 
+/* Custom Rocket Pointer (Desktop Fine-Pointer Devices Only) */
+@media (hover: hover) and (pointer: fine) {
+  body.rocket-cursor-enabled,
+  body.rocket-cursor-enabled a,
+  body.rocket-cursor-enabled button,
+  body.rocket-cursor-enabled [role="button"],
+  body.rocket-cursor-enabled summary,
+  body.rocket-cursor-enabled .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
 /* Print Stylesheet for clean CV output */
 @media print {
   body {

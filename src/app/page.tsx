@@ -13,6 +13,7 @@ import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
 import { BackToTop } from "@/components/BackToTop";
+import { RocketCursor } from "@/components/RocketCursor";
 
 const SolarSystemBackground = dynamic(
   () =>
@@ -40,6 +41,9 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-page text-ink selection:bg-cyan-500/30 selection:text-white font-sans">
+      {/* Custom Cyberpunk Rocket Ship Mouse Pointer */}
+      <RocketCursor />
+
       {/* Interactive 3D Solar System Background with Deep Space Scrim */}
       <SolarSystemBackground />
 

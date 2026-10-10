@@ -42,6 +42,19 @@ assert(pageContent.includes("SolarSystemBackground") && !pageContent.includes("G
 assert(!pageContent.includes("isPaletteOpen") && !pageContent.includes("isTerminalOpen"), "page.tsx contains zero palette state");
 assert(!pageContent.includes("Cmd+K") && !pageContent.includes("Ctrl+K"), "page.tsx contains zero Cmd+K / Ctrl+K keyboard listeners");
 
+const rocketCursorExists = fs.existsSync(path.join(process.cwd(), "src/components/RocketCursor.tsx"));
+assert(rocketCursorExists, "RocketCursor.tsx exists in components directory");
+assert(pageContent.includes("RocketCursor"), "page.tsx imports and mounts RocketCursor component");
+
+const rocketContent = fs.readFileSync(path.join(process.cwd(), "src/components/RocketCursor.tsx"), "utf-8");
+assert(rocketContent.includes("(hover: hover) and (pointer: fine)"), "RocketCursor includes fine-pointer desktop guard");
+assert(rocketContent.includes("plasmaFlame") && rocketContent.includes("idleFlame"), "RocketCursor implements multi-state plasma thruster flames");
+assert(rocketContent.includes("particlesRef") && rocketContent.includes("prefers-reduced-motion"), "RocketCursor features starlight particle exhaust trail with motion reduction safeguards");
+
+const cssContent = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf-8");
+assert(cssContent.includes("body.rocket-cursor-enabled"), "globals.css scopes cursor: none to body.rocket-cursor-enabled on fine-pointer devices");
+
+
 const solarContent = fs.readFileSync(path.join(process.cwd(), "src/components/SolarSystemBackground.tsx"), "utf-8");
 assert(solarContent.includes("solarSystemGroup.rotation.x = 0.58") && solarContent.includes("solarSystemGroup.rotation.z = -0.32"), "Solar system uses isometric 3D rotation angles");
 assert(solarContent.includes("opacity-90") && solarContent.includes("bg-[#05060A]/35"), "Solar system uses calibrated visibility and depth vignette");

@@ -69,4 +69,6 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 - **Open Graph Metadata**: 1200x630 preview card generated and linked in layout metadata for social media shares.
 - **No Em Dashes**: Pure standard punctuation with colons, commas, and parentheses.
 - **Zero Terminal Remnants**: Clean codebase without command line or terminal components.
-- **Real Playwright Browser Verification**: End-to-end headless browser test verifying filters, modal open/close, email copying, navigation, and capturing desktop and mobile screenshots.
+- **Cyberpunk Rocket Ship Pointer**: High-precision vector spacecraft mouse pointer featuring aerodynamic metallic hull, glowing cyan canopy visor, delta wings, stateful plasma thruster flame (cruising idle, boost flare on interactive hover, recoil pulse on click), starlight exhaust particle trail, and automatic touch device suppression.
+- **Real Playwright Browser Verification**: End-to-end headless browser test verifying filters, modal open/close, email copying, navigation, rocket cursor tracking, and capturing desktop and mobile screenshots.
+
