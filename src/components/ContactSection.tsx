@@ -20,7 +20,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 border-b border-rule/60">
+    <section id="contact" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Dedicated Cyber Comms Uplink Module */}
         <div className="rounded-3xl border border-cyan-500/30 bg-[#0B0D16]/95 p-8 sm:p-12 shadow-[0_0_35px_rgba(0,0,0,0.8)]">

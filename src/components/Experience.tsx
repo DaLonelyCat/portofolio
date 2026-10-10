@@ -10,10 +10,10 @@ interface ExperienceProps {
 
 export function ExperienceSection({ experiences, education }: ExperienceProps) {
   return (
-    <section id="experience" className="py-16 md:py-24 border-b border-rule/60">
+    <section id="experience" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
+        <div className="mb-10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
             <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
               Experience
@@ -113,6 +113,21 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                   )}
                 </div>
               ))}
+
+              {/* Entrepreneurship Track Enrichment Program */}
+              <div className="p-6 sm:p-7 rounded-2xl border border-amber-500/30 bg-[#0B0D16]/90 text-xs font-sans space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-amber-400 block uppercase tracking-wider">
+                    Enrichment Program: Entrepreneurship Track
+                  </span>
+                  <span className="text-[10px] font-mono text-amber-300 px-2 py-0.5 rounded-full bg-amber-950/40 border border-amber-500/30">
+                    CURRENT
+                  </span>
+                </div>
+                <p className="text-slate-300 leading-relaxed text-xs sm:text-sm">
+                  Currently undertaking the university enrichment program focused on venture building, market validation, business finance, and operational product development, applied directly to scaling Fruqita.
+                </p>
+              </div>
 
               {/* Completed Multimedia Minor Narrative */}
               <div className="p-6 sm:p-7 rounded-2xl border border-cyan-500/25 bg-[#0B0D16]/90 text-xs font-sans space-y-3">

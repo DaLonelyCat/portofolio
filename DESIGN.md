@@ -29,6 +29,8 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 ## Shape & HUD System
 - **HUD Navigation**: Dual-state fluid navigation bar with seamless scroll transformation: spans full width across the viewport at the top of the page, and fluidly morphs into a centered floating capsule pill with frosted glass depth (`backdrop-blur-2xl`), cyan starlight borders, and top specular reflection highlights upon scrolling. Flashing dot removed for clean typography.
 - **Surface Panels**: `rounded-2xl` and `rounded-3xl` alloy cards with subtle hairline borders (`border-white/10`) and neon hover states.
+- **Seamless Cosmic Continuity**: Full-bleed section divider lines (`border-b border-rule/60` and `footer border-t`) are completely removed, allowing the 3D celestial solar system background to flow without visual interruptions between sections.
+- **Right-Side Vertical Category Rail**: On desktop, the Engineering Projects section mounts a dedicated sticky vertical filter rail on the right side with category domain counts, allowing effortless browsing and filtering.
 - **Pill Badges & Tags**: Monospace status chips (`[ PRODUCTION CORE ]`, `[ CURRENT ]`, `[ MATRIX // 01 ]`) with translucent neon badges.
 - **Profile Avatar**: Framed profile portrait with cyber cyan rim glow (purged of flashing dots or redundant tags).
 - **Semi-Fullscreen Modal**: Expansive `max-w-6xl` responsive dialog with two-column space utilization and dedicated frosted cards for Problem, Solution, and Impact.

@@ -10,7 +10,7 @@ interface HeroProps {
 
 export function Hero({ personal, onPrintCV }: HeroProps) {
   return (
-    <section id="hero" className="pt-32 pb-16 md:pt-40 md:pb-24 border-b border-rule/60">
+    <section id="hero" className="pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Flight Deck 2-Column Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -89,7 +89,10 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                   Bina Nusantara University, Computer Science
                 </dd>
                 <dd className="text-xs text-slate-400 mt-0.5">
-                  Completed Minor in Multimedia (Game Dev, Graphics & UX) • GPA: 3.30 / 4.00
+                  Completed Minor in Multimedia • GPA: 3.30 / 4.00
+                </dd>
+                <dd className="text-xs text-cyan-400 mt-1">
+                  Currently in Entrepreneurship Track Enrichment Program
                 </dd>
               </div>
 

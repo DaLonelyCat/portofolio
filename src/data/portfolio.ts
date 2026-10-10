@@ -315,7 +315,7 @@ export const portfolioData: PortfolioData = {
       degree: "Computer Science Undergraduate (Completed Minor in Multimedia)",
       institution: "Bina Nusantara University",
       period: "2023 - 2027",
-      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a completed Minor in Multimedia. The minor curriculum connected core computing with interactive entertainment and visual design, combining game programming, computer graphics pipelines, and user experience design with core software engineering.",
+      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a completed Minor in Multimedia. Currently undertaking the Entrepreneurship Track Enrichment Program. The minor curriculum connected core computing with interactive entertainment and visual design, combining game programming, computer graphics pipelines, and user experience design with core software engineering.",
     },
   ],
 };

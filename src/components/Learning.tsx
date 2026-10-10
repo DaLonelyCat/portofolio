@@ -22,10 +22,10 @@ export function Learning() {
   ];
 
   return (
-    <section id="learning" className="py-16 md:py-20 border-b border-rule/60">
+    <section id="learning" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-4 border-b border-white/10">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
             <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
               Currently Learning

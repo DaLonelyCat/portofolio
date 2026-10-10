@@ -9,10 +9,10 @@ interface SkillsProps {
 
 export function SkillsSection({ categories }: SkillsProps) {
   return (
-    <section id="skills" className="py-16 md:py-24 border-b border-rule/60">
+    <section id="skills" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
+        <div className="mb-10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
             <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
               Skills

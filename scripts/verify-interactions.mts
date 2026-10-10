@@ -66,6 +66,8 @@ assert(!heroContent.includes("ORBITAL UPLINK"), "Hero tags and beacons purged co
 assert(!heroContent.includes("Builder and problem solver turning cool ideas into working software."), "Corny one-liner purged from Hero");
 assert(!heroContent.includes("animate-pulse"), "Flashing dots with animate-pulse purged from Hero");
 assert(heroContent.includes("At a Glance"), "Hero includes At a Glance overview module");
+assert(!heroContent.includes("(Game Dev, Graphics & UX)"), "Hero At a Glance purged of '(Game Dev, Graphics & UX)'");
+assert(heroContent.includes("Entrepreneurship Track Enrichment Program"), "Hero At a Glance features active Entrepreneurship Track Enrichment Program");
 assert(!heroContent.includes("Station Telemetry"), "Station Telemetry jargon purged from Hero");
 assert(!heroContent.includes("ID: CK-2026"), "ID: CK-2026 tag purged from Hero");
 
@@ -98,15 +100,19 @@ assert(!contactContent.includes("COMMS UPLINK"), "ContactSection purged of COMMS
 assert(!contactContent.includes("animate-pulse"), "Flashing dots with animate-pulse purged from ContactSection");
 assert(contactContent.includes("viewBox=\"0 0 24 24\"") && contactContent.includes("GitHub") && contactContent.includes("LinkedIn"), "ContactSection includes official platform vector SVG logos");
 
+const projectsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
+assert(!heroContent.includes("border-rule/60") && !projectsContent.includes("border-rule/60") && !learningContent.includes("border-rule/60") && !experienceContent.includes("border-rule/60") && !skillsContent.includes("border-rule/60") && !contactContent.includes("border-rule/60"), "Section full-width divider borders purged completely across all sections");
+assert(experienceContent.includes("Enrichment Program: Entrepreneurship Track"), "Experience section features active Entrepreneurship Track Enrichment Program narrative");
+
 // ----------------------------------------------------
 // 4. Projects Directory & Conversational Button Label
 // ----------------------------------------------------
 console.log("\n--- 4. Projects Directory & Button Test ---");
 
-const projectsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
 assert(projectsContent.includes("PRODUCTION CORE"), "UniCash POS is badged as PRODUCTION CORE in project directory");
 assert(projectsContent.includes("View Details"), "Project button renamed to conversational 'View Details'");
 assert(!projectsContent.includes("<span>Dossier</span>"), "Old 'Dossier' button label completely removed");
+assert(projectsContent.includes("Filter by Domain") && projectsContent.includes("sticky top-28"), "Projects directory mounts desktop right-side vertical filter bar");
 
 const unicashProject = portfolioData.projects.find((p) => p.id === "unicash-pos");
 assert(!!unicashProject, "UniCash POS exists in project dataset");
@@ -217,6 +223,7 @@ assert(fruqitaWebProject?.liveUrl === "https://fruqitamlg.vercel.app/", "Fruqita
 const footerContent = fs.readFileSync(path.join(process.cwd(), "src/components/Footer.tsx"), "utf-8");
 assert(!footerContent.includes("Typeset in IBM Plex Sans"), "Footer purged of 'Typeset in IBM Plex Sans' text");
 assert(!footerContent.includes("Deployed on Cloudflare Pages"), "Footer purged of 'Deployed on Cloudflare Pages' text");
+assert(!footerContent.includes("border-t border-white/10"), "Footer border-t purged completely");
 
 const bioText = portfolioData.personal.bio;
 assert(bioText.includes("Completed a Minor in Multimedia"), "Bio reflects completed Minor in Multimedia");

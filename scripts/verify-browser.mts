@@ -117,15 +117,21 @@ async function runBrowserTests() {
     assert(isScrolledHeader, "Navbar fluidly transforms into floating glass capsule upon scrolling");
 
     // Test Category Filtering
-    console.log("\n--- Testing Category Filter Rail ---");
-    const desktopFilterBtn = desktopPage.locator("button:has-text('Desktop Application')");
+    // Verify At a Glance in Hero
+    const atAGlanceText = await desktopPage.locator("section#hero dl").innerText();
+    assert(!atAGlanceText.includes("(Game Dev, Graphics & UX)"), "At a Glance purged of '(Game Dev, Graphics & UX)'");
+    assert(atAGlanceText.includes("Completed Minor in Multimedia") && atAGlanceText.includes("Entrepreneurship Track Enrichment Program"), "At a Glance features Completed Minor and Entrepreneurship Track Enrichment Program");
+
+    // Test Category Filtering
+    console.log("\n--- Testing Right-Side Vertical Filter Rail ---");
+    const desktopFilterBtn = desktopPage.locator("aside button:has-text('Desktop Application')");
     await desktopFilterBtn.click();
     await desktopPage.waitForTimeout(300);
 
     const visibleProjectsCount = await desktopPage.locator("section#projects article").count();
     assert(visibleProjectsCount >= 1, "Category filter 'Desktop Application' updates visible cards", `Visible cards: ${visibleProjectsCount}`);
 
-    const allFilterBtn = desktopPage.locator("button:has-text('All')");
+    const allFilterBtn = desktopPage.locator("aside button:has-text('All')");
     await allFilterBtn.click();
     await desktopPage.waitForTimeout(300);
 
