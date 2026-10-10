@@ -15,9 +15,9 @@ export function Learning() {
       status: "Currently learning",
     },
     {
-      category: "Academic Minor",
-      title: "Multimedia Systems & Interface Design",
-      status: "Coursework",
+      category: "3D Graphics & Spatial Computing",
+      title: "WebXR & Real-Time Three.js Shaders",
+      status: "Currently learning",
     },
   ];
 

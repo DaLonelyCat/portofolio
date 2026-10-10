@@ -89,7 +89,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                   Bina Nusantara University, Computer Science
                 </dd>
                 <dd className="text-xs text-slate-400 mt-0.5">
-                  Minor in Multimedia (UI/UX, Game Design) • GPA: 3.30 / 4.00
+                  Completed Minor in Multimedia (Game Dev, Graphics & UX) • GPA: 3.30 / 4.00
                 </dd>
               </div>
 

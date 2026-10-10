@@ -5,7 +5,7 @@ export const portfolioData: PortfolioData = {
     name: "Christian Emanuel Ikajaya",
     role: "Software Engineer & Builder",
     tagline: "Hello im Christian",
-    bio: "I am a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently learning 3D brain scans of flies (connectomics) and agentic AI systems. Minoring in Multimedia at Bina Nusantara University with an emphasis on UI/UX architecture, game design, and multimedia computing.",
+    bio: "I am a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring 3D Drosophila brain connectomics and agentic AI systems. Completed a Minor in Multimedia at Bina Nusantara University, bridging core software systems with interactive game programming, computer graphics, and user experience design.",
     philosophy: "Hello im Christian",
     location: "Indonesia (Bina Nusantara University, Open for Remote)",
     status: "Available for software engineering and builder roles",
@@ -209,6 +209,24 @@ export const portfolioData: PortfolioData = {
       tags: ["WebXR", "Three.js", "Augmented Reality", "JavaScript"],
       featured: false,
     },
+    {
+      id: "fruqita-web",
+      title: "Fruqita Fruit Chips Storefront",
+      tagline: "Brand website and digital storefront for Fruqita fruit chips enterprise.",
+      category: "Web App",
+      year: "2026",
+      overview:
+        "Official web storefront built for Fruqita in 2026 to showcase artisan fruit chips, display seasonal product catalogs, and streamline direct ordering through Shopee and WhatsApp channels.",
+      problem:
+        "Direct-to-consumer fruit chip sales required an authoritative digital brand platform with mobile responsiveness and seamless customer purchasing channels.",
+      solution:
+        "Engineered a responsive web platform with smooth animations, interactive product displays, Shopee marketplace integration, and direct WhatsApp ordering flow.",
+      impact:
+        "Established Fruqita's active digital storefront, elevating brand credibility and directing consumer traffic to verified checkout points.",
+      tags: ["Web App", "Tailwind CSS", "Vercel", "E-Commerce", "Brand Strategy"],
+      liveUrl: "https://fruqitamlg.vercel.app/",
+      featured: true,
+    },
   ],
 
   experiences: [
@@ -223,7 +241,8 @@ export const portfolioData: PortfolioData = {
         "As CFO and software developer at Fruqita, I manage company budgeting, cash flow, and financial forecasting while building our internal software tools. I developed our proprietary point of sale and cash tracking software from scratch to automate daily financial records and track product sales.",
       highlights: [
         "Manage company budget, cash flow, and financial planning to maintain steady business operations.",
-        "Built custom cashier and bookkeeping software from scratch, automating daily sales logging.",
+        "Built and launched the official brand website (https://fruqitamlg.vercel.app/) to showcase fruit chip products and drive customer orders.",
+        "Engineered custom cashier and bookkeeping software from scratch, automating daily sales logging.",
         "Provided real-time visibility into product inventory and revenue figures.",
       ],
       technologies: ["Financial Management", "Custom POS Architecture", "Cash Flow Planning", "Software Development"],
@@ -280,23 +299,23 @@ export const portfolioData: PortfolioData = {
       ],
     },
     {
-      title: "Multimedia & Interactive Systems (Minor)",
-      description: "Academic minor specialization at Bina Nusantara University bridging interaction design and game engineering.",
+      title: "Multimedia & Game Systems (Completed Minor)",
+      description: "Completed minor curriculum bridging interactive game programming, computer graphics, and user-centered interface architecture.",
       skills: [
-        { name: "UI & UX Design Systems", context: "Interface design, design tokens, WCAG AA accessibility" },
-        { name: "Game Design & Programming", context: "Unity C# 2D/3D physics, collision handling, wave systems" },
-        { name: "Multimedia Perception", context: "Computer graphics pipelines, audio/video processing, WebXR" },
-        { name: "Interactive Prototyping", context: "Rapid design iterations and responsive canvas interfaces" },
+        { name: "Game Programming & Design", context: "Gameplay mechanics, game loops, Unity C# architecture" },
+        { name: "Computer Graphics", context: "Rendering pipelines, visual algorithms, 3D coordinate spaces" },
+        { name: "User Experience (UX)", context: "Interaction architecture, ergonomics, and visual hierarchy" },
+        { name: "Multimedia Systems", context: "Audio/visual data handling and interactive applications" },
       ],
     },
   ],
 
   education: [
     {
-      degree: "Computer Science Undergraduate (Minor in Multimedia)",
+      degree: "Computer Science Undergraduate (Completed Minor in Multimedia)",
       institution: "Bina Nusantara University",
       period: "2023 - 2027",
-      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a formal Minor in Multimedia specializing in UI/UX architecture, game design, and multimedia systems.",
+      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a completed Minor in Multimedia. The minor curriculum connected core computing with interactive entertainment and visual design, combining game programming, computer graphics pipelines, and user experience design with core software engineering.",
     },
   ],
 };

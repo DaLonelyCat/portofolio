@@ -202,6 +202,25 @@ const cvPdfExists = fs.existsSync(path.join(process.cwd(), "public/Christian_Ema
 assert(cvPdfExists, "CV PDF asset exists in public folder");
 
 // ----------------------------------------------------
+// 11. Fruqita Website & Completed Minor Narrative Test
+// ----------------------------------------------------
+console.log("\n--- 11. Fruqita Website & Completed Minor Test ---");
+
+const fruqitaWebProject = portfolioData.projects.find((p) => p.id === "fruqita-web");
+assert(!!fruqitaWebProject, "Fruqita website project exists in dataset");
+assert(fruqitaWebProject?.liveUrl === "https://fruqitamlg.vercel.app/", "Fruqita website has live demo URL https://fruqitamlg.vercel.app/");
+
+const footerContent = fs.readFileSync(path.join(process.cwd(), "src/components/Footer.tsx"), "utf-8");
+assert(!footerContent.includes("Typeset in IBM Plex Sans"), "Footer purged of 'Typeset in IBM Plex Sans' text");
+assert(!footerContent.includes("Deployed on Cloudflare Pages"), "Footer purged of 'Deployed on Cloudflare Pages' text");
+
+const bioText = portfolioData.personal.bio;
+assert(bioText.includes("Completed a Minor in Multimedia"), "Bio reflects completed Minor in Multimedia");
+
+const expContent = fs.readFileSync(path.join(process.cwd(), "src/components/Experience.tsx"), "utf-8");
+assert(expContent.includes("Completed Minor in Multimedia"), "Experience section features completed Minor in Multimedia narrative");
+
+// ----------------------------------------------------
 // Summary
 // ----------------------------------------------------
 console.log("\n=================================================");

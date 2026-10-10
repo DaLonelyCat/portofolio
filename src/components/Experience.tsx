@@ -114,25 +114,14 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                 </div>
               ))}
 
-              {/* Academic Highlights Summary */}
-              <div className="p-6 rounded-2xl border border-cyan-500/20 bg-[#0B0D16]/80 text-xs font-sans space-y-3">
+              {/* Completed Multimedia Minor Narrative */}
+              <div className="p-6 sm:p-7 rounded-2xl border border-cyan-500/25 bg-[#0B0D16]/90 text-xs font-sans space-y-3">
                 <span className="text-xs font-mono text-cyan-400 block uppercase tracking-wider">
-                  Academic Focus
+                  Completed Minor in Multimedia
                 </span>
-                <p className="text-slate-300 leading-relaxed">
-                  Specializing in software engineering, multi-platform system architecture, and interactive multimedia interfaces.
+                <p className="text-slate-300 leading-relaxed text-xs sm:text-sm">
+                  Completed a specialized minor curriculum bridging computer science fundamentals with interactive media. The coursework connected game programming and real-time computer graphics pipelines with user experience architecture and multimedia foundations, applying visual computing and interaction design directly to software engineering.
                 </p>
-                <div className="flex flex-wrap gap-2 pt-2 border-t border-white/10">
-                  <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-400">
-                    UI/UX Design
-                  </span>
-                  <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-400">
-                    Game Architecture
-                  </span>
-                  <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-400">
-                    Full-Stack Systems
-                  </span>
-                </div>
               </div>
             </div>
           </div>

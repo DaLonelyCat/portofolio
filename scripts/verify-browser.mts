@@ -130,7 +130,10 @@ async function runBrowserTests() {
     await desktopPage.waitForTimeout(300);
 
     const allProjectsCount = await desktopPage.locator("section#projects article").count();
-    assert(allProjectsCount === 8, "Category filter 'All' shows all 8 projects", `Total projects: ${allProjectsCount}`);
+    assert(allProjectsCount === 9, "Category filter 'All' shows all 9 projects", `Total projects: ${allProjectsCount}`);
+
+    const fruqitaCard = desktopPage.locator("section#projects article:has-text('Fruqita Fruit Chips Storefront')");
+    assert(await fruqitaCard.isVisible(), "Fruqita fruit chips storefront project card is visible");
 
     // Test Project Modal (UniCash POS)
     console.log("\n--- Testing Semi-Fullscreen Project Modal ---");
@@ -181,6 +184,10 @@ async function runBrowserTests() {
     await desktopPage.waitForTimeout(700);
     const scrollYAfterTop = await desktopPage.evaluate(() => window.scrollY);
     assert(scrollYAfterTop < 100, "Back-to-Top button smoothly scrolls page to top", `ScrollY: ${scrollYAfterTop}`);
+
+    // Verify Clean Footer
+    const footerText = await desktopPage.locator("footer").innerText();
+    assert(!footerText.includes("Typeset in IBM Plex Sans") && !footerText.includes("Deployed on Cloudflare Pages"), "Footer is clean and contains no colophon text");
 
     // Capture Desktop Screenshot
     const desktopScreenshotPath = path.join(screenshotsDir, "desktop-full.png");
