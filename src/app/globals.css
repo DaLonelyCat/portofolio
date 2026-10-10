@@ -37,40 +37,55 @@ body {
   clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
 }
 
-/* Cyberpunk Glass & Panel Textures */
+/* Cyberpunk Glass & Panel Textures - Lightweight on Mobile */
 .cyber-panel {
-  background: rgba(13, 17, 26, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(13, 17, 26, 0.96);
   border: 1px solid rgba(56, 189, 248, 0.16);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cyber-panel:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.7), 0 0 16px -4px rgba(56, 189, 248, 0.18);
-  transform: translateY(-2px);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .cyber-panel-yellow {
-  background: rgba(13, 17, 26, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(13, 17, 26, 0.96);
   border: 1px solid rgba(245, 158, 11, 0.2);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cyber-panel-yellow:hover {
-  border-color: rgba(245, 158, 11, 0.45);
-  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.7), 0 0 16px -4px rgba(245, 158, 11, 0.2);
-  transform: translateY(-2px);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .cyber-nav {
-  background: rgba(8, 10, 17, 0.94);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(8, 10, 17, 0.96);
   border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+/* Enable backdrop-filter blur only on desktop (768px+) where GPUs are powerful */
+@media (min-width: 768px) {
+  .cyber-panel {
+    background: rgba(13, 17, 26, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .cyber-panel:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.7), 0 0 16px -4px rgba(56, 189, 248, 0.18);
+    transform: translateY(-2px);
+  }
+
+  .cyber-panel-yellow {
+    background: rgba(13, 17, 26, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .cyber-panel-yellow:hover {
+    border-color: rgba(245, 158, 11, 0.45);
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.7), 0 0 16px -4px rgba(245, 158, 11, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .cyber-nav {
+    background: rgba(8, 10, 17, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
 }
 
 /* Tactical Sub-pixel Grid Pattern */

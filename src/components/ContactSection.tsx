@@ -25,16 +25,16 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
       <div className="max-w-[1600px] mx-auto px-4 sm:px-8 xl:px-12">
         {/* Contact Terminal Card with 2-Column Wide Layout to Maximize Space */}
         <div className="relative p-5 sm:p-7 cyber-panel-yellow clip-corner border-cyber-yellow/40 bg-[#090b14]/90 overflow-hidden shadow-[0_0_35px_rgba(255,230,0,0.12)]">
-          {/* Subtle dual neon background glow */}
-          <div className="absolute -top-24 left-1/3 w-96 h-48 bg-cyber-yellow/12 blur-3xl rounded-full pointer-events-none" />
-          <div className="absolute -bottom-24 right-1/3 w-96 h-48 bg-cyber-cyan/12 blur-3xl rounded-full pointer-events-none" />
+          {/* Subtle dual neon background glow (Desktop Only) */}
+          <div className="hidden md:block absolute -top-24 left-1/3 w-96 h-48 bg-cyber-yellow/10 blur-3xl rounded-full pointer-events-none" />
+          <div className="hidden md:block absolute -bottom-24 right-1/3 w-96 h-48 bg-cyber-cyan/10 blur-3xl rounded-full pointer-events-none" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* Left Column (7 cols): Heading & Transmission Box */}
             <div className="lg:col-span-7 text-center lg:text-left">
               {/* Terminal frequency status */}
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/80 border border-yellow-500/40 clip-corner-sm text-xs font-mono text-cyber-yellow mb-3 shadow-neon-yellow-sm">
-                <Radio className="w-3.5 h-3.5 animate-pulse text-cyber-yellow" />
+                <Radio className="w-3.5 h-3.5 hidden sm:inline-block sm:animate-pulse text-cyber-yellow" />
                 <span>// FREQ: 433.92 MHz // ENCRYPTED_UPLINK</span>
               </div>
 

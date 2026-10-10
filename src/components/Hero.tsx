@@ -12,8 +12,8 @@ interface HeroProps {
 export function Hero({ personal, onPrintCV }: HeroProps) {
   return (
     <section id="hero" className="relative pt-20 pb-8 md:pt-24 md:pb-12 overflow-hidden">
-      {/* Background ambient cyberpunk multi-color glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1600px] h-[450px] hero-cyber-glow pointer-events-none" />
+      {/* Background ambient cyberpunk multi-color glow (Desktop Only) */}
+      <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1600px] h-[450px] hero-cyber-glow pointer-events-none" />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-8 xl:px-12 relative z-10">
         {/* Main 2-Column High-Density Grid */}
@@ -22,7 +22,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
           <div className="lg:col-span-7 text-center md:text-left">
             {/* Tactical Status Tag with Cyberpunk Yellow */}
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/80 border border-cyber-yellow/40 clip-corner-sm text-xs font-mono mb-4 shadow-neon-yellow-sm">
-              <span className="w-2 h-2 rounded-full bg-cyber-yellow animate-pulse shadow-[0_0_8px_#ffe600]" />
+              <span className="w-2 h-2 rounded-full bg-cyber-yellow sm:animate-pulse" />
               <span className="text-cyber-yellow font-bold">STATUS:</span>
               <span className="text-slate-100">{personal.status.toUpperCase()}</span>
               <span className="text-slate-500">//</span>
@@ -108,7 +108,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                   <span>[ TELEMETRY_CONSOLE // v3.2 ]</span>
                 </div>
                 <span className="text-cyber-green flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyber-green animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyber-green sm:animate-pulse" />
                   ONLINE
                 </span>
               </div>

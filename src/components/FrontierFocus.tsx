@@ -76,7 +76,7 @@ export function FrontierFocus() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-yellow-500/20 gap-4">
           <div>
             <div className="flex items-center gap-2 text-cyber-yellow font-mono text-xs font-semibold uppercase tracking-wider mb-1">
-              <Sparkles className="w-3.5 h-3.5 text-cyber-yellow animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5 text-cyber-yellow sm:animate-pulse" />
               <span>// ACTIVE_FRONTIERS // CURRENT_FOCUS_AREAS</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
@@ -88,7 +88,7 @@ export function FrontierFocus() {
           </div>
 
           <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-slate-400 bg-black/60 px-3 py-1.5 border border-yellow-500/20 clip-corner-sm">
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_#2dd4bf]" />
+            <span className="w-2 h-2 rounded-full bg-teal-400 sm:animate-pulse" />
             <span className="text-slate-200">LAB_STATUS: ACTIVE_EXECUTION</span>
           </div>
         </div>

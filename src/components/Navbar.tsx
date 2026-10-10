@@ -40,7 +40,7 @@ export function Navbar({ personal, onPrintCV, onOpenCLI }: NavbarProps) {
           aria-label="Home"
         >
           <div className="relative flex items-center justify-center">
-            <span className="w-2 h-2 rounded-full bg-cyber-yellow shadow-[0_0_8px_#ffe600] animate-ping absolute" />
+            <span className="hidden sm:inline w-2 h-2 rounded-full bg-cyber-yellow shadow-[0_0_8px_#f59e0b] sm:animate-ping absolute" />
             <span className="w-2 h-2 rounded-full bg-cyber-yellow relative" />
           </div>
           <span className="font-mono font-bold text-xs tracking-wider text-white group-hover:text-cyber-yellow transition-colors">

@@ -23,6 +23,12 @@ export function SynapticCanvas() {
 
     let animationFrameId: number;
     let isVisible = true;
+
+    // Completely disable canvas simulation on mobile (< 768px) to keep mobile lightweight
+    if (window.innerWidth < 768) {
+      return;
+    }
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Dimensions
@@ -179,7 +185,7 @@ export function SynapticCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-45 mix-blend-screen z-0"
+      className="hidden md:block absolute inset-0 pointer-events-none opacity-40 mix-blend-screen z-0"
       aria-hidden="true"
     />
   );
