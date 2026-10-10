@@ -85,6 +85,46 @@ export const portfolioData: PortfolioData = {
       featured: true,
     },
     {
+      id: "nestfit-workout",
+      title: "NestFit Smart Workout Companion",
+      tagline: "Mobile-first workout tracker and customizable dumbbell plate calculator for home gym training.",
+      category: "Web App",
+      year: "2026",
+      overview:
+        "A responsive, mobile-first workout companion and equipment manager engineered in 2026 for personal training. NestFit specializes in modular spinlock dumbbells and barbell conversion setups, dynamically calculating symmetrical plate configurations, sleeve limits, and daily workout volume.",
+      problem:
+        "Training with adjustable spinlock dumbbell sets requires mental math to balance plates symmetrically, account for collar and handle weights, and organize exercises across available equipment without internet connectivity.",
+      solution:
+        "Engineered a responsive, mobile-first web application featuring an interactive visual plate setup diagram, 16 weight presets, 175-exercise movement database with multi-filter tagging, equipment inventory management (handles, collars, 19kg plates breakdown), and muscle readiness tracking.",
+      impact:
+        "Streamlined daily home workouts by automating plate math, preventing asymmetrical loading, and delivering an offline-friendly workout workflow on mobile and desktop devices.",
+      tags: ["Web App", "React", "Mobile First", "Fitness Tech", "Tailwind CSS", "Algorithm Design"],
+      screenshots: [
+        {
+          src: "/projects/nestfit-calculator.png",
+          label: "Weight Calculator",
+          caption: "Modular dumbbell plate setup diagram with sleeve capacity and symmetrical weight distribution",
+        },
+        {
+          src: "/projects/nestfit-workout.png",
+          label: "Workout Session",
+          caption: "Active workout session view with daily directive, readiness telemetry, and exercise set tracking",
+        },
+        {
+          src: "/projects/nestfit-inventory.png",
+          label: "Equipment Inventory",
+          caption: "Hardware equipment inventory tracking handles, barbell connector adapter, collars, and plate weight breakdown",
+        },
+        {
+          src: "/projects/nestfit-exercises.png",
+          label: "Exercise Database",
+          caption: "Categorized exercise catalog with 175 movements filtered by muscle group and equipment type",
+        },
+      ],
+      liveUrl: "https://workout.dalonelycat.site/",
+      featured: true,
+    },
+    {
       id: "koya-food-review",
       title: "KOYA Food Review WebApp",
       tagline: "Next.js community platform for sharing dining experiences and restaurant ratings.",

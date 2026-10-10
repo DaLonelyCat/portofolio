@@ -245,6 +245,30 @@ const expContent = fs.readFileSync(path.join(process.cwd(), "src/components/Expe
 assert(expContent.includes("Completed Minor in Multimedia"), "Experience section features completed Minor in Multimedia narrative");
 
 // ----------------------------------------------------
+// 12. NestFit Smart Workout Companion Test
+// ----------------------------------------------------
+console.log("\n--- 12. NestFit Smart Workout Companion Test ---");
+
+const nestfitProject = portfolioData.projects.find((p) => p.id === "nestfit-workout");
+assert(!!nestfitProject, "NestFit project exists in dataset");
+assert(nestfitProject?.year === "2026", "NestFit is dated 2026");
+assert(nestfitProject?.category === "Web App", "NestFit is classified as Web App");
+assert(nestfitProject?.liveUrl === "https://workout.dalonelycat.site/", "NestFit live demo URL points to workout.dalonelycat.site");
+assert(nestfitProject?.screenshots?.length === 4, "NestFit has 4 screenshot assets registered", `Count: ${nestfitProject?.screenshots?.length}`);
+
+const expectedNestfitFiles = [
+  "nestfit-calculator.png",
+  "nestfit-workout.png",
+  "nestfit-inventory.png",
+  "nestfit-exercises.png",
+];
+
+expectedNestfitFiles.forEach((file) => {
+  const filePath = path.join(process.cwd(), "public/projects", file);
+  assert(fs.existsSync(filePath), `Public asset public/projects/${file} exists`);
+});
+
+// ----------------------------------------------------
 // Summary
 // ----------------------------------------------------
 console.log("\n=================================================");

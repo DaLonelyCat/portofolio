@@ -144,10 +144,13 @@ async function runBrowserTests() {
     await desktopPage.waitForTimeout(300);
 
     const allProjectsCount = await desktopPage.locator("section#projects article").count();
-    assert(allProjectsCount === 9, "Category filter 'All' shows all 9 projects", `Total projects: ${allProjectsCount}`);
+    assert(allProjectsCount === 10, "Category filter 'All' shows all 10 projects", `Total projects: ${allProjectsCount}`);
 
     const fruqitaCard = desktopPage.locator("section#projects article:has-text('Fruqita Fruit Chips Storefront')");
     assert(await fruqitaCard.isVisible(), "Fruqita fruit chips storefront project card is visible");
+
+    const nestfitCard = desktopPage.locator("section#projects article:has-text('NestFit Smart Workout Companion')");
+    assert(await nestfitCard.isVisible(), "NestFit smart workout companion project card is visible");
 
     // Test Project Modal (UniCash POS)
     console.log("\n--- Testing Semi-Fullscreen Project Modal ---");
@@ -167,6 +170,26 @@ async function runBrowserTests() {
     await desktopPage.waitForTimeout(300);
     const isModalClosed = !(await modalDialog.isVisible());
     assert(isModalClosed, "Modal closes cleanly on Escape key");
+
+    // Test NestFit Project Modal & Screenshot Tabs
+    console.log("\n--- Testing NestFit Project Modal & Screenshots ---");
+    const nestfitDetailsBtn = desktopPage.locator("section#projects article:has-text('NestFit') button:has-text('View Details')").first();
+    await nestfitDetailsBtn.click();
+    await desktopPage.waitForTimeout(400);
+
+    const nestfitModalTitle = await modalDialog.locator("#modal-title").innerText();
+    assert(nestfitModalTitle.includes("NestFit"), "NestFit modal displays correct project title", nestfitModalTitle);
+
+    const screenshotTabBtn = modalDialog.locator("button:has-text('02')");
+    assert(await screenshotTabBtn.isVisible(), "Screenshot tabs are visible for NestFit");
+    await screenshotTabBtn.click();
+    await desktopPage.waitForTimeout(200);
+
+    const nestfitLiveBtn = modalDialog.locator("a[href='https://workout.dalonelycat.site/']");
+    assert(await nestfitLiveBtn.isVisible(), "NestFit live demo link is visible in modal");
+
+    await desktopPage.keyboard.press("Escape");
+    await desktopPage.waitForTimeout(300);
 
     // Test Modal Close Button (X) on another project
     const secondProjectDetailsBtn = desktopPage.locator("section#projects article button:has-text('View Details')").nth(1);

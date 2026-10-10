@@ -174,9 +174,19 @@ export function Projects({ projects, categories }: ProjectsProps) {
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2 mb-3">
-                            <span className="text-xs font-mono text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/30">
-                              {project.category}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-mono text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/30">
+                                {project.category}
+                              </span>
+                              {project.screenshots && project.screenshots.length > 0 && (
+                                <span className="text-[10px] font-mono text-cyan-300/80 px-2 py-0.5 rounded-full bg-cyan-950/30 border border-cyan-500/20 flex items-center gap-1">
+                                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                  {project.screenshots.length} Screens
+                                </span>
+                              )}
+                            </div>
                             <span className="text-xs font-mono text-slate-400">
                               {project.year}
                             </span>

@@ -97,12 +97,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left Column: High-Res Screenshot Viewer & Actions */}
             <div className="lg:col-span-7 space-y-4">
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/15 bg-black/60 shadow-inner">
+              <div className="relative w-full aspect-video sm:aspect-[16/10] min-h-[340px] sm:min-h-[420px] rounded-2xl overflow-hidden border border-white/15 bg-black/60 shadow-inner flex items-center justify-center">
                 <Image
                   src={screenshots[activeShot].src}
                   alt={screenshots[activeShot].caption}
                   fill
-                  className="object-contain"
+                  className="object-contain p-2"
                   sizes="(max-width: 1024px) 100vw, 680px"
                   priority
                 />
