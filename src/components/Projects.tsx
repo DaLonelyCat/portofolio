@@ -24,37 +24,38 @@ export function Projects({ projects, categories }: ProjectsProps) {
   );
 
   return (
-    <section id="projects" className="py-16 md:py-24 border-b border-rule/50">
+    <section id="projects" className="py-16 md:py-24 border-b border-rule/60">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Integrated Directory Toolbar */}
+        {/* Integrated Cyber Directory Header */}
         <div className="mb-10 pb-6 border-b border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div>
-            <div className="flex items-baseline gap-3 mb-1">
-              <h2 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
-                Project Index
+            <div className="flex items-center gap-3 mb-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-400" />
+              <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
+                Engineering Projects
               </h2>
-              <span className="text-xs text-muted font-mono">
+              <span className="text-xs font-mono text-cyan-400">
                 ({filteredProjects.length} {filteredProjects.length === 1 ? "entry" : "entries"})
               </span>
             </div>
-            <p className="text-xs text-muted max-w-lg">
-              Chronological ledger of shipped desktop applications, web platforms, and utilities.
+            <p className="text-xs text-slate-400 max-w-lg">
+              Shipped desktop applications, web platforms, and mobile utilities.
             </p>
           </div>
 
-          {/* Integrated Filter Pills (Playful Rounded Rail) */}
+          {/* Cyber Filter Rail */}
           <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex items-center gap-1.5 min-w-max p-1.5 rounded-full bg-surface/70 backdrop-blur-xl border border-white/10 shadow-md">
+            <div className="flex items-center gap-1.5 min-w-max p-1.5 rounded-full bg-[#0B0D16]/95 border border-white/10 shadow-lg">
               {categories.map((category) => {
                 const isActive = selectedCategory === category;
                 return (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`text-xs px-4 py-2 rounded-full min-h-[38px] transition-all ${
+                    className={`text-xs font-mono px-4 py-2 rounded-full min-h-[38px] transition-all ${
                       isActive
-                        ? "bg-accent text-page font-medium shadow-md shadow-accent/25"
-                        : "text-muted hover:text-ink hover:bg-white/5"
+                        ? "bg-cyan-400 text-black font-semibold shadow-[0_0_12px_rgba(0,240,255,0.4)]"
+                        : "text-slate-400 hover:text-white hover:bg-white/5"
                     }`}
                     aria-pressed={isActive}
                   >
@@ -68,8 +69,8 @@ export function Projects({ projects, categories }: ProjectsProps) {
 
         {/* Year-Grouped Project Index */}
         {filteredProjects.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl border border-white/10 bg-surface/60 backdrop-blur-xl">
-            <p className="text-sm text-muted">
+          <div className="p-12 text-center rounded-3xl border border-white/10 bg-[#0B0D16]/95">
+            <p className="text-sm text-slate-400">
               No archive entries match the selected category.
             </p>
           </div>
@@ -84,75 +85,89 @@ export function Projects({ projects, categories }: ProjectsProps) {
                 >
                   {/* Left Column: Bold Year Marker */}
                   <div className="lg:col-span-2">
-                    <span className="text-2xl sm:text-4xl font-light text-muted font-mono tracking-tight">
+                    <span className="text-2xl sm:text-4xl font-mono text-cyan-400/80 tracking-tight">
                       {year}
                     </span>
-                    <span className="block text-xs text-muted/60 mt-1">
+                    <span className="block text-xs font-mono text-slate-400 mt-1">
                       {yearProjects.length} {yearProjects.length === 1 ? "project" : "projects"}
                     </span>
                   </div>
 
-                  {/* Right Column: Playful Rounded Project Cards */}
+                  {/* Right Column: Cyber Project Cards */}
                   <div className="lg:col-span-10 space-y-4">
-                    {yearProjects.map((project) => (
-                      <article
-                        key={project.id}
-                        onClick={() => setActiveProject(project)}
-                        className="group rounded-2xl border border-white/10 bg-surface/50 backdrop-blur-xl p-6 hover:border-accent/40 hover:bg-surface/80 hover:scale-[1.01] hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-6"
-                      >
-                        <div className="md:w-5/12">
-                          <span className="text-xs text-accent font-medium px-2.5 py-0.5 rounded-full bg-accent/15 border border-accent/20 inline-block mb-2">
-                            {project.category}
-                          </span>
-                          <h3 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors">
-                            {project.title}
-                          </h3>
-                        </div>
-
-                        <div className="md:w-5/12">
-                          <p className="text-xs sm:text-sm text-muted leading-relaxed mb-3">
-                            {project.tagline}
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {project.tags.slice(0, 3).map((tag) => (
-                              <span
-                                key={tag}
-                                className="text-[11px] px-2.5 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted"
-                              >
-                                {tag}
+                    {yearProjects.map((project) => {
+                      const isUniCash = project.id === "unicash-pos";
+                      return (
+                        <article
+                          key={project.id}
+                          onClick={() => setActiveProject(project)}
+                          className={`group rounded-2xl border bg-[#0B0D16]/95 p-6 hover:bg-[#111422] transition-all duration-300 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-[0_4px_20px_rgba(0,0,0,0.6)] ${
+                            isUniCash
+                              ? "border-cyan-500/40 hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(0,240,255,0.2)]"
+                              : "border-white/10 hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)]"
+                          }`}
+                        >
+                          <div className="md:w-5/12">
+                            <div className="flex flex-wrap items-center gap-2 mb-2">
+                              <span className="text-xs font-mono text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/30">
+                                {project.category}
                               </span>
-                            ))}
-                            {project.tags.length > 3 && (
-                              <span className="text-[11px] px-2 py-0.5 text-muted/70">
-                                +{project.tags.length - 3}
-                              </span>
-                            )}
+                              {isUniCash && (
+                                <span className="text-xs font-mono text-amber-400 px-2.5 py-0.5 rounded-full bg-amber-950/40 border border-amber-500/30">
+                                  PRODUCTION CORE
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="text-lg font-normal text-white group-hover:text-cyan-400 transition-colors">
+                              {project.title}
+                            </h3>
                           </div>
-                        </div>
 
-                        <div className="md:w-2/12 md:text-right shrink-0">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveProject(project);
-                            }}
-                            className="inline-flex items-center gap-1.5 text-xs text-ink px-4 py-2 rounded-full border border-white/10 bg-white/5 group-hover:bg-accent group-hover:text-page group-hover:border-accent transition-all min-h-[38px]"
-                            aria-label={`View details for ${project.title}`}
-                          >
-                            <span>Details</span>
-                            <svg
-                              className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                          <div className="md:w-5/12">
+                            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-3">
+                              {project.tagline}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {project.tags.slice(0, 3).map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border border-white/10 bg-white/5 text-slate-300"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                              {project.tags.length > 3 && (
+                                <span className="text-[11px] font-mono px-2 py-0.5 text-slate-400">
+                                  +{project.tags.length - 3}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="md:w-2/12 md:text-right shrink-0">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveProject(project);
+                              }}
+                              className="inline-flex items-center gap-1.5 text-xs font-mono text-white px-4 py-2 rounded-full border border-white/10 bg-white/5 group-hover:bg-cyan-400 group-hover:text-black group-hover:border-cyan-400 transition-all min-h-[38px]"
+                              aria-label={`View details for ${project.title}`}
                             >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </button>
-                        </div>
-                      </article>
-                    ))}
+                              <span>Dossier</span>
+                              <svg
+                                className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </button>
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
                 </div>
               );

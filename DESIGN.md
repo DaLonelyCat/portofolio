@@ -1,55 +1,56 @@
-# DESIGN.md: Playful Frosted Space Design System
+# DESIGN.md: Space and Cyberpunk Observatory Design System
 
 ## Identity & Mood
-A personal portfolio and interactive CV for Christian Emanuel Ikajaya: computer science student, founder, and software builder. The mood is a playful, luminous Deep Space Observatory aesthetic, blending a dense blooming spiral galaxy with tactile frosted glass depth, floating pill navigation, and approachable rounded surfaces.
+A personal portfolio and interactive engineering dossier for Christian Emanuel Ikajaya: computer science student, founder, and systems builder. The aesthetic blends a deep cosmic void with sharp cyberpunk telemetry: electric neon cyan accents, solid alloy backing panels for razor-sharp readability, and floating HUD navigation pills.
 
 ## Dial Settings
-- **ENERGY**: 2 (Focused, confident, real screenshot showcase)
-- **RHYTHM**: 3 (Varied compositions: standalone display hero, minimal 2-column academic split, featured POS dossier, integrated directory toolbar, asymmetric career timeline, 4-column competency matrix, colophon footer)
-- **MOTION**: 2 (Dense 6,000-star blooming galaxy with calm, steady orbital rotation; zero dizzying mouse or scroll parallax)
+- **ENERGY**: 2 (Focused, confident, real engineering showcase)
+- **RHYTHM**: 3 (Varied compositions: flight deck hero with telemetry HUD, core engineering project directory with category filter rail, 3-column research frontiers grid, operational flight log, 4-column systems matrix, comms uplink console)
+- **MOTION**: 2 (Dense blooming spiral galaxy with calm, steady orbital rotation; zero dizzying parallax displacement)
 
 ## Theme & Palette
-Deep space frosted observatory palette engineered for long reading sessions and high contrast:
+Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 
 | Token | Hex | Role | Contrast on Background |
 |---|---|---|---|
-| `page` | `#090A10` | Interstellar void baseline | Baseline |
-| `surface` | `#11131E` | Deep-space frosted container surface | Baseline surface |
-| `rule` | `#222638` | Celestial hairline dividers and borders | Structural only |
-| `ink` | `#F0F2F8` | Crisp starlight primary text and headings | 17.5:1 (WCAG AAA) |
-| `muted` | `#949AB0` | Cosmic dust secondary text, captions, dates | 6.8:1 (WCAG AAA) |
-| `accent` | `#E07A5F` | Solar flare / pulsar copper-amber accent | 6.1:1 (WCAG AA) |
+| `page` | `#05060A` | Deep orbital space void | Baseline void |
+| `surface` | `#0B0D16` | High-opacity cyber alloy panel backing | 95% solid container surface |
+| `rule` | `#1C2236` | Celestial structural dividers and borders | Structural only |
+| `ink` | `#FFFFFF` | Razor-sharp starlight text and headings | 21:1 (WCAG AAA) |
+| `muted` | `#94A3B8` | Cool telemetry slate secondary text | 7.2:1 (WCAG AAA) |
+| `accent` | `#00F0FF` | Electric neon cyan primary HUD accent | 13.8:1 on `#05060A` |
+| `neonAmber` | `#F59E0B` | Production core and active status amber | 9.4:1 on `#05060A` |
 
-## Shape & Radius System (Playful & Tactile)
-- **Interactive Actions & Buttons**: `rounded-full` pills with smooth tactile padding and soft hover glow.
-- **Surface Cards & Modules**: `rounded-2xl` and `rounded-3xl` organic frosted glass containers (`backdrop-blur-xl bg-surface/60 border border-white/10`).
-- **Pill Badges & Tabs**: `rounded-full` chips and floating active pill states.
-- **Hierarchy**: Clear visual distinction between small action pills (`rounded-full`) and spacious content surfaces (`rounded-2xl`, `rounded-3xl`).
+## Readability Architecture
+1. **Solid Alloy Surfaces**: All text containers use 95% opacity dark alloy backing (`bg-[#0B0D16]/95`) with frosted backdrop diffusion, ensuring text is never washed out by background star clusters.
+2. **Deep Space Scrim**: An 80% opaque void wash (`bg-[#05060A]/80`) and dimmed star opacity (`opacity-35`) guarantees content readability without sacrificing cosmic depth.
+3. **High-Contrast Typography**: Display headlines and titles render in pure white (`#FFFFFF`), while body copy is set in slate-200 / slate-300 and metadata in slate-400.
 
-## Background Architecture
-1. **Dense 6,000-Star Galaxy**: Procedural Three.js simulation (6,000 stars on desktop, 2,500 on mobile) featuring a radiant additive core bulge and 4 logarithmic spiral arms.
-2. **Optical Bloom**: Additive blending (`THREE.AdditiveBlending`) creates a natural luminous bloom where core star densities overlap.
-3. **Calm, Steady Orbit (No Parallax)**: Camera is stably positioned with near-zero mouse or scroll displacement, allowing the galaxy to rotate smoothly without dizzying perspective shifts.
-4. **Frosted Background Diffusion**: A layered `backdrop-blur-md bg-page/35` wash diffuses star particles into a celestial dreamscape behind the UI.
+## Shape & HUD System
+- **HUD Navigation**: Floating pill navigation bar with cyber station status indicator and mono labels.
+- **Surface Panels**: `rounded-2xl` and `rounded-3xl` alloy cards with subtle hairline borders (`border-white/10`) and neon hover states.
+- **Pill Badges & Tags**: Monospace status chips (`[ PRODUCTION CORE ]`, `[ CURRENT ]`, `[ MATRIX // 01 ]`) with translucent neon badges.
+
+## Background Simulation
+1. **Dense Galaxy Particle Canvas**: Three.js procedural galaxy simulation (6,000 stars on desktop, 2,500 on mobile) with luminous additive core and spiral arms.
+2. **Calm Steady Orbit**: Stable camera coordinates with steady rotation (0.015 rad/s) and zero parallax displacement, keeping reading comfortable.
 
 ## Typography
 - **Primary Family**: IBM Plex Sans, self-hosted locally via `@fontsource/ibm-plex-sans` (zero external runtime network calls).
-- **Weights**: Light (`font-light`, 300) for display headings; Regular (`font-normal`, 400) for body and UI elements.
-- **Hierarchy**: Governed by font size, letterform spacing, and structural whitespace rather than excessive bold weights.
+- **Monospace Family**: System monospace for telemetry badges, IDs, years, and status codes.
+- **Hierarchy**: Guided by font scale, tracking, and structural hierarchy.
 
-## Layout Compositions (RHYTHM 3)
-- **Hero**: Standalone display headline, playful rounded quote card, and frosted snapshot panel.
-- **Active Explorations**: Clean 2-column flex layout with strict topic title and status pills only (zero descriptive sentences).
-- **Featured Case Study**: Production core dossier for UniCash POS (Fruqita) with rounded pill screenshot tabs and frosted breakdown cards.
-- **Project Index**: Integrated directory toolbar with category filter pills and interactive rounded project cards.
-- **Experience**: Asymmetric 2-column split with sticky section summary on left and rounded frosted career cards on right.
-- **Skills**: Architectural 4-column competency matrix with smooth rounded hover elevations.
-- **Contact**: Direct conversational inquiry card with rounded email pill bar.
+## Layout Narrative Flow
+1. **Flight Deck Hero**: Status beacon, bold mission statement, bio, and Station Telemetry HUD module.
+2. **Engineering Projects**: Primary directory with category filter rail, year markers, and UniCash POS highlighted with `PRODUCTION CORE`.
+3. **Research Frontiers**: 3-column grid covering Connectomics, Agentic AI, and Multimedia.
+4. **Operational Flight Log**: Detailed career timeline covering venture leadership, financial oversight, and software engineering.
+5. **Systems Competencies**: 4-column capability matrix.
+6. **Comms Uplink**: Direct email console with one-click copy and messaging actions.
+7. **Colophon Footer**: Minimal cyber footer with edge deployment status.
 
-## Design Decisions & One-Line Reasons (R-31)
-- **Deep Space Palette**: Interstellar void and starlight off-white provide effortless legibility without harsh white glare.
-- **Dense Galaxy Bloom**: Dense 6,000-particle canvas with additive core creates a breathtaking, alive cosmic backdrop.
-- **Calm Orbit**: Eliminating heavy parallax ensures readers focus comfortably on content without motion sickness.
-- **Playful Rounded Curves**: Replacing boxy 90-degree corners with organic curves and pills brings warmth, personality, and modern tactile delight.
-- **No Terminal Remnants**: Completely removed the command palette to maintain clean, focused browsing.
-- **No Em Dashes**: Clean, natural human punctuation using colons, commas, and parentheses.
+## Design Decisions & Verification
+- **Readability Solved**: High-opacity dark containers eliminate previous legibility issues from blooming star fields.
+- **Unified Engineering Showcase**: Integrating UniCash POS directly into the primary project directory creates a cohesive archive without redundant featured hero banners.
+- **No Em Dashes**: Pure standard punctuation with colons, commas, and parentheses.
+- **Zero Terminal Remnants**: Verified clean codebase without command line or terminal components.

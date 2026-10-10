@@ -17,23 +17,22 @@ export function GalaxyBackground() {
 
     const isMobile = window.innerWidth < 768;
 
-    // Dense Galaxy parameters
-    const totalCount = isMobile ? 2500 : 6000;
-    const coreCount = Math.floor(totalCount * 0.28); // Dense luminous core bulge
-    const armCount = totalCount - coreCount; // Spiral arms & cosmic dust
+    // Galaxy parameters - tuned for deep space atmosphere with zero text glare
+    const totalCount = isMobile ? 1800 : 4200;
+    const coreCount = Math.floor(totalCount * 0.22);
 
-    const radius = isMobile ? 20 : 30;
+    const radius = isMobile ? 18 : 28;
     const branches = 4;
-    const spin = 1.35;
-    const randomness = 0.4;
-    const power = 3.2;
+    const spin = 1.3;
+    const randomness = 0.42;
+    const power = 3.3;
 
-    // Colors
-    const colorCore = new THREE.Color("#FFFDF0"); // Radiant starlight core
-    const colorBulge = new THREE.Color("#FFE5B4"); // Warm luminous amber starlight
+    // Cyberpunk-Space Palette
+    const colorCore = new THREE.Color("#00F0FF"); // Electric cyan starlight core
+    const colorBulge = new THREE.Color("#E2E8F0"); // Pale starlight
     const colorArmPrimary = new THREE.Color("#7F5AF0"); // Deep cosmic violet
-    const colorArmSecondary = new THREE.Color("#38BDF8"); // Starlight cyan
-    const colorFlare = new THREE.Color("#E07A5F"); // Solar flare copper
+    const colorArmSecondary = new THREE.Color("#0284C7"); // Sky cyan
+    const colorFlare = new THREE.Color("#F59E0B"); // Cyber amber
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
@@ -43,7 +42,7 @@ export function GalaxyBackground() {
       0.1,
       150
     );
-    // Stable, calm camera elevation with no dizzying parallax
+    // Fixed, calm camera elevation with no parallax jumps
     camera.position.set(0, 8, 28);
     camera.lookAt(0, 0, 0);
 
@@ -58,20 +57,19 @@ export function GalaxyBackground() {
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
-    // Create a high-intensity blooming star sprite texture
+    // Create a gentle star sprite texture
     const starCanvas = document.createElement("canvas");
-    starCanvas.width = 64;
-    starCanvas.height = 64;
+    starCanvas.width = 32;
+    starCanvas.height = 32;
     const ctx = starCanvas.getContext("2d");
     if (ctx) {
-      const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-      gradient.addColorStop(0.15, "rgba(255, 250, 240, 0.95)");
-      gradient.addColorStop(0.4, "rgba(220, 230, 255, 0.45)");
-      gradient.addColorStop(0.75, "rgba(120, 140, 200, 0.12)");
+      const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+      gradient.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+      gradient.addColorStop(0.2, "rgba(220, 245, 255, 0.6)");
+      gradient.addColorStop(0.5, "rgba(0, 240, 255, 0.2)");
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 64, 64);
+      ctx.fillRect(0, 0, 32, 32);
     }
     const starTexture = new THREE.CanvasTexture(starCanvas);
 
@@ -80,25 +78,24 @@ export function GalaxyBackground() {
     const positions = new Float32Array(totalCount * 3);
     const colors = new Float32Array(totalCount * 3);
 
-    // 1. Generate dense core bulge particles
+    // 1. Core bulge particles
     for (let i = 0; i < coreCount; i++) {
       const i3 = i * 3;
-      const coreR = Math.pow(Math.random(), 2.5) * (radius * 0.22);
+      const coreR = Math.pow(Math.random(), 2.5) * (radius * 0.2);
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
 
       positions[i3] = coreR * Math.sin(phi) * Math.cos(theta);
-      positions[i3 + 1] = coreR * Math.cos(phi) * 0.45; // slightly flattened bulge
+      positions[i3 + 1] = coreR * Math.cos(phi) * 0.45;
       positions[i3 + 2] = coreR * Math.sin(phi) * Math.sin(theta);
 
-      // Core color: luminous white to warm gold
-      const c = colorCore.clone().lerp(colorBulge, Math.random() * 0.6);
+      const c = colorCore.clone().lerp(colorBulge, Math.random() * 0.7);
       colors[i3] = c.r;
       colors[i3 + 1] = c.g;
       colors[i3 + 2] = c.b;
     }
 
-    // 2. Generate spiral arms and cosmic dust
+    // 2. Spiral arms & cosmic dust
     for (let i = coreCount; i < totalCount; i++) {
       const i3 = i * 3;
       const r = Math.pow(Math.random(), power) * radius;
@@ -125,7 +122,6 @@ export function GalaxyBackground() {
       positions[i3 + 1] = randomY;
       positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
 
-      // Color gradation along arms
       const fraction = r / radius;
       const armColor = colorBulge.clone();
 
@@ -137,9 +133,8 @@ export function GalaxyBackground() {
         armColor.lerp(colorArmSecondary, (fraction - 0.75) / 0.25);
       }
 
-      // ~18% solar flare copper stars
-      if (Math.random() < 0.18) {
-        armColor.lerp(colorFlare, 0.75);
+      if (Math.random() < 0.15) {
+        armColor.lerp(colorFlare, 0.6);
       }
 
       colors[i3] = armColor.r;
@@ -150,21 +145,20 @@ export function GalaxyBackground() {
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
-    // Particle Material with Additive Blending for radiant optical bloom
+    // Particle Material - subtle, non-glaring opacity
     const material = new THREE.PointsMaterial({
-      size: isMobile ? 3.5 : 4.8,
+      size: isMobile ? 3.0 : 3.8,
       sizeAttenuation: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       vertexColors: true,
       map: starTexture,
       transparent: true,
-      opacity: 0.88,
+      opacity: 0.35, // Dimmed down to guarantee 100% text readability
     });
 
     const points = new THREE.Points(geometry, material);
-    // 38-degree cosmic perspective tilt
-    points.rotation.x = 0.62;
+    points.rotation.x = 0.60;
     scene.add(points);
 
     // Window Resize Handler
@@ -177,7 +171,7 @@ export function GalaxyBackground() {
     };
     window.addEventListener("resize", handleResize);
 
-    // Tab visibility handling to pause RAF
+    // Tab visibility handling
     let isVisible = true;
     const handleVisibility = () => {
       isVisible = document.visibilityState === "visible";
@@ -194,9 +188,8 @@ export function GalaxyBackground() {
 
       const elapsed = clock.getElapsedTime();
 
-      // Slow, majestic continuous orbital rotation
       if (!prefersReducedMotion) {
-        points.rotation.y = elapsed * 0.018;
+        points.rotation.y = elapsed * 0.015;
       }
 
       renderer.render(scene, camera);
@@ -226,14 +219,11 @@ export function GalaxyBackground() {
       aria-hidden="true"
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden no-print"
     >
-      {/* 3D Dense Galaxy Canvas */}
-      <div ref={containerRef} className="absolute inset-0 opacity-90" />
+      {/* 3D Galaxy Canvas (dimmed for high text contrast) */}
+      <div ref={containerRef} className="absolute inset-0 opacity-40" />
 
-      {/* Layered Frosted Glass Background Diffusion Wash */}
-      <div className="absolute inset-0 backdrop-blur-md bg-page/35" />
-
-      {/* Soft Vignette Depth */}
-      <div className="absolute inset-0 bg-radial-gradient pointer-events-none opacity-40" />
+      {/* Deep Space Dark Scrim to guarantee 100% pure contrast for foreground text */}
+      <div className="absolute inset-0 bg-[#05060A]/80 pointer-events-none" />
     </div>
   );
 }

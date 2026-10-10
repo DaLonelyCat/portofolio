@@ -9,14 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        page: "#090A10",        // Interstellar void background
-        surface: "#11131E",     // Deep-space observatory surface
-        surfaceHover: "#181B2B",// Elevated hover state
-        rule: "#222638",        // Celestial hairline borders
-        ink: "#F0F2F8",         // Crisp starlight primary text
-        muted: "#949AB0",       // Cosmic dust secondary text
-        accent: "#E07A5F",      // Solar flare / pulsar copper-amber
-        accentHover: "#C9664D", // Accent hover state
+        page: "#05060A",         // Deep space orbital void
+        surface: "#0B0D16",      // Cyber alloy panel
+        surfaceHover: "#121626", // Cyber elevated surface
+        rule: "#1C2236",         // Structural telemetry border
+        ink: "#FFFFFF",          // 100% pure crisp white headings
+        muted: "#94A3B8",        // Cool cyber slate secondary text
+        accent: "#00F0FF",       // Electric neon cyan
+        accentHover: "#38BDF8",  // Bright cyan hover
+        neonAmber: "#F59E0B",    // Warning amber telemetry
+        neonViolet: "#A855F7",   // Deep cosmic violet
       },
       fontFamily: {
         sans: [

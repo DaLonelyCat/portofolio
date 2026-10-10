@@ -5,9 +5,8 @@ import dynamic from "next/dynamic";
 import { portfolioData } from "@/data/portfolio";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { Learning } from "@/components/Learning";
-import { FeaturedCaseStudy } from "@/components/FeaturedCaseStudy";
 import { Projects } from "@/components/Projects";
+import { Learning } from "@/components/Learning";
 import { ExperienceSection } from "@/components/Experience";
 import { SkillsSection } from "@/components/Skills";
 import { ContactSection } from "@/components/ContactSection";
@@ -38,13 +37,9 @@ export default function Home() {
     showToast("Opening CV in new tab");
   };
 
-  const featuredProject =
-    portfolioData.projects.find((p) => p.id === "unicash-pos") ||
-    portfolioData.projects[0];
-
   return (
-    <div className="relative min-h-screen bg-page text-ink selection:bg-rule selection:text-ink font-sans">
-      {/* Interactive Dense Three.js Galaxy Background Canvas */}
+    <div className="relative min-h-screen bg-page text-ink selection:bg-cyan-500/30 selection:text-white font-sans">
+      {/* Interactive Galaxy Background with Deep Space Scrim */}
       <GalaxyBackground />
 
       <div className="relative z-10">
@@ -62,7 +57,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Floating Playful Pill Navigation */}
+        {/* Floating Cyber HUD Pill Navigation */}
         <div className="no-print">
           <Navbar
             personal={portfolioData.personal}
@@ -70,17 +65,27 @@ export default function Home() {
           />
         </div>
 
-        {/* Main Content Sections */}
+        {/* Main Content Sections: Space & Cyberpunk Layout Flow */}
         <main>
+          {/* 1. Hero Flight Deck & Station Telemetry */}
           <Hero personal={portfolioData.personal} onPrintCV={handleExportCV} />
-          <Learning />
-          <FeaturedCaseStudy project={featuredProject} />
+
+          {/* 2. Core Engineering Showcase */}
           <Projects projects={portfolioData.projects} categories={portfolioData.categories} />
+
+          {/* 3. Research Frontiers */}
+          <Learning />
+
+          {/* 4. Operational Flight Log */}
           <ExperienceSection
             experiences={portfolioData.experiences}
             education={portfolioData.education}
           />
+
+          {/* 5. Systems Competencies */}
           <SkillsSection categories={portfolioData.skillCategories} />
+
+          {/* 6. Comms Uplink */}
           <ContactSection
             personal={portfolioData.personal}
             onCopyEmail={(email) => showToast(`Copied ${email} to clipboard`)}

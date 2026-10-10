@@ -14,15 +14,15 @@ html {
 }
 
 body {
-  background-color: #090A10;
-  color: #F0F2F8;
+  background-color: #05060A;
+  color: #FFFFFF;
   font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
 }
 
 ::selection {
-  background-color: #222638;
-  color: #F0F2F8;
+  background-color: rgba(0, 240, 255, 0.25);
+  color: #FFFFFF;
 }
 
 /* Subtle stardust texture overlay */
@@ -33,14 +33,14 @@ body {
   height: 100%;
   background-image: url('/noise.svg');
   background-repeat: repeat;
-  opacity: 0.03;
+  opacity: 0.025;
   pointer-events: none;
   z-index: 40;
 }
 
-/* High-contrast focus indicator conforming to WCAG AA */
+/* Cyberpunk electric focus indicator */
 :focus-visible {
-  outline: 2px solid #E07A5F !important;
+  outline: 2px solid #00F0FF !important;
   outline-offset: 2px !important;
 }
 
@@ -49,14 +49,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090A10;
+  background: #05060A;
 }
 ::-webkit-scrollbar-thumb {
-  background: #222638;
+  background: #1C2236;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #949AB0;
+  background: #00F0FF;
 }
 
 /* Print Stylesheet for clean CV output */

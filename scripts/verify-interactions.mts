@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 console.log("=================================================");
-console.log("RUNNING PLAYFUL FROSTED SPACE INTERACTION TEST SUITE");
+console.log("RUNNING SPACE & CYBERPUNK INTERACTION TEST SUITE");
 console.log("=================================================\n");
 
 let passedTests = 0;
@@ -21,78 +21,56 @@ function assert(condition: boolean, testName: string, details: string = "") {
 }
 
 // ----------------------------------------------------
-// 1. Terminal / Palette Complete Removal Verification
+// 1. Terminal & Highlighted Case Study Removal
 // ----------------------------------------------------
-console.log("--- 1. Terminal / Palette Removal Test ---");
+console.log("--- 1. Terminal & Featured Case Study Removal Test ---");
 
 const paletteFileExists = fs.existsSync(path.join(process.cwd(), "src/components/CommandPalette.tsx"));
 const terminalFileExists = fs.existsSync(path.join(process.cwd(), "src/components/TacticalTerminal.tsx"));
+const caseStudyFileExists = fs.existsSync(path.join(process.cwd(), "src/components/FeaturedCaseStudy.tsx"));
 assert(!paletteFileExists && !terminalFileExists, "CommandPalette.tsx and TacticalTerminal.tsx completely deleted");
+assert(!caseStudyFileExists, "FeaturedCaseStudy.tsx completely deleted");
 
 const pageContent = fs.readFileSync(path.join(process.cwd(), "src/app/page.tsx"), "utf-8");
 assert(!pageContent.includes("CommandPalette") && !pageContent.includes("TacticalTerminal"), "page.tsx contains zero imports or references to terminal/palette");
+assert(!pageContent.includes("FeaturedCaseStudy"), "page.tsx contains zero imports or references to FeaturedCaseStudy");
 assert(!pageContent.includes("isPaletteOpen") && !pageContent.includes("isTerminalOpen"), "page.tsx contains zero palette state");
 assert(!pageContent.includes("Cmd+K") && !pageContent.includes("Ctrl+K"), "page.tsx contains zero Cmd+K / Ctrl+K keyboard listeners");
 
 // ----------------------------------------------------
-// 2. Playful Rounded Shape System Verification
+// 2. Cyber Layout & Section Navigation Anchors
 // ----------------------------------------------------
-console.log("\n--- 2. Playful Rounded Shapes & Frosted Glass Test ---");
+console.log("\n--- 2. Layout Flow & Navigation Anchors Test ---");
 
 const navbarContent = fs.readFileSync(path.join(process.cwd(), "src/components/Navbar.tsx"), "utf-8");
-assert(navbarContent.includes("rounded-full"), "Navbar uses floating rounded-full pill design");
+assert(navbarContent.includes("#projects") && navbarContent.includes("#frontiers") && navbarContent.includes("#log") && navbarContent.includes("#skills") && navbarContent.includes("#contact"), "Navbar contains anchors for all 5 layout sections");
 
 const heroContent = fs.readFileSync(path.join(process.cwd(), "src/components/Hero.tsx"), "utf-8");
-assert(heroContent.includes("rounded-full") && heroContent.includes("rounded-2xl") && heroContent.includes("rounded-3xl"), "Hero uses rounded-full pill buttons and rounded-3xl frosted card");
+assert(heroContent.includes("Station Telemetry") && heroContent.includes("ORBITAL UPLINK"), "Hero includes Cyberpunk Station Telemetry and Status Beacon");
 
-const caseStudyContent = fs.readFileSync(path.join(process.cwd(), "src/components/FeaturedCaseStudy.tsx"), "utf-8");
-assert(caseStudyContent.includes("rounded-3xl") && caseStudyContent.includes("rounded-full"), "Case Study uses rounded-3xl showcase frame and rounded-full pill tabs");
+const learningContent = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
+assert(learningContent.includes('id="frontiers"') && learningContent.includes("Research Frontiers"), "Learning component mounts #frontiers research grid");
 
-const projectsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
-assert(projectsContent.includes("rounded-2xl") && projectsContent.includes("rounded-full"), "Projects uses rounded-2xl interactive cards and rounded-full filter rail");
+const experienceContent = fs.readFileSync(path.join(process.cwd(), "src/components/Experience.tsx"), "utf-8");
+assert(experienceContent.includes('id="log"') && experienceContent.includes("Operational Flight Log"), "Experience component mounts #log flight log");
+
+const skillsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Skills.tsx"), "utf-8");
+assert(skillsContent.includes('id="skills"') && skillsContent.includes("Systems Competencies"), "Skills component mounts #skills capability matrix");
 
 const contactContent = fs.readFileSync(path.join(process.cwd(), "src/components/ContactSection.tsx"), "utf-8");
-assert(contactContent.includes("rounded-3xl") && contactContent.includes("rounded-full"), "Contact section uses rounded-3xl container and rounded-full pill email bar");
+assert(contactContent.includes('id="contact"') && contactContent.includes("Comms Uplink"), "Contact component mounts #contact comms uplink");
 
 // ----------------------------------------------------
-// 3. Featured Case Study Tabs Interactive Logic
+// 3. UniCash POS Production Core Showcase in Projects
 // ----------------------------------------------------
-console.log("\n--- 3. Featured Case Study Tabs Test ---");
+console.log("\n--- 3. UniCash POS Core Integration Test ---");
 
-const caseStudyProject = portfolioData.projects.find((p) => p.id === "unicash-pos");
-assert(!!caseStudyProject, "UniCash POS project exists in dataset");
-assert(caseStudyProject?.screenshots?.length === 5, "UniCash POS has 5 screenshots configured", `Count: ${caseStudyProject?.screenshots?.length}`);
+const projectsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
+assert(projectsContent.includes("PRODUCTION CORE"), "UniCash POS is badged as PRODUCTION CORE in project directory");
 
-class CaseStudyTabSimulation {
-  screenshots: any[];
-  activeTab: number = 0;
-  constructor(screenshots: any[]) {
-    this.screenshots = screenshots;
-  }
-  selectTab(idx: number) {
-    if (idx >= 0 && idx < this.screenshots.length) {
-      this.activeTab = idx;
-    }
-  }
-  getActiveShot() {
-    return this.screenshots[this.activeTab];
-  }
-}
-
-const tabSim = new CaseStudyTabSimulation(caseStudyProject?.screenshots || []);
-assert(tabSim.activeTab === 0 && tabSim.getActiveShot().src === "/projects/unicash-cashier.png", "Initial tab is 0 (Cashier Interface)");
-
-tabSim.selectTab(1);
-assert(tabSim.activeTab === 1 && tabSim.getActiveShot().src === "/projects/unicash-dashboard.png", "Clicking Tab 1 switches to Sales Analytics screenshot");
-
-tabSim.selectTab(2);
-assert(tabSim.activeTab === 2 && tabSim.getActiveShot().src === "/projects/unicash-sales.png", "Clicking Tab 2 switches to Order Ledger screenshot");
-
-tabSim.selectTab(3);
-assert(tabSim.activeTab === 3 && tabSim.getActiveShot().src === "/projects/unicash-financials.png", "Clicking Tab 3 switches to Financial Reports screenshot");
-
-tabSim.selectTab(4);
-assert(tabSim.activeTab === 4 && tabSim.getActiveShot().src === "/projects/unicash-ai-agent.png", "Clicking Tab 4 switches to Store AI Assistant screenshot");
+const unicashProject = portfolioData.projects.find((p) => p.id === "unicash-pos");
+assert(!!unicashProject, "UniCash POS exists in project dataset");
+assert(unicashProject?.screenshots?.length === 5, "UniCash POS has all 5 screenshots intact", `Count: ${unicashProject?.screenshots?.length}`);
 
 // ----------------------------------------------------
 // 4. Project Archive Category Filtering Logic
@@ -125,7 +103,7 @@ let modalProject: any = null;
 function openModal(p: any) { modalProject = p; }
 function closeModal() { modalProject = null; }
 
-openModal(caseStudyProject);
+openModal(unicashProject);
 assert(modalProject !== null && modalProject.id === "unicash-pos", "Clicking project opens ProjectModal with project details");
 
 closeModal();
@@ -178,7 +156,7 @@ console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);
 console.log("=================================================");
 
 if (passedTests === totalTests) {
-  console.log("ALL INTERACTIVE & PLAYFUL CHECKS VERIFIED SUCCESSFULLY!\n");
+  console.log("ALL INTERACTIVE & CYBER CHECKS VERIFIED SUCCESSFULLY!\n");
   process.exit(0);
 } else {
   console.error("SOME TESTS FAILED!\n");
