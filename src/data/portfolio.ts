@@ -309,7 +309,7 @@ export const portfolioData: PortfolioData = {
       degree: "Computer Science Undergraduate (Minor in Multimedia)",
       institution: "Bina Nusantara University",
       period: "2023 - 2027",
-      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a formal Minor in Multimedia — specializing in UI/UX architecture, game design & programming, multimedia understanding, and intelligent computing systems.",
+      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a formal Minor in Multimedia specializing in UI/UX architecture, game design & programming, multimedia understanding, and intelligent computing systems.",
     },
   ],
 };
