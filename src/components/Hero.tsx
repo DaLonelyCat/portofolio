@@ -48,10 +48,10 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
             </p>
 
             {/* Telemetry metadata chips */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 font-mono text-xs text-slate-400 mb-6">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 font-mono text-xs text-slate-400 mb-6">
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-cyan-500/30 text-cyber-cyan clip-corner-sm">
                 <Crosshair className="w-3.5 h-3.5" />
-                <span>BINUS_UNIVERSITY // CS</span>
+                <span>BINUS // CS (MINOR: MULTIMEDIA)</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-yellow-500/30 text-cyber-yellow clip-corner-sm">
                 <Cpu className="w-3.5 h-3.5" />
@@ -59,7 +59,11 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-magenta-500/30 text-cyber-magenta clip-corner-sm">
                 <Zap className="w-3.5 h-3.5" />
-                <span>CFO_FRUQITA (ACTIVE) // EX_FOUNDER_MYBEANS</span>
+                <span>CFO_FRUQITA // EX_FOUNDER_MYBEANS</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 border border-teal-500/40 text-teal-300 clip-corner-sm">
+                <Activity className="w-3.5 h-3.5 text-teal-400" />
+                <span>R&D: 3D_FLY_CONNECTOMICS // AGENTIC_AI</span>
               </div>
             </div>
 
@@ -129,19 +133,34 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                 {/* Metric 2 */}
                 <div className="p-2.5 bg-black/60 border border-yellow-500/30 clip-corner-sm">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-300">ACADEMIC_CREDENTIALS</span>
+                    <span className="text-slate-300">ACADEMICS_&_MULTIMEDIA_MINOR</span>
                     <span className="text-cyber-yellow font-bold">GPA: 3.30 / 4.00</span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-800 rounded-none overflow-hidden">
                     <div className="h-full bg-cyber-yellow w-[83%]" />
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                    <span>Bina Nusantara University</span>
-                    <span>Class of 2027</span>
+                    <span>CS Major • Minor in Multimedia</span>
+                    <span>UI/UX • Game Dev • Perception</span>
                   </div>
                 </div>
 
                 {/* Metric 3 */}
+                <div className="p-2.5 bg-black/60 border border-teal-500/30 clip-corner-sm">
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="text-slate-300">ACTIVE_FRONTIER_R&D</span>
+                    <span className="text-teal-400 font-bold">R&D_LAB // 2026</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-none overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-teal-400 to-cyber-cyan w-[88%]" />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+                    <span>3D Fly Connectome Scans</span>
+                    <span>Agentic AI Market Engines</span>
+                  </div>
+                </div>
+
+                {/* Metric 4 */}
                 <div className="p-2.5 bg-black/60 border border-magenta-500/20 clip-corner-sm">
                   <div className="flex items-center justify-between text-xs mb-1">
                     <span className="text-slate-300">VENTURE_LEADERSHIP</span>
@@ -152,7 +171,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-400 mt-1">
                     <span>Fruqita (CFO, Active) • MyBeans (Founder)</span>
-                    <span>Operations & POS Dev</span>
+                    <span>Operations & Custom POS</span>
                   </div>
                 </div>
 

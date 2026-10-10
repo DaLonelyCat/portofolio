@@ -22,6 +22,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
   }, []);
 
   const navLinks = [
+    { label: "FRONTIERS_R&D", href: "#frontiers" },
     { label: "CASE_FILES", href: "#projects" },
     { label: "OPERATIONAL_LOG", href: "#experience" },
     { label: "CYBERWARE", href: "#skills" },

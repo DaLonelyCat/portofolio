@@ -5,7 +5,7 @@ export const portfolioData: PortfolioData = {
     name: "Christian Emanuel Ikajaya",
     role: "Software Engineer & Tech Builder",
     tagline: "Builder and problem solver turning cool ideas into working projects.",
-    bio: "I'm a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring 3D brain scans of flies (connectomics) and engineering Agentic AI systems for stock trading, daily workflows, and business automation. Naturally curious, I genuinely love learning new stuff and figuring out how things work under the hood.",
+    bio: "I'm a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring 3D brain scans of flies (connectomics) and engineering Agentic AI systems for stock trading, daily workflows, and business automation. Minoring in Multimedia with an emphasis on UI/UX architecture, game design & programming, and multimedia computing.",
     location: "Indonesia (BINUS University // Open for Remote)",
     status: "Available for Software Engineering & Builder roles",
     statusAvailable: true,
@@ -28,6 +28,42 @@ export const portfolioData: PortfolioData = {
   ],
 
   projects: [
+    {
+      id: "agentic-trading-automation",
+      title: "Agentic AI Market & Task Engine",
+      tagline: "Autonomous multi-agent system executing algorithmic stock trading strategies, daily task flows, and business ops.",
+      category: "AI & Machine Learning",
+      year: "2026 (Active)",
+      overview:
+        "An autonomous multi-agent framework designed to orchestrate quantitative stock trading telemetry, personal task scheduling, and end-to-end business operations with self-correcting execution loops.",
+      problem:
+        "Fragmented tools, manual market telemetry, and repetitive administrative overhead cause operational bottlenecks for ventures and traders.",
+      solution:
+        "Architected cooperating LLM agents with specialized tool-calling capabilities for real-time market data retrieval, algorithmic execution, and automated business schedule dispatching.",
+      impact:
+        "Streamlined decision pipelines, enabled 24/7 autonomous monitoring of market trends, and automated business workflows.",
+      tags: ["Agentic AI", "Stock Trading", "Workflow Automation", "Autonomous Agents", "Python"],
+      repoUrl: "https://github.com/dalonelycat",
+      featured: true,
+    },
+    {
+      id: "drosophila-connectome-3d",
+      title: "3D Fly Brain Connectome Explorer",
+      tagline: "Investigating 3D whole-brain electron microscopy scans and synaptic wiring diagrams of Drosophila melanogaster.",
+      category: "AI & Machine Learning",
+      year: "2026 (Research)",
+      overview:
+        "Computational neurobiology and 3D volumetric analysis investigating the fruit fly (Drosophila melanogaster) connectome to understand neural wiring topologies and synaptic circuits.",
+      problem:
+        "Dense biological connectome data requires specialized spatial reconstruction and graph analysis to interpret complex synaptic connections.",
+      solution:
+        "Exploring 3D volumetric imaging datasets, mapping synaptic circuit graphs, and drawing architectural parallels between biological intelligence and artificial neural networks.",
+      impact:
+        "Advanced understanding of whole-brain synaptic topologies and bio-inspired computing paradigms.",
+      tags: ["Connectomics", "3D Volumetric Imaging", "Drosophila Brain", "Neurobiology", "Graph Analysis"],
+      repoUrl: "https://github.com/dalonelycat",
+      featured: true,
+    },
     {
       id: "unicash-pos",
       title: "UniCash POS",
@@ -247,14 +283,24 @@ export const portfolioData: PortfolioData = {
         { name: "Problem Solving & Systems Optimization", context: "Keeping software simple, resilient, and efficient" },
       ],
     },
+    {
+      title: "Multimedia & Interactive Systems (Minor)",
+      description: "Academic minor specialization bridging human-computer interaction, visual design, and real-time game architecture.",
+      skills: [
+        { name: "UI & UX Design Systems", context: "Tactical HUD designs, design tokens, WCAG accessible ergonomics" },
+        { name: "Game Design & Programming", context: "Unity C# 2D/3D physics, collision mechanics, wave controllers" },
+        { name: "Multimedia Understanding & Perception", context: "Computer graphics pipelines, sensory audio/video processing, WebXR" },
+        { name: "Interactive Prototyping", context: "Figma design tokens, rapid prototypes, 60fps canvas engines" },
+      ],
+    },
   ],
 
   education: [
     {
-      degree: "Computer Science Undergraduate",
+      degree: "Computer Science Undergraduate (Minor in Multimedia)",
       institution: "Bina Nusantara University",
       period: "2023 - 2027",
-      notes: "Current GPA: 3.30 / 4.00. Focus on software engineering, computer science theory, algorithms, and application development.",
+      notes: "Current GPA: 3.30 / 4.00. Major in Computer Science with a formal Minor in Multimedia — specializing in UI/UX architecture, game design & programming, multimedia understanding, and intelligent computing systems.",
     },
   ],
 };

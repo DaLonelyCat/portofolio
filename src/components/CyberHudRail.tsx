@@ -11,10 +11,11 @@ interface SectorNav {
 
 const SECTORS: SectorNav[] = [
   { id: "hero", code: "01", label: "APEX" },
-  { id: "projects", code: "02", label: "DOSSIERS" },
-  { id: "experience", code: "03", label: "MISSIONS" },
-  { id: "skills", code: "04", label: "CYBERWARE" },
-  { id: "contact", code: "05", label: "UPLINK" },
+  { id: "frontiers", code: "02", label: "FRONTIERS" },
+  { id: "projects", code: "03", label: "DOSSIERS" },
+  { id: "experience", code: "04", label: "MISSIONS" },
+  { id: "skills", code: "05", label: "CYBERWARE" },
+  { id: "contact", code: "06", label: "UPLINK" },
 ];
 
 export function CyberHudRail() {

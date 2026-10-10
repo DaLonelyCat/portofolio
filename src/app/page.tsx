@@ -5,6 +5,7 @@ import { portfolioData } from "@/data/portfolio";
 import { Navbar } from "@/components/Navbar";
 import { CyberHudRail } from "@/components/CyberHudRail";
 import { Hero } from "@/components/Hero";
+import { FrontierFocus } from "@/components/FrontierFocus";
 import { Projects } from "@/components/Projects";
 import { ExperienceSection } from "@/components/Experience";
 import { SkillsSection } from "@/components/Skills";
@@ -55,6 +56,7 @@ export default function Home() {
       {/* Main Content Sections */}
       <main className="relative z-10">
         <Hero personal={portfolioData.personal} onPrintCV={handleExportCV} />
+        <FrontierFocus />
         <Projects projects={portfolioData.projects} categories={portfolioData.categories} />
         <ExperienceSection
           experiences={portfolioData.experiences}
