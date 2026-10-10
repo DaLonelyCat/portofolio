@@ -1,6 +1,6 @@
-# Cyberpunk Neon Portfolio & CV for Vercel
+# Cyberpunk Neon Portfolio & CV for Cloudflare
 
-A modern, high-performance web portfolio and interactive CV for a **UI/UX Designer & Creative Developer**, crafted with an authentic **Cyberpunk neon aesthetic** featuring Electric Cyan, Neon Magenta, Acid Amber, chamfered HUD geometry, and CRT scanlines. Built for instant, zero-configuration deployment on **Vercel**.
+A modern, high-performance web portfolio and interactive CV for a **Software Engineer & Tech Builder**, crafted with an authentic **Cyberpunk neon aesthetic** featuring Electric Cyan, Neon Magenta, Acid Amber, chamfered HUD geometry, and CRT scanlines. Built for instant static export deployment on **Cloudflare Pages / Workers**.
 
 ---
 
@@ -79,9 +79,10 @@ npm run dev
 ```
 Open [http://localhost:2010](http://localhost:2010) in your browser.
 
-### Deploying to Vercel
-1. Push your repository to **GitHub**, **GitLab**, or **Bitbucket**.
-2. Go to [Vercel](https://vercel.com) and click **"Add New Project"**.
-3. Import this repository.
-4. Vercel automatically detects Next.js; click **"Deploy"** with default settings.
-5. Your portfolio will be live with a global edge CDN and automatic HTTPS!
+### Deploying to Cloudflare Pages / Workers
+1. Push your repository to **GitHub**.
+2. Connect your repo in the [Cloudflare Dashboard](https://dash.cloudflare.com/) under **Workers & Pages**.
+3. Build command: `npm run build`
+4. Output directory: `out`
+5. Your portfolio is served instantly across Cloudflare's global edge network!
+

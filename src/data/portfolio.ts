@@ -5,7 +5,7 @@ export const portfolioData: PortfolioData = {
     name: "Christian Emanuel Ikajaya",
     role: "Software Engineer & Tech Builder",
     tagline: "Builder and problem solver turning cool ideas into working projects.",
-    bio: "I'm a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. I care about keeping things simple and efficient, and I'm super comfortable with changes whenever things shift. Naturally curious, I just genuinely love learning new stuff and figuring out how things work under the hood.",
+    bio: "I'm a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring 3D brain scans of flies (connectomics) and engineering Agentic AI systems for stock trading, daily workflows, and business automation. Naturally curious, I genuinely love learning new stuff and figuring out how things work under the hood.",
     location: "Indonesia (BINUS University // Open for Remote)",
     status: "Available for Software Engineering & Builder roles",
     statusAvailable: true,
@@ -61,7 +61,6 @@ export const portfolioData: PortfolioData = {
       impact:
         "Created an engaging community platform with seamless browsing and transparent dining ratings.",
       tags: ["Next.js", "React", "Tailwind CSS", "MongoDB", "User Auth"],
-      liveUrl: "https://koya-food-app.vercel.app",
       repoUrl: "https://github.com/DaLonelyCat/KOYA_Food_Review_Webapp",
       featured: true,
     },
@@ -228,6 +227,8 @@ export const portfolioData: PortfolioData = {
       title: "Systems Architecture & Data",
       description: "Database architectures, point-of-sale systems, and emerging technology stacks.",
       skills: [
+        { name: "Agentic AI & Automation", context: "Autonomous workflows for stock trading, daily tasks & business ops" },
+        { name: "Connectomics & 3D Imaging", context: "Exploring 3D biological brain scans of fruit flies (Drosophila)" },
         { name: "Custom POS & Cashier Systems", context: "Transaction processing, inventory management" },
         { name: "MongoDB & Database Systems", context: "Data modeling, CRUD endpoints, local persistence" },
         { name: "WebXR & Augmented Reality", context: "3D camera anchoring, interactive celestial models" },

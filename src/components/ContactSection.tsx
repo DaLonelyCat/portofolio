@@ -143,7 +143,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
             © {new Date().getFullYear()} {personal.name.toUpperCase()} // PROTOCOL_V3
           </div>
           <div className="flex items-center gap-3 text-cyber-yellow text-[11px]">
-            <span>[HOSTED_ON_VERCEL]</span>
+            <span>[HOSTED_ON_CLOUDFLARE]</span>
             <span>//</span>
             <span>[LOC: {personal.location.toUpperCase()}]</span>
           </div>
