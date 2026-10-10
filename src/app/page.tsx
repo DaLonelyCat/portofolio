@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { portfolioData } from "@/data/portfolio";
-import { Project } from "@/types/portfolio";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Learning } from "@/components/Learning";
@@ -14,8 +13,6 @@ import { SkillsSection } from "@/components/Skills";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
-import { CommandPalette } from "@/components/CommandPalette";
-import { ProjectModal } from "@/components/ProjectModal";
 
 const GalaxyBackground = dynamic(
   () =>
@@ -28,27 +25,6 @@ const GalaxyBackground = dynamic(
 export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
-  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [selectedModalProject, setSelectedModalProject] = useState<Project | null>(null);
-
-  // Global Cmd+K / Ctrl+K listener for the quick command palette
-  useEffect(() => {
-    const handleGlobalKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setIsPaletteOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener("keydown", handleGlobalKey);
-    return () => window.removeEventListener("keydown", handleGlobalKey);
-  }, []);
-
-  const handleOpenProjectFromPalette = (projectId: string) => {
-    const found = portfolioData.projects.find((p) => p.id === projectId);
-    if (found) {
-      setSelectedModalProject(found);
-    }
-  };
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -68,7 +44,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-page text-ink selection:bg-rule selection:text-ink font-sans">
-      {/* Interactive Three.js Galaxy Background Canvas */}
+      {/* Interactive Dense Three.js Galaxy Background Canvas */}
       <GalaxyBackground />
 
       <div className="relative z-10">
@@ -86,12 +62,11 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Navigation */}
+        {/* Floating Playful Pill Navigation */}
         <div className="no-print">
           <Navbar
             personal={portfolioData.personal}
             onPrintCV={handleExportCV}
-            onOpenPalette={() => setIsPaletteOpen(true)}
           />
         </div>
 
@@ -116,20 +91,6 @@ export default function Home() {
         {/* Colophon Footer */}
         <Footer />
       </div>
-
-      {/* Interactive Command Palette (Cmd+K Easter Egg) */}
-      <CommandPalette
-        isOpen={isPaletteOpen}
-        onClose={() => setIsPaletteOpen(false)}
-        onOpenProject={handleOpenProjectFromPalette}
-        onShowToast={showToast}
-      />
-
-      {/* Project Modal Triggered From Command Palette */}
-      <ProjectModal
-        project={selectedModalProject}
-        onClose={() => setSelectedModalProject(null)}
-      />
 
       {/* Notification Toast */}
       <Toast

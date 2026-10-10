@@ -10,10 +10,10 @@ interface ExperienceProps {
 
 export function ExperienceSection({ experiences, education }: ExperienceProps) {
   return (
-    <section id="experience" className="py-16 md:py-24 border-b border-rule">
+    <section id="experience" className="py-16 md:py-24 border-b border-rule/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Asymmetric Section Header */}
-        <div className="mb-10 pb-6 border-b border-rule flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
+        <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
             <h2 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
               Operational History
@@ -24,22 +24,25 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
           </span>
         </div>
 
-        {/* Roles List */}
-        <div className="divide-y divide-rule border-b border-rule mb-16">
+        {/* Roles List (Playful Rounded Frosted Cards) */}
+        <div className="space-y-4 mb-16">
           {experiences.map((exp) => (
-            <div key={exp.id} className="py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div
+              key={exp.id}
+              className="p-6 sm:p-8 rounded-2xl border border-white/10 bg-surface/50 backdrop-blur-xl shadow-md hover:border-white/20 transition-all grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+            >
               {/* Left Column (4 cols) */}
               <div className="lg:col-span-4">
-                <span className="text-xs text-muted block mb-1">
+                <span className="text-xs text-muted block mb-1.5 font-mono">
                   {exp.period} • {exp.location}
                 </span>
                 <h3 className="text-lg font-normal text-ink">
                   {exp.role}
                 </h3>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-2 mt-2">
                   <span className="text-sm text-accent font-medium">{exp.company}</span>
                   {exp.current && (
-                    <span className="text-[11px] px-2 py-0.5 border border-accent/40 bg-accent/10 text-accent font-normal">
+                    <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-accent/40 bg-accent/15 text-accent font-medium">
                       Current
                     </span>
                   )}
@@ -61,11 +64,11 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                   ))}
                 </ul>
 
-                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-rule/50">
+                <div className="flex flex-wrap gap-2 pt-3 border-t border-white/10">
                   {exp.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="text-xs px-2.5 py-0.5 border border-rule bg-surface/80 text-muted"
+                      className="text-xs px-3 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted"
                     >
                       {tech}
                     </span>
@@ -78,14 +81,17 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
 
         {/* Education Subsection */}
         <div>
-          <h3 className="text-xs font-normal uppercase tracking-wider text-muted mb-6 pb-2 border-b border-rule">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-muted mb-6 pb-2 border-b border-white/10">
             Formal Academic Background
           </h3>
-          <div className="divide-y divide-rule border-b border-rule">
+          <div className="space-y-4">
             {education.map((edu, idx) => (
-              <div key={idx} className="py-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+              <div
+                key={idx}
+                className="p-6 rounded-2xl border border-white/10 bg-surface/40 backdrop-blur-md shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-4 items-start"
+              >
                 <div className="lg:col-span-4">
-                  <span className="text-xs text-muted block mb-1">{edu.period}</span>
+                  <span className="text-xs text-muted block mb-1 font-mono">{edu.period}</span>
                   <h4 className="text-base font-normal text-ink">{edu.institution}</h4>
                 </div>
                 <div className="lg:col-span-8">

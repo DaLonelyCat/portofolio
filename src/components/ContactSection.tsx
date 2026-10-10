@@ -20,10 +20,10 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 border-b border-rule">
+    <section id="contact" className="py-16 md:py-24 border-b border-rule/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Dedicated Direct Action Container */}
-        <div className="border border-rule p-6 sm:p-10 bg-surface/85 backdrop-blur-sm">
+        {/* Dedicated Direct Action Container (Playful Rounded-3xl Frosted Bubble) */}
+        <div className="rounded-3xl border border-white/10 bg-surface/60 backdrop-blur-xl p-8 sm:p-12 shadow-2xl">
           <div className="max-w-2xl">
             <span className="text-xs text-accent font-mono uppercase tracking-wider block mb-2">
               Direct Inquiries
@@ -35,9 +35,9 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
               Whether you are discussing engineering opportunities, product development, or new technology ventures, feel free to reach out directly by email.
             </p>
 
-            {/* Email Box */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3 border border-rule bg-page/90 mb-8">
-              <span className="text-sm sm:text-base text-ink font-normal px-2 truncate select-all font-mono">
+            {/* Email Box (Playful Pill Rail) */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-2 sm:pl-5 rounded-2xl sm:rounded-full border border-white/10 bg-black/40 mb-8 shadow-inner">
+              <span className="text-sm sm:text-base text-ink font-normal px-2 truncate select-all font-mono py-1">
                 {personal.socials.email}
               </span>
 
@@ -45,7 +45,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                 <button
                   onClick={handleCopy}
                   type="button"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-normal border border-rule text-ink hover:border-accent hover:text-accent transition-colors min-h-[44px]"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-5 py-2 text-xs font-medium rounded-full border border-white/10 bg-white/5 text-ink hover:border-accent hover:text-accent transition-all min-h-[44px]"
                   aria-label="Copy email address to clipboard"
                 >
                   {copied ? (
@@ -67,7 +67,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
 
                 <a
                   href={`mailto:${personal.socials.email}`}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-normal text-page bg-accent hover:bg-accentHover transition-colors min-h-[44px]"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-5 py-2 text-xs font-medium rounded-full text-page bg-accent hover:bg-accentHover transition-all shadow-md shadow-accent/20 min-h-[44px]"
                 >
                   <span>Send email</span>
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -77,14 +77,14 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
               </div>
             </div>
 
-            {/* Social Channels & Links */}
-            <div className="flex flex-wrap items-center gap-5 text-xs text-muted pt-4 border-t border-rule/50">
+            {/* Social Channels & Links (Pills) */}
+            <div className="flex flex-wrap items-center gap-3 text-xs text-muted pt-4 border-t border-white/10">
               {personal.socials.github && (
                 <a
                   href={personal.socials.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors underline underline-offset-4"
+                  className="px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-accent hover:text-accent hover:scale-[1.02] transition-all"
                 >
                   GitHub (dalonelycat)
                 </a>
@@ -95,7 +95,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                   href={personal.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors underline underline-offset-4"
+                  className="px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-accent hover:text-accent hover:scale-[1.02] transition-all"
                 >
                   LinkedIn
                 </a>
@@ -106,7 +106,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onPrintCV}
-                className="hover:text-ink transition-colors underline underline-offset-4"
+                className="px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-accent hover:text-accent hover:scale-[1.02] transition-all"
               >
                 Curriculum Vitae (PDF)
               </a>

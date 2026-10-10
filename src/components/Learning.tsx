@@ -19,10 +19,10 @@ export function Learning() {
   ];
 
   return (
-    <section id="learning" className="py-16 md:py-20 border-b border-rule">
+    <section id="learning" className="py-16 md:py-20 border-b border-rule/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Minimal 2-Column Academic Header */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-5 border-b border-rule">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-4 border-b border-white/10">
           <h2 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
             Active Explorations
           </h2>
@@ -31,17 +31,17 @@ export function Learning() {
           </span>
         </div>
 
-        {/* Tabular List of Active Subjects */}
-        <div className="bg-surface/80 backdrop-blur-sm border border-rule divide-y divide-rule">
+        {/* Playful Rounded Frosted Container */}
+        <div className="rounded-3xl bg-surface/60 backdrop-blur-xl border border-white/10 p-2 sm:p-3 shadow-xl space-y-1">
           {topics.map((item, idx) => (
             <div
               key={idx}
-              className="px-5 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-surfaceHover/50 transition-colors"
+              className="px-5 py-4 sm:px-6 sm:py-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/5 transition-all"
             >
               <h3 className="text-sm sm:text-base font-normal text-ink">
                 {item.title}
               </h3>
-              <span className="text-xs text-accent font-normal shrink-0">
+              <span className="text-xs text-accent font-medium px-3.5 py-1 rounded-full bg-accent/15 border border-accent/30 shrink-0">
                 {item.status}
               </span>
             </div>

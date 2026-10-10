@@ -24,10 +24,10 @@ export function Projects({ projects, categories }: ProjectsProps) {
   );
 
   return (
-    <section id="projects" className="py-16 md:py-24 border-b border-rule">
+    <section id="projects" className="py-16 md:py-24 border-b border-rule/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Integrated Directory Toolbar */}
-        <div className="mb-10 pb-6 border-b border-rule flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="mb-10 pb-6 border-b border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div>
             <div className="flex items-baseline gap-3 mb-1">
               <h2 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
@@ -42,19 +42,19 @@ export function Projects({ projects, categories }: ProjectsProps) {
             </p>
           </div>
 
-          {/* Integrated Filter Pills */}
+          {/* Integrated Filter Pills (Playful Rounded Rail) */}
           <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex items-center gap-1.5 min-w-max bg-surface/85 backdrop-blur-sm p-1 border border-rule">
+            <div className="flex items-center gap-1.5 min-w-max p-1.5 rounded-full bg-surface/70 backdrop-blur-xl border border-white/10 shadow-md">
               {categories.map((category) => {
                 const isActive = selectedCategory === category;
                 return (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`text-xs px-3 py-1.5 min-h-[38px] transition-colors ${
+                    className={`text-xs px-4 py-2 rounded-full min-h-[38px] transition-all ${
                       isActive
-                        ? "bg-accent text-page font-medium"
-                        : "text-muted hover:text-ink hover:bg-surfaceHover/50"
+                        ? "bg-accent text-page font-medium shadow-md shadow-accent/25"
+                        : "text-muted hover:text-ink hover:bg-white/5"
                     }`}
                     aria-pressed={isActive}
                   >
@@ -68,7 +68,7 @@ export function Projects({ projects, categories }: ProjectsProps) {
 
         {/* Year-Grouped Project Index */}
         {filteredProjects.length === 0 ? (
-          <div className="p-12 text-center border border-rule bg-surface/80 backdrop-blur-sm">
+          <div className="p-12 text-center rounded-3xl border border-white/10 bg-surface/60 backdrop-blur-xl">
             <p className="text-sm text-muted">
               No archive entries match the selected category.
             </p>
@@ -80,7 +80,7 @@ export function Projects({ projects, categories }: ProjectsProps) {
               return (
                 <div
                   key={year}
-                  className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start border-t border-rule pt-8"
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start border-t border-white/10 pt-8"
                 >
                   {/* Left Column: Bold Year Marker */}
                   <div className="lg:col-span-2">
@@ -92,16 +92,16 @@ export function Projects({ projects, categories }: ProjectsProps) {
                     </span>
                   </div>
 
-                  {/* Right Column: Project Rows for this Year */}
-                  <div className="lg:col-span-10 divide-y divide-rule/60 border-b border-rule/60">
+                  {/* Right Column: Playful Rounded Project Cards */}
+                  <div className="lg:col-span-10 space-y-4">
                     {yearProjects.map((project) => (
                       <article
                         key={project.id}
                         onClick={() => setActiveProject(project)}
-                        className="group py-5 flex flex-col md:flex-row md:items-start justify-between gap-4 cursor-pointer hover:bg-surface/60 transition-colors px-3 -mx-3"
+                        className="group rounded-2xl border border-white/10 bg-surface/50 backdrop-blur-xl p-6 hover:border-accent/40 hover:bg-surface/80 hover:scale-[1.01] hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-6"
                       >
                         <div className="md:w-5/12">
-                          <span className="text-xs text-accent block mb-1">
+                          <span className="text-xs text-accent font-medium px-2.5 py-0.5 rounded-full bg-accent/15 border border-accent/20 inline-block mb-2">
                             {project.category}
                           </span>
                           <h3 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors">
@@ -110,34 +110,34 @@ export function Projects({ projects, categories }: ProjectsProps) {
                         </div>
 
                         <div className="md:w-5/12">
-                          <p className="text-xs sm:text-sm text-muted leading-relaxed mb-2.5">
+                          <p className="text-xs sm:text-sm text-muted leading-relaxed mb-3">
                             {project.tagline}
                           </p>
-                          <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-wrap gap-1.5">
                             {project.tags.slice(0, 3).map((tag) => (
                               <span
                                 key={tag}
-                                className="text-[11px] px-2 py-0.5 border border-rule/60 bg-page text-muted"
+                                className="text-[11px] px-2.5 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted"
                               >
                                 {tag}
                               </span>
                             ))}
                             {project.tags.length > 3 && (
-                              <span className="text-[11px] px-1.5 py-0.5 text-muted/70">
+                              <span className="text-[11px] px-2 py-0.5 text-muted/70">
                                 +{project.tags.length - 3}
                               </span>
                             )}
                           </div>
                         </div>
 
-                        <div className="md:w-2/12 md:text-right shrink-0 pt-1">
+                        <div className="md:w-2/12 md:text-right shrink-0">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               setActiveProject(project);
                             }}
-                            className="inline-flex items-center gap-1 text-xs text-ink group-hover:text-accent transition-colors min-h-[44px]"
+                            className="inline-flex items-center gap-1.5 text-xs text-ink px-4 py-2 rounded-full border border-white/10 bg-white/5 group-hover:bg-accent group-hover:text-page group-hover:border-accent transition-all min-h-[38px]"
                             aria-label={`View details for ${project.title}`}
                           >
                             <span>Details</span>
