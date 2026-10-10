@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { PersonalInfo } from "../types/portfolio";
+import { SectionHeader } from "./SectionHeader";
 
 interface ContactSectionProps {
   personal: PersonalInfo;
@@ -20,22 +21,26 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24">
+    <section id="contact" className="py-16 md:py-24 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border border-rule p-8 sm:p-12 bg-paper">
+        <SectionHeader
+          number="06"
+          category="Inquiries & Transmission"
+          title="Direct Contact"
+          description="Available for software engineering opportunities, builder roles, and collaborations."
+        />
+
+        <div className="border border-rule p-6 sm:p-10 bg-surface">
           <div className="max-w-2xl">
-            <h2 className="text-xs font-normal uppercase tracking-wider text-muted mb-2">
-              Contact
-            </h2>
-            <h3 className="text-2xl sm:text-4xl font-light text-ink tracking-tight mb-4">
-              Get in touch
-            </h3>
-            <p className="text-sm sm:text-base text-muted leading-relaxed mb-8">
-              I am open to software engineering positions, builder roles, and technical collaborations. Feel free to reach out directly by email.
+            <h4 className="text-xl sm:text-3xl font-light text-ink tracking-tight mb-4">
+              Let&rsquo;s talk about building software together.
+            </h4>
+            <p className="text-sm text-muted leading-relaxed mb-8">
+              Whether you are discussing engineering roles, product development, or new technology ventures, feel free to reach out directly by email.
             </p>
 
             {/* Email Box */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3 border border-rule bg-paper mb-8">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3 border border-rule bg-page mb-8">
               <span className="text-sm sm:text-base text-ink font-normal px-2 truncate select-all">
                 {personal.socials.email}
               </span>
@@ -44,7 +49,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                 <button
                   onClick={handleCopy}
                   type="button"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-normal border border-rule text-ink hover:border-ink transition-colors min-h-[44px]"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-normal border border-rule text-ink hover:border-accent hover:text-accent transition-colors min-h-[44px]"
                   aria-label="Copy email address to clipboard"
                 >
                   {copied ? (
@@ -66,7 +71,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
 
                 <a
                   href={`mailto:${personal.socials.email}`}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-normal text-paper bg-accent hover:bg-accentHover transition-colors min-h-[44px]"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-normal text-page bg-accent hover:bg-accentHover transition-colors min-h-[44px]"
                 >
                   <span>Send email</span>
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,14 +81,14 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
               </div>
             </div>
 
-            {/* Links */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-muted pt-4 border-t border-rule">
+            {/* Social Channels & Links */}
+            <div className="flex flex-wrap items-center gap-5 text-xs text-muted pt-4 border-t border-rule/50">
               {personal.socials.github && (
                 <a
                   href={personal.socials.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors underline"
+                  className="hover:text-ink transition-colors underline underline-offset-4"
                 >
                   GitHub (dalonelycat)
                 </a>
@@ -94,7 +99,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                   href={personal.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors underline"
+                  className="hover:text-ink transition-colors underline underline-offset-4"
                 >
                   LinkedIn
                 </a>
@@ -105,18 +110,10 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onPrintCV}
-                className="hover:text-ink transition-colors underline"
+                className="hover:text-ink transition-colors underline underline-offset-4"
               >
                 Curriculum Vitae (PDF)
               </a>
-            </div>
-
-            {/* Quiet Easter Egg Hint */}
-            <div className="mt-8 text-xs text-muted/80">
-              <span>Terminal easter egg available anytime: press </span>
-              <kbd className="px-1.5 py-0.5 border border-rule text-ink bg-paper text-[11px]">Ctrl+K</kbd>
-              <span> or </span>
-              <kbd className="px-1.5 py-0.5 border border-rule text-ink bg-paper text-[11px]">⌘K</kbd>
             </div>
           </div>
         </div>

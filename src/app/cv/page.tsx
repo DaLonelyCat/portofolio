@@ -10,9 +10,9 @@ export default function CVViewerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-paper text-ink flex flex-col font-sans">
+    <div className="min-h-screen bg-page text-ink flex flex-col font-sans">
       {/* Top Header Bar */}
-      <header className="sticky top-0 z-30 bg-paper border-b border-rule px-4 sm:px-6 py-3">
+      <header className="sticky top-0 z-30 bg-page/95 border-b border-rule px-4 sm:px-6 py-3">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
           {/* Left: Return */}
           <div className="flex items-center gap-4 text-xs">
@@ -36,7 +36,7 @@ export default function CVViewerPage() {
             <a
               href="/Christian_Emanuel_Ikajaya_CV.pdf"
               download="Christian_Emanuel_Ikajaya_CV.pdf"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-accent hover:bg-accentHover text-paper transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-accent hover:bg-accentHover text-page transition-colors"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -59,7 +59,7 @@ export default function CVViewerPage() {
 
       {/* Main PDF Viewer Frame */}
       <main className="flex-1 w-full max-w-6xl mx-auto p-3 sm:p-6 flex flex-col">
-        <div className="flex-1 w-full border border-rule overflow-hidden bg-paper shadow-sm min-h-[calc(100vh-100px)]">
+        <div className="flex-1 w-full border border-rule overflow-hidden bg-surface shadow-sm min-h-[calc(100vh-100px)]">
           <iframe
             src="/Christian_Emanuel_Ikajaya_CV.pdf#toolbar=1"
             className="w-full h-full min-h-[calc(100vh-120px)] border-0"

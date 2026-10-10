@@ -4,8 +4,9 @@ export const portfolioData: PortfolioData = {
   personal: {
     name: "Christian Emanuel Ikajaya",
     role: "Software Engineer & Builder",
-    tagline: "Builder and problem solver turning cool ideas into working projects.",
+    tagline: "I build solutions to problems I encountered while studying and running my business.",
     bio: "I am a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring 3D brain scans of flies (connectomics) and agentic AI systems. Minoring in Multimedia at Bina Nusantara University with an emphasis on UI/UX architecture, game design, and multimedia computing.",
+    philosophy: "I build solutions to problems I encountered while studying and running my business.",
     location: "Indonesia (Bina Nusantara University, Open for Remote)",
     status: "Available for software engineering and builder roles",
     statusAvailable: true,
@@ -31,25 +32,40 @@ export const portfolioData: PortfolioData = {
     {
       id: "unicash-pos",
       title: "UniCash POS System",
-      tagline: "Point of sale and transaction logging software built for retail and beverage operations.",
+      tagline: "Point of sale and financial accounting software engineered for Fruqita retail and beverage operations.",
       category: "Desktop Application",
       year: "2026",
       overview:
-        "A desktop-based point of sale system engineered to streamline cashier workflows, track item sales, and automate daily reconciliations for growing ventures.",
+        "A desktop-based point of sale and financial tracking system built from scratch to streamline cashier workflows, track item sales, and automate daily reconciliations for Fruqita.",
       problem:
-        "Small businesses struggle with manual daily sales reconciliation, inventory discrepancies, and convoluted checkout interfaces.",
+        "Small food and beverage operations face manual daily sales calculations, inventory discrepancies, and convoluted checkout processes that slow down service.",
       solution:
-        "Engineered an offline-capable React and Electron cashier interface with an embedded Express/Node API, local persistent logging, and structured receipt generation.",
+        "Engineered an offline-capable React and Electron cashier interface with an embedded Express/Node API, local persistent transaction logging, QRIS payment breakdowns, and real-time Profit and Loss financial statements.",
       impact:
-        "Automated daily bookkeeping and reduced checkout transaction duration with zero cloud dependency.",
+        "Automated daily bookkeeping, eliminated manual register discrepancies, and gave executive leadership instant visibility into revenue and product demand.",
       tags: [
         "React",
         "TypeScript",
+        "Electron",
         "Node.js",
         "Express",
-        "Electron",
         "Tailwind CSS",
         "POS Architecture",
+        "Accounting",
+      ],
+      screenshots: [
+        {
+          src: "/projects/unicash-cashier.png",
+          caption: "Cashier Terminal with Active Order Ticket and Menu Catalog",
+        },
+        {
+          src: "/projects/unicash-sales.png",
+          caption: "Live Sales Log with Gross Revenue and QRIS vs Cash Breakdown",
+        },
+        {
+          src: "/projects/unicash-financials.png",
+          caption: "Financial Management Module with Statement of Profit and Loss",
+        },
       ],
       featured: true,
     },
@@ -124,7 +140,6 @@ export const portfolioData: PortfolioData = {
       impact:
         "Demonstrated strong classification accuracy and diagnostic confidence scoring across evaluation image sets.",
       tags: ["Python", "CNN", "Deep Learning", "Computer Vision", "TensorFlow", "Android Studio"],
-      repoUrl: "https://github.com/dalonelycat",
       featured: true,
     },
     {
@@ -160,7 +175,6 @@ export const portfolioData: PortfolioData = {
       impact:
         "Achieved smooth 60fps performance across desktop and mobile web browsers without third-party dependencies.",
       tags: ["JavaScript", "HTML5 Canvas", "Game Physics"],
-      repoUrl: "https://github.com/dalonelycat",
       featured: false,
     },
     {
@@ -178,7 +192,6 @@ export const portfolioData: PortfolioData = {
       impact:
         "Enabled immersive astronomy exploration on mobile browsers without requiring specialized hardware.",
       tags: ["WebXR", "Three.js", "Augmented Reality", "JavaScript"],
-      repoUrl: "https://github.com/dalonelycat",
       featured: false,
     },
   ],

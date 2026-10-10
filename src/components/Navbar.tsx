@@ -14,6 +14,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
 
   const navLinks = [
     { label: "Learning", href: "#learning" },
+    { label: "Case Study", href: "#case-study" },
     { label: "Projects", href: "#projects" },
     { label: "Experience", href: "#experience" },
     { label: "Skills", href: "#skills" },
@@ -21,7 +22,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-paper border-b border-rule">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-page/95 border-b border-rule">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <a
@@ -55,7 +56,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onPrintCV}
-            className="text-xs font-normal text-ink px-3 py-1.5 border border-rule hover:border-ink transition-colors"
+            className="text-xs font-normal text-ink px-3 py-1.5 border border-rule hover:border-accent hover:text-accent transition-colors"
           >
             Read CV
           </a>
@@ -77,7 +78,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             type="button"
             aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMobileMenuOpen}
-            className="p-2.5 text-ink border border-rule hover:bg-rule/30 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2.5 text-ink border border-rule hover:bg-surface transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {isMobileMenuOpen ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -94,13 +95,13 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-b border-rule bg-paper px-4 py-4 space-y-3">
+        <div className="md:hidden border-b border-rule bg-page px-4 py-4 space-y-2">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-sm text-ink hover:text-accent py-2 min-h-[44px] flex items-center border-b border-rule/40 last:border-0"
+              className="block text-sm text-ink hover:text-accent py-2 min-h-[44px] flex items-center border-b border-rule/30 last:border-0"
             >
               {link.label}
             </a>

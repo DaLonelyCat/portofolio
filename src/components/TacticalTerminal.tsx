@@ -268,24 +268,24 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
       role="dialog"
       aria-modal="true"
       aria-label="Interactive Terminal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-ink text-paper border border-rule/30 font-mono text-xs flex flex-col max-h-[80vh] overflow-hidden shadow-2xl"
+        className="relative w-full max-w-2xl bg-surface text-ink border border-rule font-mono text-xs flex flex-col max-h-[80vh] overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Bar */}
-        <div className="flex items-center justify-between px-4 py-2 border-b border-rule/20 bg-ink/90 text-muted">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-rule bg-page/80 text-muted">
           <div className="flex items-center gap-2">
-            <span className="text-paper">terminal</span>
+            <span className="text-ink font-medium">terminal</span>
             <span>•</span>
-            <span>press ESC to exit</span>
+            <span className="text-muted">press ESC to exit</span>
           </div>
 
           <button
             onClick={onClose}
-            className="text-muted hover:text-paper p-1 transition-colors"
+            className="text-muted hover:text-ink p-1 transition-colors"
             aria-label="Close terminal"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -306,14 +306,14 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
             }
             if (log.type === "input") {
               return (
-                <div key={log.id} className="text-paper font-bold">
+                <div key={log.id} className="text-accent font-bold">
                   {log.text}
                 </div>
               );
             }
             if (log.type === "error") {
               return (
-                <div key={log.id} className="text-red-400">
+                <div key={log.id} className="text-accent">
                   {log.text}
                 </div>
               );
@@ -321,7 +321,7 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
             return (
               <pre
                 key={log.id}
-                className="whitespace-pre-wrap font-mono text-paper/90 leading-relaxed"
+                className="whitespace-pre-wrap font-mono text-ink/90 leading-relaxed"
               >
                 {log.text}
               </pre>
@@ -331,8 +331,8 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
         </div>
 
         {/* Input */}
-        <div className="p-3 border-t border-rule/20 bg-ink flex items-center gap-2">
-          <span className="text-paper select-none">&gt;</span>
+        <div className="p-3 border-t border-rule bg-page/90 flex items-center gap-2">
+          <span className="text-accent select-none">&gt;</span>
           <input
             ref={inputRef}
             type="text"
@@ -340,7 +340,7 @@ Focus:   Investigating coordination patterns, state management, and workflow aut
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type 'help' or 'projects'..."
-            className="flex-1 bg-transparent text-paper font-mono text-xs focus:outline-none placeholder:text-muted/60"
+            className="flex-1 bg-transparent text-ink font-mono text-xs focus:outline-none placeholder:text-muted/60"
             autoComplete="off"
             spellCheck={false}
           />

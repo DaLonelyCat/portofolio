@@ -1,5 +1,10 @@
 export type ProjectCategory = string;
 
+export interface ProjectScreenshot {
+  src: string;
+  caption: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -11,6 +16,7 @@ export interface Project {
   solution?: string;
   impact?: string;
   tags: string[];
+  screenshots?: ProjectScreenshot[];
   liveUrl?: string;
   repoUrl?: string;
   figmaUrl?: string;
@@ -60,6 +66,7 @@ export interface PersonalInfo {
   role: string;
   tagline: string;
   bio: string;
+  philosophy?: string;
   location: string;
   status: string;
   statusAvailable: boolean;

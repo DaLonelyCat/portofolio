@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Project, ProjectCategory } from "../types/portfolio";
+import { SectionHeader } from "./SectionHeader";
 import { ProjectModal } from "./ProjectModal";
 
 interface ProjectsProps {
@@ -18,121 +19,139 @@ export function Projects({ projects, categories }: ProjectsProps) {
       ? projects
       : projects.filter((p) => p.category === selectedCategory);
 
-  return (
-    <section id="projects" className="py-16 md:py-20 border-b border-rule">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-rule">
-          <div>
-            <h2 className="text-xs font-normal uppercase tracking-wider text-muted mb-2">
-              Work & Builds
-            </h2>
-            <h3 className="text-2xl sm:text-3xl font-light text-ink tracking-tight">
-              Selected Projects
-            </h3>
-            <p className="text-sm text-muted mt-1 max-w-xl">
-              Software built for business operations, mobile utilities, machine learning evaluation, and games.
-            </p>
-          </div>
+  // Group filtered projects by year
+  const years = Array.from(new Set(filteredProjects.map((p) => p.year))).sort(
+    (a, b) => b.localeCompare(a)
+  );
 
-          {/* Category Filter */}
-          <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-            <div className="flex items-center gap-1.5 min-w-max">
-              {categories.map((category) => {
-                const isActive = selectedCategory === category;
-                return (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`text-xs px-3 py-1.5 min-h-[36px] transition-colors border ${
-                      isActive
-                        ? "bg-ink text-paper border-ink font-normal"
-                        : "bg-transparent text-muted border-rule hover:border-ink hover:text-ink"
-                    }`}
-                    aria-pressed={isActive}
-                  >
-                    {category}
-                  </button>
-                );
-              })}
-            </div>
+  return (
+    <section id="projects" className="py-16 md:py-24 border-b border-rule">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader
+          number="03"
+          category="Software Archive"
+          title="Project Index"
+          description="Chronological record of shipped desktop applications, web platforms, and interactive systems."
+        />
+
+        {/* Category Filters */}
+        <div className="w-full overflow-x-auto pb-4 mb-8">
+          <div className="flex items-center gap-2 min-w-max">
+            {categories.map((category) => {
+              const isActive = selectedCategory === category;
+              return (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`text-xs px-3.5 py-2 min-h-[38px] transition-colors border ${
+                    isActive
+                      ? "bg-accent text-page border-accent font-medium"
+                      : "bg-surface text-muted border-rule hover:border-ink hover:text-ink"
+                  }`}
+                  aria-pressed={isActive}
+                >
+                  {category}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Index List Rows */}
+        {/* Year-Grouped Project Index */}
         {filteredProjects.length === 0 ? (
-          <div className="p-12 text-center border border-rule">
+          <div className="p-12 text-center border border-rule bg-surface">
             <p className="text-sm text-muted">
-              No projects found under this category filter.
+              No archive entries match the selected category.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-rule border-t border-b border-rule">
-            {filteredProjects.map((project) => (
-              <article
-                key={project.id}
-                onClick={() => setActiveProject(project)}
-                className="group py-6 flex flex-col md:flex-row md:items-start justify-between gap-4 cursor-pointer hover:bg-rule/20 transition-colors px-2 sm:px-3 -mx-2 sm:-mx-3"
-              >
-                <div className="md:w-1/3">
-                  <div className="flex items-center gap-2 text-xs text-muted mb-1">
-                    <span className="text-accent">{project.category}</span>
-                    <span>•</span>
-                    <span>{project.year}</span>
+          <div className="space-y-12">
+            {years.map((year) => {
+              const yearProjects = filteredProjects.filter((p) => p.year === year);
+              return (
+                <div
+                  key={year}
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start border-t border-rule pt-8"
+                >
+                  {/* Left Column: Bold Year Marker */}
+                  <div className="lg:col-span-2">
+                    <span className="text-2xl sm:text-4xl font-light text-muted font-mono tracking-tight">
+                      {year}
+                    </span>
+                    <span className="block text-xs text-muted/60 mt-1">
+                      {yearProjects.length} {yearProjects.length === 1 ? "project" : "projects"}
+                    </span>
                   </div>
-                  <h4 className="text-lg font-normal text-ink group-hover:text-accent transition-colors">
-                    {project.title}
-                  </h4>
-                </div>
 
-                <div className="md:w-1/2">
-                  <p className="text-sm text-muted leading-relaxed mb-3">
-                    {project.tagline}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.slice(0, 4).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2 py-0.5 border border-rule text-muted"
+                  {/* Right Column: Project Rows for this Year */}
+                  <div className="lg:col-span-10 divide-y divide-rule/60 border-b border-rule/60">
+                    {yearProjects.map((project) => (
+                      <article
+                        key={project.id}
+                        onClick={() => setActiveProject(project)}
+                        className="group py-5 flex flex-col md:flex-row md:items-start justify-between gap-4 cursor-pointer hover:bg-surface/60 transition-colors px-3 -mx-3"
                       >
-                        {tag}
-                      </span>
+                        <div className="md:w-5/12">
+                          <span className="text-xs text-accent block mb-1">
+                            {project.category}
+                          </span>
+                          <h4 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors">
+                            {project.title}
+                          </h4>
+                        </div>
+
+                        <div className="md:w-5/12">
+                          <p className="text-xs sm:text-sm text-muted leading-relaxed mb-2.5">
+                            {project.tagline}
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {project.tags.slice(0, 3).map((tag) => (
+                              <span
+                                key={tag}
+                                className="text-[11px] px-2 py-0.5 border border-rule/60 bg-page text-muted"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                            {project.tags.length > 3 && (
+                              <span className="text-[11px] px-1.5 py-0.5 text-muted/70">
+                                +{project.tags.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="md:w-2/12 md:text-right shrink-0 pt-1">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveProject(project);
+                            }}
+                            className="inline-flex items-center gap-1 text-xs text-ink group-hover:text-accent transition-colors min-h-[44px]"
+                            aria-label={`View details for ${project.title}`}
+                          >
+                            <span>Details</span>
+                            <svg
+                              className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                        </div>
+                      </article>
                     ))}
-                    {project.tags.length > 4 && (
-                      <span className="text-xs px-2 py-0.5 text-muted">
-                        +{project.tags.length - 4} more
-                      </span>
-                    )}
                   </div>
                 </div>
-
-                <div className="md:w-auto md:text-right shrink-0 pt-2 md:pt-0">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveProject(project);
-                    }}
-                    className="inline-flex items-center gap-1.5 text-xs text-ink font-normal group-hover:text-accent transition-colors min-h-[44px]"
-                    aria-label={`View details for ${project.title}`}
-                  >
-                    <span>Read overview</span>
-                    <svg
-                      className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </div>
-              </article>
-            ))}
+              );
+            })}
           </div>
         )}
 
-        {/* Modal */}
+        {/* Project Detail Modal */}
         <ProjectModal
           project={activeProject}
           onClose={() => setActiveProject(null)}

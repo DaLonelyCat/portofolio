@@ -9,12 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#F6F1E7",
-        ink: "#1C1A17",
-        muted: "#5B554B",
-        rule: "#D9D1C1",
-        accent: "#8F3B1F",
-        accentHover: "#752F17",
+        page: "#121316",
+        surface: "#1A1B20",
+        surfaceHover: "#22242B",
+        rule: "#2C2D35",
+        ink: "#F0EFEB",
+        muted: "#A3A1A8",
+        accent: "#E07A5F",
+        accentHover: "#C9664D",
       },
       fontFamily: {
         sans: [
