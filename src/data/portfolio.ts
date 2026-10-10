@@ -66,7 +66,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       id: "unicash-pos",
-      title: "UniCash POS",
+      title: "UniCash POS Proprietary System",
       tagline: "Point-of-sale and financial transaction tracking system built for streamlined retail and food service operations.",
       category: "Desktop Application",
       year: "2026",
@@ -88,7 +88,6 @@ export const portfolioData: PortfolioData = {
         "POS Architecture",
         "Financial Logging",
       ],
-      repoUrl: "https://github.com/dalonelycat",
       featured: true,
     },
     {
@@ -161,7 +160,7 @@ export const portfolioData: PortfolioData = {
         "Trained a Convolutional Neural Network (CNN) with image preprocessing, data augmentation, and feature extraction to accurately classify lesion types.",
       impact:
         "Demonstrated strong classification accuracy and diagnostic confidence scoring across dermatological image evaluation sets.",
-      tags: ["Python", "CNN", "Deep Learning", "Computer Vision", "TensorFlow"],
+      tags: ["Python", "CNN", "Deep Learning", "Computer Vision", "TensorFlow", "Application", "Dermatology", "Android Studio"],
       repoUrl: "https://github.com/dalonelycat",
       featured: true,
     },
