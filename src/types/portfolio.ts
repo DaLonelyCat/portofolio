@@ -71,6 +71,7 @@ export interface PersonalInfo {
   location: string;
   status: string;
   statusAvailable: boolean;
+  avatar?: string;
   socials: SocialLinks;
 }
 

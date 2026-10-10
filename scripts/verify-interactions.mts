@@ -21,32 +21,48 @@ function assert(condition: boolean, testName: string, details: string = "") {
 }
 
 // ----------------------------------------------------
-// 1. Terminal & Highlighted Case Study Removal
+// 1. Terminal, Old Galaxy & Featured Case Study Removal
 // ----------------------------------------------------
-console.log("--- 1. Terminal & Featured Case Study Removal Test ---");
+console.log("--- 1. Removals & Replacements Test ---");
 
 const paletteFileExists = fs.existsSync(path.join(process.cwd(), "src/components/CommandPalette.tsx"));
 const terminalFileExists = fs.existsSync(path.join(process.cwd(), "src/components/TacticalTerminal.tsx"));
 const caseStudyFileExists = fs.existsSync(path.join(process.cwd(), "src/components/FeaturedCaseStudy.tsx"));
+const galaxyBgExists = fs.existsSync(path.join(process.cwd(), "src/components/GalaxyBackground.tsx"));
+const solarBgExists = fs.existsSync(path.join(process.cwd(), "src/components/SolarSystemBackground.tsx"));
+
 assert(!paletteFileExists && !terminalFileExists, "CommandPalette.tsx and TacticalTerminal.tsx completely deleted");
 assert(!caseStudyFileExists, "FeaturedCaseStudy.tsx completely deleted");
+assert(solarBgExists && !galaxyBgExists, "SolarSystemBackground.tsx created and GalaxyBackground.tsx completely removed");
 
 const pageContent = fs.readFileSync(path.join(process.cwd(), "src/app/page.tsx"), "utf-8");
 assert(!pageContent.includes("CommandPalette") && !pageContent.includes("TacticalTerminal"), "page.tsx contains zero imports or references to terminal/palette");
 assert(!pageContent.includes("FeaturedCaseStudy"), "page.tsx contains zero imports or references to FeaturedCaseStudy");
+assert(pageContent.includes("SolarSystemBackground") && !pageContent.includes("GalaxyBackground"), "page.tsx mounts SolarSystemBackground with zero references to GalaxyBackground");
 assert(!pageContent.includes("isPaletteOpen") && !pageContent.includes("isTerminalOpen"), "page.tsx contains zero palette state");
 assert(!pageContent.includes("Cmd+K") && !pageContent.includes("Ctrl+K"), "page.tsx contains zero Cmd+K / Ctrl+K keyboard listeners");
 
 // ----------------------------------------------------
-// 2. Cyber Layout & Section Navigation Anchors
+// 2. Profile Avatar & Hero Headline Greeting
 // ----------------------------------------------------
-console.log("\n--- 2. Layout Flow & Navigation Anchors Test ---");
+console.log("\n--- 2. Profile Avatar & Greeting Test ---");
+
+const avatarFileExists = fs.existsSync(path.join(process.cwd(), "public/avatar.jpg"));
+assert(avatarFileExists, "Profile image exists at public/avatar.jpg");
+
+const heroContent = fs.readFileSync(path.join(process.cwd(), "src/components/Hero.tsx"), "utf-8");
+assert(heroContent.includes("avatar.jpg") || heroContent.includes("personal.avatar"), "Hero renders Christian's profile picture");
+assert(heroContent.includes("Hello, I&rsquo;m Christian") || heroContent.includes("Hello, I'm Christian"), "Hero features 'Hello, I'm Christian' headline");
+assert(!heroContent.includes("I build solutions to problems I encountered while studying and running my business."), "Corny quote banner completely removed from Hero");
+assert(heroContent.includes("Station Telemetry") && heroContent.includes("ORBITAL UPLINK"), "Hero includes Cyberpunk Station Telemetry and Status Beacon");
+
+// ----------------------------------------------------
+// 3. Cyber Layout & Section Navigation Anchors
+// ----------------------------------------------------
+console.log("\n--- 3. Layout Flow & Navigation Anchors Test ---");
 
 const navbarContent = fs.readFileSync(path.join(process.cwd(), "src/components/Navbar.tsx"), "utf-8");
 assert(navbarContent.includes("#projects") && navbarContent.includes("#frontiers") && navbarContent.includes("#log") && navbarContent.includes("#skills") && navbarContent.includes("#contact"), "Navbar contains anchors for all 5 layout sections");
-
-const heroContent = fs.readFileSync(path.join(process.cwd(), "src/components/Hero.tsx"), "utf-8");
-assert(heroContent.includes("Station Telemetry") && heroContent.includes("ORBITAL UPLINK"), "Hero includes Cyberpunk Station Telemetry and Status Beacon");
 
 const learningContent = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
 assert(learningContent.includes('id="frontiers"') && learningContent.includes("Research Frontiers"), "Learning component mounts #frontiers research grid");
@@ -61,9 +77,9 @@ const contactContent = fs.readFileSync(path.join(process.cwd(), "src/components/
 assert(contactContent.includes('id="contact"') && contactContent.includes("Comms Uplink"), "Contact component mounts #contact comms uplink");
 
 // ----------------------------------------------------
-// 3. UniCash POS Production Core Showcase in Projects
+// 4. UniCash POS Production Core Showcase in Projects
 // ----------------------------------------------------
-console.log("\n--- 3. UniCash POS Core Integration Test ---");
+console.log("\n--- 4. UniCash POS Core Integration Test ---");
 
 const projectsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
 assert(projectsContent.includes("PRODUCTION CORE"), "UniCash POS is badged as PRODUCTION CORE in project directory");
@@ -73,9 +89,9 @@ assert(!!unicashProject, "UniCash POS exists in project dataset");
 assert(unicashProject?.screenshots?.length === 5, "UniCash POS has all 5 screenshots intact", `Count: ${unicashProject?.screenshots?.length}`);
 
 // ----------------------------------------------------
-// 4. Project Archive Category Filtering Logic
+// 5. Project Archive Category Filtering Logic
 // ----------------------------------------------------
-console.log("\n--- 4. Project Archive Filtering Test ---");
+console.log("\n--- 5. Project Archive Filtering Test ---");
 
 function filterProjects(category: string) {
   if (category === "All") return portfolioData.projects;
@@ -95,9 +111,9 @@ const webProjects = filterProjects("Web App");
 assert(webProjects.length > 0 && webProjects.every(p => p.category === "Web App"), "Filter 'Web App' isolates web apps", `Count: ${webProjects.length}`);
 
 // ----------------------------------------------------
-// 5. Project Modal Interactive Flow
+// 6. Project Modal Interactive Flow
 // ----------------------------------------------------
-console.log("\n--- 5. Project Modal Flow Test ---");
+console.log("\n--- 6. Project Modal Flow Test ---");
 
 let modalProject: any = null;
 function openModal(p: any) { modalProject = p; }
@@ -110,9 +126,9 @@ closeModal();
 assert(modalProject === null, "Closing modal resets active project state");
 
 // ----------------------------------------------------
-// 6. Contact Copy Email Interaction
+// 7. Contact Copy Email Interaction
 // ----------------------------------------------------
-console.log("\n--- 6. Contact Copy Email Test ---");
+console.log("\n--- 7. Contact Copy Email Test ---");
 
 let copiedState = false;
 function simulateCopyEmail(email: string) {
@@ -124,9 +140,9 @@ const copiedValue = simulateCopyEmail(portfolioData.personal.socials.email);
 assert(copiedState && copiedValue === "christian.emanuel.08@gmail.com", "Copy Email button writes correct email and triggers feedback");
 
 // ----------------------------------------------------
-// 7. Mobile Navigation Drawer Toggle
+// 8. Mobile Navigation Drawer Toggle
 // ----------------------------------------------------
-console.log("\n--- 7. Mobile Navigation Drawer Test ---");
+console.log("\n--- 8. Mobile Navigation Drawer Test ---");
 
 let isMobileMenuOpen = false;
 function toggleMobileMenu() { isMobileMenuOpen = !isMobileMenuOpen; }
@@ -138,9 +154,9 @@ toggleMobileMenu();
 assert(!isMobileMenuOpen, "Clicking close button closes mobile drawer");
 
 // ----------------------------------------------------
-// 8. CV Route & Resource
+// 9. CV Route & Resource
 // ----------------------------------------------------
-console.log("\n--- 8. CV Route & Assets Test ---");
+console.log("\n--- 9. CV Route & Assets Test ---");
 
 const cvPageExists = fs.existsSync(path.join(process.cwd(), "src/app/cv/page.tsx"));
 assert(cvPageExists, "CV route page exists at src/app/cv/page.tsx");
@@ -156,7 +172,7 @@ console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);
 console.log("=================================================");
 
 if (passedTests === totalTests) {
-  console.log("ALL INTERACTIVE & CYBER CHECKS VERIFIED SUCCESSFULLY!\n");
+  console.log("ALL INTERACTIVE, SOLAR SYSTEM & PROFILE CHECKS VERIFIED SUCCESSFULLY!\n");
   process.exit(0);
 } else {
   console.error("SOME TESTS FAILED!\n");

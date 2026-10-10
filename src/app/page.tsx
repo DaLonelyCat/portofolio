@@ -13,10 +13,10 @@ import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
 
-const GalaxyBackground = dynamic(
+const SolarSystemBackground = dynamic(
   () =>
-    import("@/components/GalaxyBackground").then(
-      (mod) => mod.GalaxyBackground
+    import("@/components/SolarSystemBackground").then(
+      (mod) => mod.SolarSystemBackground
     ),
   { ssr: false }
 );
@@ -39,8 +39,8 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-page text-ink selection:bg-cyan-500/30 selection:text-white font-sans">
-      {/* Interactive Galaxy Background with Deep Space Scrim */}
-      <GalaxyBackground />
+      {/* Interactive 3D Solar System Background with Deep Space Scrim */}
+      <SolarSystemBackground />
 
       <div className="relative z-10">
         {/* Printable Resume Header (visible only when printing) */}

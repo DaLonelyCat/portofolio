@@ -4,12 +4,13 @@ export const portfolioData: PortfolioData = {
   personal: {
     name: "Christian Emanuel Ikajaya",
     role: "Software Engineer & Builder",
-    tagline: "I build solutions to problems I encountered while studying and running my business.",
+    tagline: "Hello im Christian",
     bio: "I am a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently learning 3D brain scans of flies (connectomics) and agentic AI systems. Minoring in Multimedia at Bina Nusantara University with an emphasis on UI/UX architecture, game design, and multimedia computing.",
-    philosophy: "I build solutions to problems I encountered while studying and running my business.",
+    philosophy: "Hello im Christian",
     location: "Indonesia (Bina Nusantara University, Open for Remote)",
     status: "Available for software engineering and builder roles",
     statusAvailable: true,
+    avatar: "/avatar.jpg",
     socials: {
       email: "christian.emanuel.08@gmail.com",
       github: "https://github.com/dalonelycat",
