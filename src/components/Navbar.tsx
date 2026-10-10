@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PersonalInfo } from "../types/portfolio";
 
 interface NavbarProps {
@@ -10,6 +10,18 @@ interface NavbarProps {
 
 export function Navbar({ personal, onPrintCV }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { label: "Projects", href: "#projects" },
@@ -20,29 +32,38 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 pt-3 sm:pt-4 px-3 sm:px-6 pointer-events-none">
-      <div className="max-w-5xl mx-auto h-14 px-4 sm:px-6 rounded-full border border-cyan-500/25 bg-[#0B0D16]/95 backdrop-blur-2xl shadow-[0_0_25px_rgba(0,0,0,0.8)] flex items-center justify-between pointer-events-auto transition-all">
-        {/* Cyber Brand */}
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500 ease-in-out ${
+        isScrolled ? "pt-3 sm:pt-4 px-3 sm:px-6" : "pt-0 px-0"
+      }`}
+    >
+      <div
+        className={`mx-auto pointer-events-auto transition-all duration-500 ease-in-out flex items-center justify-between ${
+          isScrolled
+            ? "w-full max-w-5xl h-14 px-4 sm:px-6 rounded-full border border-cyan-500/30 bg-[#0B0D16]/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.7),_inset_0_1px_0_0_rgba(255,255,255,0.15)]"
+            : "w-full max-w-full h-16 px-4 sm:px-8 lg:px-12 rounded-none border-b border-white/10 border-t-0 border-x-0 bg-[#05060A]/75 backdrop-blur-xl shadow-none"
+        }`}
+      >
+        {/* Cyber Brand (Flashing dot removed) */}
         <a
           href="#"
-          className="flex items-center gap-2 text-xs sm:text-sm font-mono tracking-tight text-white hover:text-cyan-400 transition-colors py-1.5 px-2 rounded-full"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-mono tracking-tight text-white hover:text-cyan-400 transition-colors py-1.5 px-2 rounded-full"
           aria-label="Home"
         >
-          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF] animate-pulse" />
-          <span>{personal.name.toLowerCase()}</span>
-          <span className="text-muted/60">// station</span>
+          <span className="font-medium text-white">{personal.name.toLowerCase()}</span>
+          <span className="text-slate-400/70 font-normal">// station</span>
         </a>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links (Frosted Glass Pill Rail) */}
         <nav
           aria-label="Main Navigation"
-          className="hidden md:flex items-center gap-1 bg-[#121626]/80 px-2 py-1 rounded-full border border-white/5"
+          className="hidden md:flex items-center gap-1 bg-white/[0.04] backdrop-blur-md px-2 py-1 rounded-full border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
         >
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-xs font-mono text-muted hover:text-cyan-400 hover:bg-cyan-950/30 transition-all px-3.5 py-1 rounded-full"
+              className="text-xs font-mono text-slate-300 hover:text-cyan-400 hover:bg-cyan-950/40 transition-all px-3.5 py-1 rounded-full"
             >
               {link.label}
             </a>
@@ -56,7 +77,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onPrintCV}
-            className="text-xs font-mono text-cyan-400 px-4 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-950/30 hover:border-cyan-400 hover:bg-cyan-950/60 hover:shadow-[0_0_12px_rgba(0,240,255,0.3)] transition-all"
+            className="text-xs font-mono text-cyan-400 px-4 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-950/30 hover:border-cyan-400 hover:bg-cyan-950/60 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] backdrop-blur-md transition-all"
           >
             Read CV
           </a>
@@ -95,7 +116,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden mt-2 max-w-sm mx-auto rounded-2xl border border-cyan-500/30 bg-[#0B0D16]/98 backdrop-blur-2xl p-4 space-y-1.5 shadow-2xl pointer-events-auto">
+        <div className="md:hidden mt-2 max-w-sm mx-auto rounded-2xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-2xl p-4 space-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.8),_inset_0_1px_0_0_rgba(255,255,255,0.1)] pointer-events-auto">
           {navLinks.map((link) => (
             <a
               key={link.href}

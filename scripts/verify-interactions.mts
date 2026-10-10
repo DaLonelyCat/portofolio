@@ -63,6 +63,9 @@ console.log("\n--- 3. Layout Flow & Navigation Anchors Test ---");
 
 const navbarContent = fs.readFileSync(path.join(process.cwd(), "src/components/Navbar.tsx"), "utf-8");
 assert(navbarContent.includes("#projects") && navbarContent.includes("#frontiers") && navbarContent.includes("#log") && navbarContent.includes("#skills") && navbarContent.includes("#contact"), "Navbar contains anchors for all 5 layout sections");
+assert(navbarContent.includes("isScrolled"), "Navbar contains isScrolled scroll detection state");
+assert(!navbarContent.includes("animate-pulse"), "Navbar completely removed flashing dot pulse animation");
+assert(navbarContent.includes("duration-500") && navbarContent.includes("backdrop-blur-2xl"), "Navbar contains fluid transition and glass effect classes");
 
 const learningContent = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
 assert(learningContent.includes('id="frontiers"') && learningContent.includes("Research Frontiers"), "Learning component mounts #frontiers research grid");

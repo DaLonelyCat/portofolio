@@ -27,7 +27,7 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 3. **High-Contrast Typography**: Display headlines and titles render in pure white (`#FFFFFF`), while body copy is set in slate-200 / slate-300 and metadata in slate-400.
 
 ## Shape & HUD System
-- **HUD Navigation**: Floating pill navigation bar with cyber station status indicator and mono labels.
+- **HUD Navigation**: Dual-state fluid navigation bar with seamless scroll transformation: spans full width across the viewport at the top of the page, and fluidly morphs into a centered floating capsule pill with frosted glass depth (`backdrop-blur-2xl`), cyan starlight borders, and top specular reflection highlights upon scrolling. Flashing dot removed for clean typography.
 - **Surface Panels**: `rounded-2xl` and `rounded-3xl` alloy cards with subtle hairline borders (`border-white/10`) and neon hover states.
 - **Pill Badges & Tags**: Monospace status chips (`[ PRODUCTION CORE ]`, `[ CURRENT ]`, `[ MATRIX // 01 ]`) with translucent neon badges.
 - **Profile Avatar**: Framed profile portrait with cyber cyan rim glow and live online beacon.
