@@ -11,10 +11,33 @@ interface NavbarProps {
 export function Navbar({ personal, onPrintCV }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
+
+  const navLinks = [
+    { label: "Projects", href: "#projects", id: "projects" },
+    { label: "Learning", href: "#learning", id: "learning" },
+    { label: "Experience", href: "#experience", id: "experience" },
+    { label: "Skills", href: "#skills", id: "skills" },
+    { label: "Contact", href: "#contact", id: "contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      // Section tracking for active pill highlight
+      const scrollPosition = window.scrollY + 250;
+      const sectionIds = ["projects", "learning", "experience", "skills", "contact"];
+      
+      let current = "";
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el && el.offsetTop <= scrollPosition) {
+          current = sectionIds[i];
+          break;
+        }
+      }
+      setActiveSection(current);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -23,51 +46,49 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: "Projects", href: "#projects" },
-    { label: "Frontiers", href: "#frontiers" },
-    { label: "Flight Log", href: "#log" },
-    { label: "Skills", href: "#skills" },
-    { label: "Comms", href: "#contact" },
-  ];
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500 ease-in-out ${
+      className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500 ease-in-out motion-reduce:transition-none ${
         isScrolled ? "pt-3 sm:pt-4 px-3 sm:px-6" : "pt-0 px-0"
       }`}
     >
       <div
-        className={`mx-auto pointer-events-auto transition-all duration-500 ease-in-out flex items-center justify-between ${
+        className={`mx-auto pointer-events-auto transition-all duration-500 ease-in-out motion-reduce:transition-none flex items-center justify-between ${
           isScrolled
-            ? "w-full max-w-5xl h-14 px-4 sm:px-6 rounded-full border border-cyan-500/30 bg-[#0B0D16]/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.7),_inset_0_1px_0_0_rgba(255,255,255,0.15)]"
-            : "w-full max-w-full h-16 px-4 sm:px-8 lg:px-12 rounded-none border-b border-white/10 border-t-0 border-x-0 bg-[#05060A]/75 backdrop-blur-xl shadow-none"
+            ? "w-full max-w-5xl h-14 px-4 sm:px-6 rounded-full border border-cyan-500/30 bg-[#0B0D16]/85 backdrop-blur-md md:backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.7),_inset_0_1px_0_0_rgba(255,255,255,0.15)]"
+            : "w-full max-w-full h-16 px-4 sm:px-8 lg:px-12 rounded-none border-b border-white/10 border-t-0 border-x-0 bg-[#05060A]/80 backdrop-blur-md md:backdrop-blur-xl shadow-none"
         }`}
       >
-        {/* Cyber Brand (Flashing dot removed) */}
+        {/* Brand (Clean, no /station tag) */}
         <a
           href="#"
           className="flex items-center gap-1.5 text-xs sm:text-sm font-mono tracking-tight text-white hover:text-cyan-400 transition-colors py-1.5 px-2 rounded-full"
           aria-label="Home"
         >
           <span className="font-medium text-white">{personal.name.toLowerCase()}</span>
-          <span className="text-slate-400/70 font-normal">// station</span>
         </a>
 
-        {/* Desktop Navigation Links (Frosted Glass Pill Rail) */}
+        {/* Desktop Navigation Links (Frosted Glass Pill Rail with Active Highlight) */}
         <nav
           aria-label="Main Navigation"
           className="hidden md:flex items-center gap-1 bg-white/[0.04] backdrop-blur-md px-2 py-1 rounded-full border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
         >
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-xs font-mono text-slate-300 hover:text-cyan-400 hover:bg-cyan-950/40 transition-all px-3.5 py-1 rounded-full"
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`text-xs font-mono transition-all px-3.5 py-1 rounded-full ${
+                  isActive
+                    ? "text-cyan-400 bg-cyan-950/60 border border-cyan-500/40 shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+                    : "text-slate-300 hover:text-cyan-400 hover:bg-cyan-950/40"
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Desktop Actions */}
@@ -83,7 +104,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
           </a>
         </div>
 
-        {/* Mobile Hamburger Button */}
+        {/* Mobile Actions & Menu Toggle */}
         <div className="flex md:hidden items-center gap-2">
           <a
             href="/cv"
@@ -116,17 +137,24 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden mt-2 max-w-sm mx-auto rounded-2xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-2xl p-4 space-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.8),_inset_0_1px_0_0_rgba(255,255,255,0.1)] pointer-events-auto">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-sm font-mono text-white hover:text-cyan-400 hover:bg-cyan-950/30 px-4 py-2.5 rounded-xl transition-all"
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="md:hidden mt-2 max-w-sm mx-auto rounded-2xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-md p-4 space-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.8),_inset_0_1px_0_0_rgba(255,255,255,0.1)] pointer-events-auto">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block text-sm font-mono px-4 py-2.5 rounded-xl transition-all ${
+                  isActive
+                    ? "text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 font-medium"
+                    : "text-white hover:text-cyan-400 hover:bg-cyan-950/30"
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </div>
       )}
     </header>

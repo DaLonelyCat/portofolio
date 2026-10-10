@@ -11,12 +11,12 @@ export function Footer() {
             <span className="text-white font-normal">Christian Emanuel Ikajaya</span>
             <span>•</span>
             <span className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[11px] text-cyan-400">
-              STATION 2026
+              © 2026
             </span>
           </div>
 
           <div className="text-slate-400">
-            Typeset in IBM Plex Sans. Space Cyberpunk • Cloudflare Pages edge.
+            Typeset in IBM Plex Sans • Deployed on Cloudflare Pages
           </div>
         </div>
       </div>

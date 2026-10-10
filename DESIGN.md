@@ -47,18 +47,22 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 - **Hierarchy**: Guided by font scale, tracking, and structural hierarchy.
 
 ## Layout Narrative Flow
-1. **Flight Deck Hero**: Profile picture with cyber frame, "Hello, I'm Christian" headline, bio, action buttons, and Station Telemetry HUD module.
-2. **Engineering Projects**: Primary directory with category filter rail, year markers, conversational "View Details" buttons, and UniCash POS highlighted with `PRODUCTION CORE`.
-3. **Research Frontiers**: 3-column grid covering Connectomics, Agentic AI, and Multimedia.
-4. **Operational Flight Log**: Detailed career timeline covering venture leadership, financial oversight, and software engineering.
-5. **Systems Competencies**: 4-column capability matrix.
-6. **Comms Uplink**: Direct email console and official platform vector logos (GitHub, LinkedIn, CV PDF).
-7. **Colophon Footer**: Minimal cyber footer with edge deployment status.
+1. **Flight Deck Hero**: Profile picture with cyber frame, role and location (deduplicated), "Hello, I'm Christian" headline, bio, action buttons ("View Projects", "Read CV", "Contact Me"), and At a Glance overview module.
+2. **Engineering Projects**: Featured UniCash POS hero card with cashier screenshot and production core highlight, followed by 2-column responsive grid for remaining 7 projects.
+3. **Currently Learning**: 3-column clean overview covering Connectomics, Agentic AI, and Multimedia.
+4. **Experience**: Compact 2-column layout pairing Work & Leadership roles on the left with Education & Academics on the right.
+5. **Skills**: 4-column capability matrix.
+6. **Contact**: Direct email console and official platform vector logos (GitHub, LinkedIn, CV PDF).
+7. **Colophon Footer**: Clean footer with edge deployment status and back-to-top button.
 
 ## Design Decisions & Verification
-- **Direct & Grounded Hero**: Removed all flashing dots, Hero tags, and corny one-liners to focus purely on Christian's identity, headline, and bio.
-- **Conversational Action Copy**: Replaced "Dossier" with "View Details" for intuitive everyday browsing.
-- **Semi-Fullscreen Detail View**: Expanded modal dialog to `max-w-6xl` to comfortably display rich technical overviews, problem/solution breakdowns, and high-resolution screenshots.
-- **Repository Link Hygiene**: Verified that project source links exclusively navigate to valid individual repositories rather than general profile pages.
+- **Direct & Grounded Hero**: Removed all flashing dots, Hero tags, and corny one-liners to focus purely on Christian's identity, headline, and bio. Name deduplicated next to avatar.
+- **Conversational Copy**: Replaced jargon with everyday language ("View Details", "Contact Me", "Currently Learning", "Experience", "Skills", "At a Glance").
+- **Featured Hero Card & 2-Col Grid**: Elevated UniCash POS as the flagship production highlight with screenshot preview, pairing the remaining projects in a clean 2-column grid.
+- **Compact 2-Column Experience**: Balanced career leadership on the left with formal education on the right.
+- **Active Section Highlighting & Back-to-Top**: Navbar smoothly tracks scroll position; floating glass button enables one-click scroll to top.
+- **Semi-Fullscreen Detail View**: Expansive modal dialog at `max-w-6xl` displaying technical overviews, problem/solution breakdowns, and high-resolution screenshots.
+- **Open Graph Metadata**: 1200x630 preview card generated and linked in layout metadata for social media shares.
 - **No Em Dashes**: Pure standard punctuation with colons, commas, and parentheses.
 - **Zero Terminal Remnants**: Clean codebase without command line or terminal components.
+- **Real Playwright Browser Verification**: End-to-end headless browser test verifying filters, modal open/close, email copying, navigation, and capturing desktop and mobile screenshots.

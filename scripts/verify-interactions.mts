@@ -61,7 +61,9 @@ assert(heroContent.includes("Hello, I&rsquo;m Christian") || heroContent.include
 assert(!heroContent.includes("ORBITAL UPLINK"), "Hero tags and beacons purged completely");
 assert(!heroContent.includes("Builder and problem solver turning cool ideas into working software."), "Corny one-liner purged from Hero");
 assert(!heroContent.includes("animate-pulse"), "Flashing dots with animate-pulse purged from Hero");
-assert(heroContent.includes("Station Telemetry"), "Hero includes Cyberpunk Station Telemetry HUD");
+assert(heroContent.includes("At a Glance"), "Hero includes At a Glance overview module");
+assert(!heroContent.includes("Station Telemetry"), "Station Telemetry jargon purged from Hero");
+assert(!heroContent.includes("ID: CK-2026"), "ID: CK-2026 tag purged from Hero");
 
 // ----------------------------------------------------
 // 3. Cyber Layout & Section Navigation Anchors
@@ -69,22 +71,26 @@ assert(heroContent.includes("Station Telemetry"), "Hero includes Cyberpunk Stati
 console.log("\n--- 3. Layout Flow & Navigation Anchors Test ---");
 
 const navbarContent = fs.readFileSync(path.join(process.cwd(), "src/components/Navbar.tsx"), "utf-8");
-assert(navbarContent.includes("#projects") && navbarContent.includes("#frontiers") && navbarContent.includes("#log") && navbarContent.includes("#skills") && navbarContent.includes("#contact"), "Navbar contains anchors for all 5 layout sections");
+assert(navbarContent.includes("#projects") && navbarContent.includes("#learning") && navbarContent.includes("#experience") && navbarContent.includes("#skills") && navbarContent.includes("#contact"), "Navbar contains anchors for all 5 layout sections");
 assert(navbarContent.includes("isScrolled"), "Navbar contains isScrolled scroll detection state");
 assert(!navbarContent.includes("animate-pulse"), "Navbar completely removed flashing dot pulse animation");
-assert(navbarContent.includes("duration-500") && navbarContent.includes("backdrop-blur-2xl"), "Navbar contains fluid transition and glass effect classes");
+assert(navbarContent.includes("duration-500"), "Navbar contains fluid transition classes");
+assert(!navbarContent.includes("// station"), "Navbar brand purged of // station tag");
 
 const learningContent = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
-assert(learningContent.includes('id="frontiers"') && learningContent.includes("Research Frontiers"), "Learning component mounts #frontiers research grid");
+assert(learningContent.includes('id="learning"') && learningContent.includes("Currently Learning"), "Learning component mounts #learning with 'Currently Learning' heading");
+assert(!learningContent.includes("FRONTIER //"), "Learning component purged of FRONTIER telemetry codes");
 
 const experienceContent = fs.readFileSync(path.join(process.cwd(), "src/components/Experience.tsx"), "utf-8");
-assert(experienceContent.includes('id="log"') && experienceContent.includes("Operational Flight Log"), "Experience component mounts #log flight log");
+assert(experienceContent.includes('id="experience"') && experienceContent.includes("Experience"), "Experience component mounts #experience with 'Experience' heading");
 
 const skillsContent = fs.readFileSync(path.join(process.cwd(), "src/components/Skills.tsx"), "utf-8");
-assert(skillsContent.includes('id="skills"') && skillsContent.includes("Systems Competencies"), "Skills component mounts #skills capability matrix");
+assert(skillsContent.includes('id="skills"') && skillsContent.includes("Skills"), "Skills component mounts #skills capability matrix");
+assert(!skillsContent.includes("MATRIX //"), "Skills component purged of MATRIX telemetry codes");
 
 const contactContent = fs.readFileSync(path.join(process.cwd(), "src/components/ContactSection.tsx"), "utf-8");
-assert(contactContent.includes('id="contact"') && contactContent.includes("Comms Uplink"), "Contact component mounts #contact comms uplink");
+assert(contactContent.includes('id="contact"'), "Contact component mounts #contact section");
+assert(!contactContent.includes("COMMS UPLINK"), "ContactSection purged of COMMS UPLINK badge");
 assert(!contactContent.includes("animate-pulse"), "Flashing dots with animate-pulse purged from ContactSection");
 assert(contactContent.includes("viewBox=\"0 0 24 24\"") && contactContent.includes("GitHub") && contactContent.includes("LinkedIn"), "ContactSection includes official platform vector SVG logos");
 

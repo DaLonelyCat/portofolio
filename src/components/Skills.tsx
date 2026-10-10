@@ -11,12 +11,11 @@ export function SkillsSection({ categories }: SkillsProps) {
   return (
     <section id="skills" className="py-16 md:py-24 border-b border-rule/60">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Cyber Section Header */}
+        {/* Section Header */}
         <div className="mb-10 pb-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-cyan-400" />
+          <div>
             <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
-              Systems Competencies
+              Skills
             </h2>
           </div>
           <span className="text-xs font-mono text-slate-400">
@@ -24,7 +23,7 @@ export function SkillsSection({ categories }: SkillsProps) {
           </span>
         </div>
 
-        {/* 4-Column Cyber Capability Matrix */}
+        {/* 4-Column Capability Matrix */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat, idx) => (
             <div
@@ -32,10 +31,7 @@ export function SkillsSection({ categories }: SkillsProps) {
               className="p-6 rounded-2xl border border-white/10 bg-[#0B0D16]/95 shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)] transition-all flex flex-col justify-between"
             >
               <div>
-                <span className="text-xs font-mono text-cyan-400/80 block mb-2">
-                  MATRIX // 0{idx + 1}
-                </span>
-                <h3 className="text-base font-normal text-white mb-2">
+                <h3 className="text-base font-medium text-white mb-2">
                   {cat.title}
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed mb-6 pb-4 border-b border-white/10">

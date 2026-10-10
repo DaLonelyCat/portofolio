@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://portfolio-cv.pages.dev"),
   title: "Christian Emanuel Ikajaya | Software Engineer & Builder",
   description:
     "Portfolio and CV of Christian Emanuel Ikajaya, Computer Science student at Bina Nusantara University, CFO at Fruqita, Founder of MyBeans, building full-stack, POS, and mobile software.",
@@ -22,8 +23,24 @@ export const metadata: Metadata = {
   authors: [{ name: "Christian Emanuel Ikajaya" }],
   openGraph: {
     title: "Christian Emanuel Ikajaya | Software Engineer & Builder",
-    description: "I build solutions to problems I encountered while studying and running my business.",
+    description:
+      "Portfolio and CV of Christian Emanuel Ikajaya, Computer Science student at Bina Nusantara University, CFO at Fruqita, Founder of MyBeans, building full-stack, POS, and mobile software.",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Christian Emanuel Ikajaya - Software Engineer & Builder",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Christian Emanuel Ikajaya | Software Engineer & Builder",
+    description:
+      "Portfolio and CV of Christian Emanuel Ikajaya, Computer Science student at Bina Nusantara University, CFO at Fruqita, Founder of MyBeans, building full-stack, POS, and mobile software.",
+    images: ["/og-image.png"],
   },
 };
 

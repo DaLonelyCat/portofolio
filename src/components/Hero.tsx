@@ -27,11 +27,11 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               </div>
 
               <div>
-                <div className="text-sm sm:text-base font-normal text-white">
-                  {personal.name}
+                <div className="text-sm sm:text-base font-medium text-white">
+                  {personal.role}
                 </div>
                 <div className="text-xs font-mono text-slate-400 mt-0.5">
-                  {personal.role} • {personal.location.split("(")[0].trim()}
+                  {personal.location.split("(")[0].trim()} • Bina Nusantara University
                 </div>
               </div>
             </div>
@@ -46,7 +46,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               {personal.bio}
             </p>
 
-            {/* Cyber Action Buttons */}
+            {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href="#projects"
@@ -69,24 +69,22 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                 href="#contact"
                 className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono text-white bg-[#0B0D16]/90 border border-white/10 hover:border-white/30 rounded-full transition-all duration-300"
               >
-                Direct Comms
+                Contact Me
               </a>
             </div>
           </div>
 
-          {/* Right Column: Station Telemetry HUD Module (100% Solid Dark Backing) */}
+          {/* Right Column: At a Glance Overview (100% Solid Dark Backing) */}
           <div className="lg:col-span-5 rounded-3xl bg-[#0B0D16]/95 border border-cyan-500/25 p-6 sm:p-8 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
             <div className="flex items-center justify-between pb-3 mb-5 border-b border-white/10">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-cyan-400 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                <span>Station Telemetry</span>
+              <h2 className="text-xs font-mono uppercase tracking-wider text-cyan-400">
+                At a Glance
               </h2>
-              <span className="text-[11px] font-mono text-slate-400">ID: CK-2026</span>
             </div>
 
             <dl className="space-y-4 text-sm font-sans">
               <div>
-                <dt className="text-xs font-mono text-slate-400">Academic Trajectory</dt>
+                <dt className="text-xs font-mono text-slate-400">Education</dt>
                 <dd className="text-white font-normal mt-0.5">
                   Bina Nusantara University, Computer Science
                 </dd>
@@ -96,7 +94,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               </div>
 
               <div className="pt-3 border-t border-white/10">
-                <dt className="text-xs font-mono text-slate-400">Ventures & Operational Roles</dt>
+                <dt className="text-xs font-mono text-slate-400">Current & Past Roles</dt>
                 <dd className="text-white font-normal mt-0.5">
                   CFO & Lead Developer at Fruqita
                 </dd>
@@ -106,7 +104,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               </div>
 
               <div className="pt-3 border-t border-white/10">
-                <dt className="text-xs font-mono text-slate-400">Core Systems Stack</dt>
+                <dt className="text-xs font-mono text-slate-400">Core Tech Stack</dt>
                 <dd className="text-white font-normal mt-0.5">
                   React, Electron, Next.js, Java, Python, Android, Unity
                 </dd>
@@ -116,7 +114,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               </div>
 
               <div className="pt-3 border-t border-white/10">
-                <dt className="text-xs font-mono text-slate-400">Coordinates & Availability</dt>
+                <dt className="text-xs font-mono text-slate-400">Location & Availability</dt>
                 <dd className="text-white font-normal mt-0.5">
                   Indonesia • Open for remote software engineering roles
                 </dd>

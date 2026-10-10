@@ -12,6 +12,7 @@ import { SkillsSection } from "@/components/Skills";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
+import { BackToTop } from "@/components/BackToTop";
 
 const SolarSystemBackground = dynamic(
   () =>
@@ -95,6 +96,9 @@ export default function Home() {
 
         {/* Colophon Footer */}
         <Footer />
+
+        {/* Back to Top Floating Button */}
+        <BackToTop />
       </div>
 
       {/* Notification Toast */}

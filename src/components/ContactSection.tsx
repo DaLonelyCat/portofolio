@@ -25,10 +25,9 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
         {/* Dedicated Cyber Comms Uplink Module */}
         <div className="rounded-3xl border border-cyan-500/30 bg-[#0B0D16]/95 p-8 sm:p-12 shadow-[0_0_35px_rgba(0,0,0,0.8)]">
           <div className="max-w-2xl">
-            {/* Comms Uplink Beacon (Static dot, no flashing animation) */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 font-mono text-[11px] mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#00F0FF]" />
-              <span>COMMS UPLINK // CHANNEL OPEN</span>
+            {/* Clean Section Label */}
+            <div className="inline-flex items-center px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 font-mono text-[11px] mb-4">
+              <span>Contact</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl font-light text-white tracking-tight mb-4">

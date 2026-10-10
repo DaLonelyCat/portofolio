@@ -5,31 +5,30 @@ import React from "react";
 export function Learning() {
   const topics = [
     {
-      code: "FRONTIER // 01",
+      category: "Neuroscience & 3D Visualization",
       title: "3D Drosophila Brain Scans & Connectomics",
       status: "Currently learning",
     },
     {
-      code: "FRONTIER // 02",
+      category: "Artificial Intelligence",
       title: "Agentic AI Systems & Automation",
       status: "Currently learning",
     },
     {
-      code: "FRONTIER // 03",
+      category: "Academic Minor",
       title: "Multimedia Systems & Interface Design",
-      status: "Minor coursework",
+      status: "Coursework",
     },
   ];
 
   return (
-    <section id="frontiers" className="py-16 md:py-20 border-b border-rule/60">
+    <section id="learning" className="py-16 md:py-20 border-b border-rule/60">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Cyber Section Header */}
+        {/* Section Header */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-4 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-cyan-400" />
+          <div>
             <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
-              Research Frontiers
+              Currently Learning
             </h2>
           </div>
           <span className="text-xs font-mono text-slate-400">
@@ -37,7 +36,7 @@ export function Learning() {
           </span>
         </div>
 
-        {/* 3-Column Cyber Grid of Research Modules */}
+        {/* 3-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {topics.map((item, idx) => (
             <div
@@ -45,8 +44,8 @@ export function Learning() {
               className="p-6 sm:p-7 rounded-2xl border border-white/10 bg-[#0B0D16]/95 shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)] transition-all flex flex-col justify-between"
             >
               <div>
-                <span className="text-xs font-mono text-cyan-400/80 block mb-3">
-                  {item.code}
+                <span className="text-xs font-mono text-cyan-400/90 block mb-3">
+                  {item.category}
                 </span>
                 <h3 className="text-base sm:text-lg font-normal text-white leading-snug mb-6">
                   {item.title}
