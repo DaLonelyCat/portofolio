@@ -96,7 +96,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                         : "border-rule text-muted hover:text-ink"
                     }`}
                   >
-                    View {idx + 1}
+                    {shot.label || `View ${idx + 1}`}
                   </button>
                 ))}
               </div>

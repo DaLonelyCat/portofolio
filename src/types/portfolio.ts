@@ -3,6 +3,7 @@ export type ProjectCategory = string;
 export interface ProjectScreenshot {
   src: string;
   caption: string;
+  label?: string;
 }
 
 export interface Project {

@@ -40,7 +40,7 @@ export const portfolioData: PortfolioData = {
       problem:
         "Small food and beverage operations face manual daily sales calculations, inventory discrepancies, and convoluted checkout processes that slow down service.",
       solution:
-        "Engineered an offline-capable React and Electron cashier interface with an embedded Express/Node API, local persistent transaction logging, QRIS payment breakdowns, and real-time Profit and Loss financial statements.",
+        "Engineered an offline-capable React and Electron cashier interface with an embedded Express/Node API, local persistent transaction logging, QRIS payment breakdowns, real-time Profit and Loss statements, and a local Ollama AI assistant for store operational queries.",
       impact:
         "Automated daily bookkeeping, eliminated manual register discrepancies, and gave executive leadership instant visibility into revenue and product demand.",
       tags: [
@@ -49,22 +49,36 @@ export const portfolioData: PortfolioData = {
         "Electron",
         "Node.js",
         "Express",
+        "Ollama (Local LLM)",
         "Tailwind CSS",
         "POS Architecture",
-        "Accounting",
+        "Financial Accounting",
       ],
       screenshots: [
         {
           src: "/projects/unicash-cashier.png",
-          caption: "Cashier Terminal with Active Order Ticket and Menu Catalog",
+          label: "Cashier Terminal",
+          caption: "Cashier terminal interface with active order ticket panel and menu catalog",
+        },
+        {
+          src: "/projects/unicash-dashboard.png",
+          label: "Sales Analytics",
+          caption: "Sales intelligence dashboard tracking gross revenue, peak business hours, and payment distributions",
         },
         {
           src: "/projects/unicash-sales.png",
-          caption: "Live Sales Log with Gross Revenue and QRIS vs Cash Breakdown",
+          label: "Order Ledger",
+          caption: "Real-time order ledger table with payment reconciliation and item transaction history",
         },
         {
           src: "/projects/unicash-financials.png",
-          caption: "Financial Management Module with Statement of Profit and Loss",
+          label: "Financial Reports",
+          caption: "Financial accounting module with statement of profit and loss, operating expense logs, and cash flow balances",
+        },
+        {
+          src: "/projects/unicash-ai-agent.png",
+          label: "Store AI Assistant",
+          caption: "Local offline LLM agent interface powered by Ollama for restock checks, store queries, and sales summaries",
         },
       ],
       featured: true,

@@ -33,7 +33,7 @@ export function FeaturedCaseStudy({ project }: FeaturedCaseStudyProps) {
                 <button
                   key={idx}
                   onClick={() => setActiveTab(idx)}
-                  className={`px-4 py-3 text-xs font-normal transition-colors border-b-2 sm:border-b-0 sm:border-r border-rule min-h-[44px] flex items-center gap-2 ${
+                  className={`px-3.5 sm:px-4 py-3 text-xs font-normal transition-colors border-b-2 sm:border-b-0 sm:border-r border-rule min-h-[44px] flex items-center gap-2 ${
                     isActive
                       ? "bg-surface text-ink border-b-accent font-medium"
                       : "text-muted hover:text-ink hover:bg-surface/50 border-b-transparent"
@@ -41,7 +41,7 @@ export function FeaturedCaseStudy({ project }: FeaturedCaseStudyProps) {
                   aria-pressed={isActive}
                 >
                   <span className="text-accent font-mono">0{idx + 1}</span>
-                  <span>{shot.caption.split(" ")[0]} Screen</span>
+                  <span>{shot.label || shot.caption}</span>
                 </button>
               );
             })}

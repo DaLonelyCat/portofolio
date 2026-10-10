@@ -67,11 +67,7 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
               </a>
             </div>
 
-            {/* Plain Availability Status (No eyebrow pill) */}
-            <div className="flex items-center gap-2 text-xs text-muted">
-              <span className="w-2 h-2 rounded-full bg-accent" />
-              <span>Available for software engineering and technical builder roles.</span>
-            </div>
+
           </div>
 
           {/* Right Column: Background Snapshot */}
