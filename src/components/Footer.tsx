@@ -16,17 +16,6 @@ export function Footer() {
           <div className="text-muted/80">
             Typeset in IBM Plex Sans. Deployed via Cloudflare Pages edge.
           </div>
-
-          <div className="flex items-center gap-1.5 text-muted">
-            <span>Terminal:</span>
-            <kbd className="px-1.5 py-0.5 border border-rule bg-surface text-ink text-[11px] font-mono">
-              Ctrl+K
-            </kbd>
-            <span>/</span>
-            <kbd className="px-1.5 py-0.5 border border-rule bg-surface text-ink text-[11px] font-mono">
-              ⌘K
-            </kbd>
-          </div>
         </div>
       </div>
     </footer>

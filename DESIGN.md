@@ -32,7 +32,7 @@ A lightweight static SVG noise texture (`/noise.svg`, 300x300, 3.5% opacity over
 - **Identity Motif**: Section markers (`01 / Focus`, `02 / Case Study`, `03 / Archive`, `04 / Experience`, `05 / Skills`, `06 / Contact`) establishing rhythm and hierarchy.
 - **Featured Showcase**: Dedicated production case study for UniCash POS (Fruqita) with interactive screenshot tabs.
 - **Archive Structure**: Year-grouped chronological project listing (`2026`, `2025`, `2024`) with category filtering.
-- **Colophon**: Formal footer with typography details, hosting information, and hidden terminal shortcut (`Ctrl+K`).
+- **Colophon**: Formal footer with typography details and hosting information.
 
 ## Design Decisions & One-Line Reasons (R-31)
 - **Palette**: Deep charcoal and crisp off-white provide effortless legibility without the harsh glare of pure black and white.

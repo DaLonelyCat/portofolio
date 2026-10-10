@@ -8,17 +8,14 @@ export function Learning() {
     {
       title: "3D Drosophila Brain Scans & Connectomics",
       status: "Currently learning",
-      note: "Studying 3D electron microscopy whole-brain datasets.",
     },
     {
       title: "Agentic AI Systems & Automation",
       status: "Currently learning",
-      note: "Investigating autonomous agent coordination and tool-calling loops.",
     },
     {
       title: "Multimedia Systems & Interface Design",
-      status: "Academic minor at Bina Nusantara University",
-      note: "Formal minor coursework spanning UI/UX architecture, Unity C# game development, and multimedia perception.",
+      status: "Minor coursework at Bina Nusantara University",
     },
   ];
 
@@ -38,14 +35,9 @@ export function Learning() {
               key={idx}
               className="py-5 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2"
             >
-              <div>
-                <h4 className="text-base font-normal text-ink">
-                  {item.title}
-                </h4>
-                <p className="text-xs text-muted mt-0.5">
-                  {item.note}
-                </p>
-              </div>
+              <h4 className="text-base font-normal text-ink">
+                {item.title}
+              </h4>
               <span className="text-xs text-accent font-normal shrink-0">
                 {item.status}
               </span>

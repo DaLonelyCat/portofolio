@@ -26,7 +26,7 @@ A personal portfolio and interactive CV for Christian Emanuel Ikajaya, Computer 
 6. **Technical Competencies**: 4-column matrix indexing languages, frameworks, systems, and operations.
 7. **Direct Contact**: Instant clipboard email copy with visual feedback and direct mailto link.
 8. **CV Viewer**: Dedicated `/cv` route embedding the curriculum vitae with print and download capabilities.
-9. **Colophon & Terminal**: Formal colophon footer with hidden `Ctrl+K` command terminal easter egg.
+9. **Colophon**: Formal footer with typography details and Cloudflare Pages hosting information.
 
 ---
 
