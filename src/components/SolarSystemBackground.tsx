@@ -17,6 +17,19 @@ interface PlanetDef {
   hasMoon?: boolean;
 }
 
+interface CometRuntime {
+  active: boolean;
+  spawnDelay: number;
+  progress: number;
+  duration: number;
+  startPos: THREE.Vector3;
+  velocity: THREE.Vector3;
+  tailLength: number;
+  geom: THREE.BufferGeometry;
+  line: THREE.Line;
+  head: THREE.Sprite;
+}
+
 export function SolarSystemBackground() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,8 +52,16 @@ export function SolarSystemBackground() {
       250
     );
 
-    // Elevated camera positioned for isometric perspective looking at the center
-    camera.position.set(0, isMobile ? 18 : 16, isMobile ? 36 : 32);
+    // Spherical Orbit Coordinates locked to the Sun at (0, 0, 0)
+    const orbitRadius = isMobile ? 40 : 36;
+    let orbitTheta = 0; // Azimuth angle
+    let orbitPhi = 1.107; // Polar angle (~63.4 degrees, matching isometric elevation)
+
+    camera.position.set(
+      orbitRadius * Math.sin(orbitPhi) * Math.sin(orbitTheta),
+      orbitRadius * Math.cos(orbitPhi),
+      orbitRadius * Math.sin(orbitPhi) * Math.cos(orbitTheta)
+    );
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({
@@ -80,7 +101,7 @@ export function SolarSystemBackground() {
     const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
     solarSystemGroup.add(sunMesh);
 
-    // Sun Corona Glow (Pulsating Additive Outer Aura)
+    // Sun Corona Glow (Pulsating Additive Outer Aura with depthWrite: false to stop blackbox occlusion)
     const coronaGeometry = track(
       new THREE.SphereGeometry(sunRadius * 1.45, isMobile ? 16 : 28, isMobile ? 16 : 28)
     );
@@ -91,32 +112,40 @@ export function SolarSystemBackground() {
         opacity: 0.45,
         blending: THREE.AdditiveBlending,
         side: THREE.BackSide,
+        depthWrite: false, // Critical: stops depth buffer occlusion
       })
     );
     const coronaMesh = new THREE.Mesh(coronaGeometry, coronaMaterial);
     solarSystemGroup.add(coronaMesh);
 
-    // Outer Solar Flare Halo Sprite
+    // Outer Solar Flare Halo Sprite (depthWrite: false prevents rectangular cutout)
     const haloCanvas = document.createElement("canvas");
-    haloCanvas.width = 64;
-    haloCanvas.height = 64;
+    haloCanvas.width = 128;
+    haloCanvas.height = 128;
     const haloCtx = haloCanvas.getContext("2d");
     if (haloCtx) {
-      const gradient = haloCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      gradient.addColorStop(0, "rgba(255, 230, 150, 0.8)");
-      gradient.addColorStop(0.3, "rgba(255, 140, 0, 0.35)");
-      gradient.addColorStop(0.7, "rgba(255, 80, 0, 0.1)");
+      haloCtx.clearRect(0, 0, 128, 128);
+      const gradient = haloCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      gradient.addColorStop(0, "rgba(255, 230, 150, 0.85)");
+      gradient.addColorStop(0.25, "rgba(255, 140, 0, 0.38)");
+      gradient.addColorStop(0.65, "rgba(255, 80, 0, 0.12)");
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       haloCtx.fillStyle = gradient;
-      haloCtx.fillRect(0, 0, 64, 64);
+      haloCtx.fillRect(0, 0, 128, 128);
     }
     const haloTexture = track(new THREE.CanvasTexture(haloCanvas));
+    haloTexture.generateMipmaps = false;
+    haloTexture.minFilter = THREE.LinearFilter;
+    haloTexture.magFilter = THREE.LinearFilter;
+
     const haloMat = track(
       new THREE.SpriteMaterial({
         map: haloTexture,
         transparent: true,
-        opacity: 0.65,
+        opacity: 0.7,
         blending: THREE.AdditiveBlending,
+        depthWrite: false, // Critical: stops blackbox cutout artifact
+        depthTest: true,
       })
     );
     const haloSprite = new THREE.Sprite(haloMat);
@@ -180,6 +209,7 @@ export function SolarSystemBackground() {
           transparent: true,
           opacity: 0.38,
           blending: THREE.AdditiveBlending,
+          depthWrite: false, // Prevents orbit lines from clipping each other or background
         })
       );
       const orbitLine = new THREE.LineLoop(orbitGeom, orbitMat);
@@ -253,11 +283,14 @@ export function SolarSystemBackground() {
       });
     });
 
-    // 3. Ambient Distant Cosmic Starfield
+    // 3. Ambient Distant Cosmic Starfield with GPU Twinkling Shader
     const starCount = isMobile ? 800 : 1600;
     const starGeom = track(new THREE.BufferGeometry());
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
+    const starTwinkleSpeeds = new Float32Array(starCount);
+    const starPhases = new Float32Array(starCount);
+    const starSizes = new Float32Array(starCount);
 
     const starColorCyan = new THREE.Color("#00F0FF");
     const starColorWhite = new THREE.Color("#FFFFFF");
@@ -284,23 +317,198 @@ export function SolarSystemBackground() {
       starColors[i3] = col.r;
       starColors[i3 + 1] = col.g;
       starColors[i3 + 2] = col.b;
+
+      // Varied organic twinkle frequency and phase
+      starTwinkleSpeeds[i] = 1.0 + Math.random() * 2.8;
+      starPhases[i] = Math.random() * Math.PI * 2;
+      starSizes[i] = (isMobile ? 1.4 : 1.8) + Math.random() * 1.4;
     }
 
     starGeom.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
     starGeom.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
+    starGeom.setAttribute("aTwinkleSpeed", new THREE.BufferAttribute(starTwinkleSpeeds, 1));
+    starGeom.setAttribute("aPhase", new THREE.BufferAttribute(starPhases, 1));
+    starGeom.setAttribute("aSize", new THREE.BufferAttribute(starSizes, 1));
 
-    const starMat = track(
-      new THREE.PointsMaterial({
-        size: isMobile ? 1.6 : 2.2,
-        sizeAttenuation: true,
-        vertexColors: true,
+    const starShaderMat = track(
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uTime: { value: 0 },
+          uPixelRatio: { value: Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5) },
+        },
+        vertexShader: `
+          uniform float uTime;
+          uniform float uPixelRatio;
+          attribute float aTwinkleSpeed;
+          attribute float aPhase;
+          attribute float aSize;
+          varying vec3 vColor;
+          varying float vAlpha;
+
+          void main() {
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            float twinkle = 0.35 + 0.65 * sin(uTime * aTwinkleSpeed + aPhase);
+            vAlpha = twinkle;
+            gl_PointSize = aSize * uPixelRatio * (200.0 / -mvPosition.z) * (0.8 + 0.3 * twinkle);
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          varying float vAlpha;
+
+          void main() {
+            vec2 coord = gl_PointCoord - vec2(0.5);
+            float dist = length(coord);
+            if (dist > 0.5) discard;
+            float glow = smoothstep(0.5, 0.0, dist);
+            gl_FragColor = vec4(vColor, vAlpha * glow * 0.9);
+          }
+        `,
         transparent: true,
-        opacity: 0.45,
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
+        vertexColors: true,
       })
     );
-    const starField = new THREE.Points(starGeom, starMat);
+    const starField = new THREE.Points(starGeom, starShaderMat);
     scene.add(starField);
+
+    // 4. Dynamic Flying Comets / Shooting Stars Runner
+    const cometCanvas = document.createElement("canvas");
+    cometCanvas.width = 64;
+    cometCanvas.height = 64;
+    const cCtx = cometCanvas.getContext("2d");
+    if (cCtx) {
+      cCtx.clearRect(0, 0, 64, 64);
+      const g = cCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0, "rgba(255, 255, 255, 1.0)");
+      g.addColorStop(0.25, "rgba(0, 240, 255, 0.85)");
+      g.addColorStop(0.6, "rgba(0, 240, 255, 0.2)");
+      g.addColorStop(1, "rgba(0, 0, 0, 0)");
+      cCtx.fillStyle = g;
+      cCtx.fillRect(0, 0, 64, 64);
+    }
+    const cometHeadTexture = track(new THREE.CanvasTexture(cometCanvas));
+
+    const cometRuntimes: CometRuntime[] = [];
+    const cometCount = 2;
+    const tailSegments = 14;
+
+    for (let c = 0; c < cometCount; c++) {
+      const cGeom = track(new THREE.BufferGeometry());
+      const cPositions = new Float32Array(tailSegments * 3);
+      const cColors = new Float32Array(tailSegments * 3);
+
+      for (let k = 0; k < tailSegments; k++) {
+        const frac = k / (tailSegments - 1);
+        const falloff = Math.pow(1 - frac, 2.0);
+        const k3 = k * 3;
+        if (k === 0) {
+          cColors[k3] = 1.0;
+          cColors[k3 + 1] = 1.0;
+          cColors[k3 + 2] = 1.0;
+        } else {
+          cColors[k3] = 0.0 * falloff;
+          cColors[k3 + 1] = 0.94 * falloff;
+          cColors[k3 + 2] = 1.0 * falloff;
+        }
+      }
+
+      cGeom.setAttribute("position", new THREE.BufferAttribute(cPositions, 3));
+      cGeom.setAttribute("color", new THREE.BufferAttribute(cColors, 3));
+
+      const cLineMat = track(
+        new THREE.LineBasicMaterial({
+          vertexColors: true,
+          transparent: true,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        })
+      );
+      const cLine = new THREE.Line(cGeom, cLineMat);
+      cLine.visible = false;
+      scene.add(cLine);
+
+      const cHeadMat = track(
+        new THREE.SpriteMaterial({
+          map: cometHeadTexture,
+          transparent: true,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        })
+      );
+      const cHead = new THREE.Sprite(cHeadMat);
+      cHead.scale.set(1.8, 1.8, 1);
+      cHead.visible = false;
+      scene.add(cHead);
+
+      cometRuntimes.push({
+        active: false,
+        spawnDelay: c === 0 ? 0.8 : 3.4,
+        progress: 0,
+        duration: 1.5,
+        startPos: new THREE.Vector3(),
+        velocity: new THREE.Vector3(),
+        tailLength: 12,
+        geom: cGeom,
+        line: cLine,
+        head: cHead,
+      });
+    }
+
+    // 5. Interactive Spherical Orbit Controller (Locked to Central Sun)
+    let isDragging = false;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let velocityTheta = 0;
+    let velocityPhi = 0;
+
+    const isInteractiveElement = (target: EventTarget | null): boolean => {
+      if (!(target instanceof Element)) return false;
+      return !!target.closest(
+        'a, button, input, textarea, select, [role="button"], [role="dialog"], [role="menuitem"], summary, pre, code'
+      );
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      if (e.button !== 0) return; // Only primary left click
+      if (isInteractiveElement(e.target)) return; // Never block UI buttons, links, or modals
+
+      isDragging = true;
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+      velocityTheta = 0;
+      velocityPhi = 0;
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+
+      const dx = e.clientX - lastPointerX;
+      const dy = e.clientY - lastPointerY;
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+
+      const deltaTheta = -dx * 0.0065;
+      const deltaPhi = -dy * 0.005;
+
+      orbitTheta += deltaTheta;
+      orbitPhi = Math.max(0.22, Math.min(Math.PI * 0.74, orbitPhi + deltaPhi));
+
+      velocityTheta = deltaTheta;
+      velocityPhi = deltaPhi;
+    };
+
+    const handlePointerUp = () => {
+      isDragging = false;
+    };
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
 
     // Window Resize Handler
     const handleResize = () => {
@@ -309,6 +517,9 @@ export function SolarSystemBackground() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      const pr = Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5);
+      renderer.setPixelRatio(pr);
+      starShaderMat.uniforms.uPixelRatio.value = pr;
     };
     window.addEventListener("resize", handleResize);
 
@@ -319,7 +530,7 @@ export function SolarSystemBackground() {
     };
     document.addEventListener("visibilitychange", handleVisibility);
 
-    // Animation Loop: Isometric planetary revolution with authentic 3D depth
+    // Animation Loop: Isometric planetary revolution with interactive orbiting camera
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -329,6 +540,27 @@ export function SolarSystemBackground() {
 
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
+
+      // Update Starfield GPU Twinkling
+      starShaderMat.uniforms.uTime.value = elapsed;
+
+      // Update Camera Spherical Orbit (Camera strictly locked to orbiting the Sun at (0, 0, 0))
+      if (!isDragging) {
+        if (Math.abs(velocityTheta) > 0.00005 || Math.abs(velocityPhi) > 0.00005) {
+          orbitTheta += velocityTheta;
+          orbitPhi = Math.max(0.22, Math.min(Math.PI * 0.74, orbitPhi + velocityPhi));
+          velocityTheta *= 0.93;
+          velocityPhi *= 0.93;
+        } else if (!prefersReducedMotion) {
+          // Autonomous celestial spin
+          orbitTheta += delta * 0.035;
+        }
+      }
+
+      camera.position.x = orbitRadius * Math.sin(orbitPhi) * Math.sin(orbitTheta);
+      camera.position.y = orbitRadius * Math.cos(orbitPhi);
+      camera.position.z = orbitRadius * Math.sin(orbitPhi) * Math.cos(orbitTheta);
+      camera.lookAt(0, 0, 0);
 
       if (!prefersReducedMotion) {
         // Central Sun axial rotation and corona breathing pulse
@@ -360,8 +592,64 @@ export function SolarSystemBackground() {
           }
         });
 
-        // Gentle cosmic drift
-        solarSystemGroup.rotation.y = elapsed * 0.006;
+        // Dynamic Flying Comets
+        cometRuntimes.forEach((comet) => {
+          if (!comet.active) {
+            comet.spawnDelay -= delta;
+            if (comet.spawnDelay <= 0) {
+              comet.active = true;
+              comet.duration = 1.3 + Math.random() * 0.6;
+              comet.progress = 0;
+              comet.tailLength = 11 + Math.random() * 6;
+
+              const startX = -32 + Math.random() * 18;
+              const startY = 16 + Math.random() * 12;
+              const startZ = -22 + Math.random() * 18;
+              comet.startPos.set(startX, startY, startZ);
+
+              const dirX = 36 + Math.random() * 14;
+              const dirY = -18 - Math.random() * 10;
+              const dirZ = 20 + Math.random() * 14;
+              comet.velocity.set(dirX, dirY, dirZ);
+
+              comet.line.visible = true;
+              comet.head.visible = true;
+            }
+          } else {
+            comet.progress += delta;
+            const t = comet.progress / comet.duration;
+            if (t >= 1.0) {
+              comet.active = false;
+              comet.line.visible = false;
+              comet.head.visible = false;
+              comet.spawnDelay = 2.8 + Math.random() * 3.4;
+            } else {
+              const headX = comet.startPos.x + comet.velocity.x * comet.progress;
+              const headY = comet.startPos.y + comet.velocity.y * comet.progress;
+              const headZ = comet.startPos.z + comet.velocity.z * comet.progress;
+              comet.head.position.set(headX, headY, headZ);
+
+              const velNorm = comet.velocity.clone().normalize();
+              const headFade = t > 0.75 ? (1.0 - t) / 0.25 : 1.0;
+              comet.head.scale.set(1.8 * headFade, 1.8 * headFade, 1);
+
+              const posAttr = comet.geom.getAttribute("position") as THREE.BufferAttribute;
+              const arr = posAttr.array as Float32Array;
+              const currentTailLen = Math.min(comet.tailLength, comet.progress * comet.velocity.length() * 0.4);
+
+              for (let k = 0; k < tailSegments; k++) {
+                const frac = k / (tailSegments - 1);
+                const k3 = k * 3;
+                arr[k3] = headX - velNorm.x * (currentTailLen * frac);
+                arr[k3 + 1] = headY - velNorm.y * (currentTailLen * frac);
+                arr[k3 + 2] = headZ - velNorm.z * (currentTailLen * frac);
+              }
+              posAttr.needsUpdate = true;
+            }
+          }
+        });
+
+        // Calm cosmic drift of starfield
         starField.rotation.y = elapsed * 0.0015;
       }
 
@@ -373,6 +661,10 @@ export function SolarSystemBackground() {
     // Cleanup on unmount
     return () => {
       cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibility);
 

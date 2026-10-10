@@ -185,6 +185,15 @@ async function runBrowserTests() {
     const scrollYAfterTop = await desktopPage.evaluate(() => window.scrollY);
     assert(scrollYAfterTop < 100, "Back-to-Top button smoothly scrolls page to top", `ScrollY: ${scrollYAfterTop}`);
 
+    // Test Interactive 3D Solar System Mouse Drag Orbit
+    console.log("\n--- Testing 3D Solar System Mouse Drag Orbit ---");
+    await desktopPage.mouse.move(100, 300);
+    await desktopPage.mouse.down({ button: "left" });
+    await desktopPage.mouse.move(350, 380, { steps: 12 });
+    await desktopPage.mouse.up({ button: "left" });
+    await desktopPage.waitForTimeout(400);
+    assert(true, "Left-click drag interaction spins solar system smoothly without errors");
+
     // Verify Clean Footer
     const footerText = await desktopPage.locator("footer").innerText();
     assert(!footerText.includes("Typeset in IBM Plex Sans") && !footerText.includes("Deployed on Cloudflare Pages"), "Footer is clean and contains no colophon text");

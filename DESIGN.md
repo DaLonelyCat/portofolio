@@ -35,11 +35,13 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 
 ## Background Simulation: Isometric 3D Solar System
 1. **Isometric Projection & Depth**: Orbital plane inclined at ~33 degrees with diagonal orientation, turning circular orbits into dynamic isometric ellipses with true 3D spatial depth.
-2. **Central Star (The Sun in the Middle)**: Radiant emissive core (`#FFBA08`) with pulsating additive corona halo, outer starlight lens aura, and 4.5 intensity PointLight illumination casting day/night terminator lines across orbiting bodies.
+2. **Central Star (The Sun in the Middle)**: Radiant emissive core (`#FFBA08`) with pulsating additive corona halo, outer starlight lens aura, and 4.5 intensity PointLight illumination casting day/night terminator lines across orbiting bodies. Configured with `depthWrite: false` across all corona and halo materials to eliminate Z-buffer black box clipping over planetary orbit paths.
 3. **8 Orbiting Planets**: Mercury, Venus, Earth (with Moon), Mars, Jupiter, Saturn (with tilted rings), Uranus, and Neptune revolving in 3D depth, sweeping in front of and behind the Sun.
-4. **Holographic Trajectory Rails**: Glowing starlight cyan and blue orbital paths with enhanced visibility (`0.38` opacity) outlining planetary flight tracks.
+4. **Holographic Trajectory Rails**: Glowing starlight cyan and blue orbital paths with enhanced visibility (`0.38` opacity) and `depthWrite: false` outlining planetary flight tracks without occlusion artifacts.
 5. **Calibrated Scrim & Contrast**: 90% canvas visibility paired with a subtle depth vignette wash (`bg-[#05060A]/35`), allowing the celestial motion to shine through between the solid 95% alloy UI cards.
-6. **Distant Starfield**: 1,600 ambient stars providing atmospheric cosmic scale.
+6. **GPU Procedural Twinkling Starfield**: 1,600 ambient stars rendered via custom GPU ShaderMaterial with per-vertex twinkle speeds and phases, displaying soft circular starlight discs with smoothstep falloff.
+7. **Dynamic Flying Comets**: Periodic celestial shooting stars streaking diagonally across the upper cosmic vista with luminous white/cyan heads and gradient fading tails.
+8. **Interactive Spherical Orbit Controls**: Left-click and hold anywhere to spin the solar system in 3D. The camera movement is strictly locked to spherical orbiting around the central Sun at (0, 0, 0) with zero panning or off-center drift. Features fluid momentum damping on pointer release before returning to calm celestial spin.
 
 ## Typography
 - **Primary Family**: IBM Plex Sans, self-hosted locally via `@fontsource/ibm-plex-sans` (zero external runtime network calls).

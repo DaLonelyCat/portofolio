@@ -46,6 +46,10 @@ const solarContent = fs.readFileSync(path.join(process.cwd(), "src/components/So
 assert(solarContent.includes("solarSystemGroup.rotation.x = 0.58") && solarContent.includes("solarSystemGroup.rotation.z = -0.32"), "Solar system uses isometric 3D rotation angles");
 assert(solarContent.includes("opacity-90") && solarContent.includes("bg-[#05060A]/35"), "Solar system uses calibrated visibility and depth vignette");
 assert(solarContent.includes("PointLight(\"#FFF8E7\", 4.5"), "Central Sun features radiant 4.5 intensity starlight illumination");
+assert(solarContent.includes("depthWrite: false"), "Sun halo, corona, and orbit paths use depthWrite: false to stop blackbox occlusion");
+assert(solarContent.includes("aTwinkleSpeed") && solarContent.includes("uTime"), "Starfield utilizes GPU twinkling ShaderMaterial with per-vertex attributes");
+assert(solarContent.includes("cometRuntimes") && solarContent.includes("cometHeadTexture"), "Dynamic flying comets runner simulates streaking shooting stars");
+assert(solarContent.includes("camera.lookAt(0, 0, 0)") && solarContent.includes("handlePointerDown") && solarContent.includes("isInteractiveElement"), "Interactive spherical orbit controller enables left-click rotation locked strictly to the central Sun");
 
 // ----------------------------------------------------
 // 2. Profile Avatar, Hero Tag Purge & Flashing Dots
