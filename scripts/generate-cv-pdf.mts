@@ -38,6 +38,7 @@ async function generateCvPdf() {
       letter-spacing: -0.5px;
       color: #111827;
       margin-bottom: 8px;
+      text-align: center;
     }
     .sub-header {
       display: flex;
@@ -140,7 +141,7 @@ async function generateCvPdf() {
     <div class="sub-header">
       <div class="links">
         <a href="https://github.com/dalonelycat" target="_blank">Github</a>
-        <a href="https://dalonelycat.site" target="_blank">Portfolio</a>
+        <a href="https://portofolio.dalonelycat.site" target="_blank">Portfolio</a>
       </div>
       <div class="contacts">
         <span class="contact-item">
