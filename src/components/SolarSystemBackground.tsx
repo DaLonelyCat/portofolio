@@ -484,7 +484,7 @@ export function SolarSystemBackground() {
     const isInteractiveElement = (target: EventTarget | null): boolean => {
       if (!(target instanceof Element)) return false;
       return !!target.closest(
-        'a, button, input, textarea, select, [role="button"], [role="dialog"], [role="menuitem"], summary, pre, code, article, [data-satellite-relay], .rounded-2xl, .rounded-3xl, main > section'
+        'a, button, input, textarea, select, [role="button"], [role="dialog"], [role="menuitem"], summary, pre, code, article, [data-interactive="true"], [data-card="true"]'
       );
     };
 

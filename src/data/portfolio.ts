@@ -12,7 +12,7 @@ export const portfolioData: PortfolioData = {
     statusAvailable: true,
     avatar: "/avatar.jpg",
     socials: {
-      email: "christian.emanuel.08@gmail.com",
+      email: "christian@dalonelycat.site",
       github: "https://github.com/dalonelycat",
       linkedin: "https://www.linkedin.com/in/dalonelycat/",
       twitter: "https://twitter.com/dalonelycat",
@@ -302,28 +302,28 @@ export const portfolioData: PortfolioData = {
       description:
         "As CFO and software developer at Fruqita, I manage company budgeting, cash flow, and financial forecasting while building our internal software tools. I developed our proprietary point of sale and cash tracking software from scratch to automate daily financial records and track product sales.",
       highlights: [
-        "Manage company budget, cash flow, and financial planning to maintain steady business operations.",
-        "Built and launched the official brand website (https://fruqitamlg.vercel.app/) to showcase fruit chip products and drive customer orders.",
-        "Engineered custom cashier and bookkeeping software from scratch, automating daily sales logging.",
-        "Provided real-time visibility into product inventory and revenue figures.",
+        "Managed the company's budget, cash flow, and all major financial decisions.",
+        "Built the web app and custom POS system from scratch to track sales and inventory.",
+        "Integrated a local AI using Ollama so the team can chat with the system for instant stock updates and daily summaries.",
       ],
-      technologies: ["Financial Management", "Custom POS Architecture", "Cash Flow Planning", "Software Development"],
+      technologies: ["Financial Management", "Custom POS Architecture", "Cash Flow Planning", "Software Development", "Ollama (Local LLM)"],
     },
     {
       id: "mybeans-ceo",
-      role: "Founder & CEO",
+      role: "CEO & Founder",
       company: "MyBeans",
       location: "Indonesia",
       period: "2026",
       current: false,
       description:
-        "As Founder and CEO of MyBeans, I directed daily operations for a coffee supply and beverage venture. My work included product development, vendor negotiations, supply chain logistics, and customer relations.",
+        "As CEO and Founder of MyBeans, I directed daily operations for a coffee supply and beverage venture. My work included product development, vendor negotiations, supply chain logistics, and customer relations.",
       highlights: [
-        "Directed daily operations, product development, and brand strategy.",
-        "Managed supplier relationships and negotiated raw material pricing.",
-        "Oversaw product quality assurance and daily order fulfillment.",
+        "Led the team, made key business decisions, and chose which coffee products to sell.",
+        "Researched and negotiated deals with local coffee suppliers to get the best beans.",
+        "Pitched directly to local restaurants and cafes door-to-door to win early clients.",
+        "Built the company website and desktop cashier system to handle daily sales.",
       ],
-      technologies: ["Leadership", "Product Strategy", "Supply Logistics", "Vendor Negotiations"],
+      technologies: ["Leadership", "Product Strategy", "Supply Logistics", "Vendor Negotiations", "Web & Desktop POS"],
     },
   ],
 

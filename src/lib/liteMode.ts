@@ -8,9 +8,8 @@ interface NavigatorWithHints extends Navigator {
 }
 
 /**
- * Decides whether the heavy visuals (WebGL solar system, rocket plume canvas,
- * Satellite relay 3D viewer) should be skipped. Conservative on purpose so normal
- * laptops keep the full experience.
+ * Decides whether the heavy visuals (WebGL solar system and rocket plume canvas)
+ * should be skipped. Conservative on purpose so normal laptops keep the full experience.
  *
  * Lite mode turns on for: reduced-motion preference, Data Saver, very low
  * memory (2 GB or less) or very few CPU cores (2 or less).

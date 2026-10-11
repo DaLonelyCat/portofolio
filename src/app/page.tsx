@@ -24,14 +24,6 @@ const SolarSystemBackground = dynamic(
   { ssr: false }
 );
 
-const SatelliteRelay = dynamic(
-  () =>
-    import("@/components/SatelliteRelay").then(
-      (mod) => mod.SatelliteRelay
-    ),
-  { ssr: false }
-);
-
 export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
@@ -109,9 +101,6 @@ export default function Home() {
             onCopyEmail={(email) => showToast(`Copied ${email} to clipboard`)}
             onPrintCV={handleExportCV}
           />
-
-          {/* 7. Orbital Satellite Relay Terminal (Interactive 3D Deep Space Comms Unit) */}
-          <SatelliteRelay />
         </main>
 
         {/* Colophon Footer */}

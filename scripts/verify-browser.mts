@@ -286,52 +286,13 @@ async function runBrowserTests() {
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
 
-    // Test 3D Interactive Orbital Satellite Relay Terminal & Subsystems
-    console.log("\n--- Testing 3D Interactive Orbital Satellite Relay Terminal ---");
-    const satelliteSection = desktopPage.locator("section#satellite");
-    await satelliteSection.scrollIntoViewIfNeeded();
-    const satelliteContainer = desktopPage.locator("[data-satellite-relay='true']");
-    assert(await satelliteContainer.isVisible(), "3D Orbital Satellite Relay component with data-satellite-relay is mounted");
+    // Verify Satellite Relay is completely removed
+    const satelliteCount = await desktopPage.locator("[data-satellite-relay='true'], section#satellite").count();
+    assert(satelliteCount === 0, "Satellite Relay is completely absent from DOM (clean bottom layout)");
 
-    // Drag on satellite canvas with isolated pointer events
-    const satelliteCanvas = satelliteContainer.locator("canvas");
-    const canvasBox = await satelliteCanvas.boundingBox();
-    if (canvasBox) {
-      await desktopPage.mouse.move(canvasBox.x + canvasBox.width / 2, canvasBox.y + canvasBox.height / 2);
-      await desktopPage.mouse.down({ button: "left" });
-      await desktopPage.mouse.move(canvasBox.x + canvasBox.width / 2 + 50, canvasBox.y + canvasBox.height / 2, { steps: 5 });
-      await desktopPage.mouse.up({ button: "left" });
-      await desktopPage.waitForTimeout(200);
-      assert(true, "Dragging on 3D Satellite canvas completes with event isolation");
-    }
-
-    // Test Subsystem Action: Toggle Photovoltaic Wings
-    const wingsBtn = satelliteContainer.locator("button:has-text('Solar Wings')").first();
-    await wingsBtn.scrollIntoViewIfNeeded();
-    assert(await wingsBtn.isVisible(), "Satellite has photovoltaic solar array toggle button");
-    await wingsBtn.click();
-    await desktopPage.waitForTimeout(300);
-    const wingsAfter = await satelliteContainer.locator("button:has-text('Solar Wings')").first().innerText();
-    assert(wingsAfter.includes("Deploy") || wingsAfter.includes("Retract"), "Toggling wings changes subsystem state", wingsAfter);
-
-    // Test Subsystem Action: Ion Thruster Fire
-    const thrusterBtn = satelliteContainer.locator("button:has-text('Fire Ion Thruster')");
-    await thrusterBtn.scrollIntoViewIfNeeded();
-    assert(await thrusterBtn.isVisible(), "Satellite has ion thruster firing button");
-    await thrusterBtn.click();
-    await desktopPage.waitForTimeout(400);
-
-    // Test Subsystem Action: Ping Telemetry
-    const pingBtn = satelliteContainer.locator("button:has-text('Ping Telemetry')");
-    await pingBtn.scrollIntoViewIfNeeded();
-    await pingBtn.click();
-    await desktopPage.waitForTimeout(400);
-    const pingReadout = desktopPage.locator("[role='status']:has-text('Signal acquired')");
-    assert(await pingReadout.isVisible(), "Ping Telemetry button outputs valid transponder status ping");
-
-    // Verify Orrery Observatory HUD is completely removed from the screen (Option 2B)
+    // Verify Orrery Observatory HUD is completely removed from DOM
     const orreryToggleCount = await desktopPage.locator("button[aria-label='Toggle Solar System Orrery Observatory HUD']").count();
-    assert(orreryToggleCount === 0, "Orrery Observatory HUD is completely absent from DOM (Option 2B clean screen)");
+    assert(orreryToggleCount === 0, "Orrery Observatory HUD is completely absent from DOM (clean screen)");
 
     // Test Email Copy Feedback
     console.log("\n--- Testing Email Copy Feedback ---");
@@ -448,9 +409,6 @@ async function runBrowserTests() {
 
     const orreryCount = await litePage.locator("button:has-text('Solar Orrery')").count();
     assert(orreryCount === 0, "Lite mode suppresses Orrery HUD controls", `Orrery count: ${orreryCount}`);
-
-    const satelliteOptIn = litePage.locator("button:has-text('Load 3D Satellite anyway')");
-    assert(await satelliteOptIn.isVisible(), "Lite mode displays opt-in button for 3D Satellite Relay viewer");
 
     await litePage.close();
   } finally {

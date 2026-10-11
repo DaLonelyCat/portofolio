@@ -197,7 +197,7 @@ function simulateCopyEmail(email: string) {
 }
 
 const copiedValue = simulateCopyEmail(portfolioData.personal.socials.email);
-assert(copiedState && copiedValue === "christian.emanuel.08@gmail.com", "Copy Email button writes correct email and triggers feedback");
+assert(copiedState && copiedValue === "christian@dalonelycat.site", "Copy Email button writes correct email and triggers feedback");
 
 // ----------------------------------------------------
 // 9. Mobile Navigation Drawer Toggle
@@ -285,9 +285,10 @@ assert(!connectomicsExists, "ConnectomicsViewer.tsx deleted from components");
 const learningUpdated = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
 assert(!learningUpdated.includes("ConnectomicsViewer"), "Learning.tsx contains zero ConnectomicsViewer references");
 
+// Satellite Relay removed in favor of clean bottom layout
 const satelliteExists = fs.existsSync(path.join(process.cwd(), "src/components/SatelliteRelay.tsx"));
-assert(satelliteExists, "SatelliteRelay.tsx exists in components");
-assert(pageContent.includes("SatelliteRelay"), "page.tsx imports and mounts SatelliteRelay at page bottom");
+assert(!satelliteExists, "SatelliteRelay.tsx deleted from components");
+assert(!pageContent.includes("SatelliteRelay"), "page.tsx contains zero imports or references to SatelliteRelay");
 
 // Dumbbell Playground
 const dumbbellExists = fs.existsSync(path.join(process.cwd(), "src/components/DumbbellPlayground.tsx"));
@@ -335,6 +336,13 @@ console.log("\n--- 15. GPA Consistency, Status Badges, Lite Mode & Accessibility
 assert(portfolioData.education[0].notes?.includes("GPA: 3.30") === true, "portfolioData education notes records GPA 3.30", portfolioData.education[0].notes);
 assert(heroContent.includes("3.30") && !heroContent.includes("3.82"), "Hero renders GPA 3.30 with zero references to 3.82");
 
+// Updated CV email and experience synchronizations
+assert(portfolioData.personal.socials.email === "christian@dalonelycat.site", "portfolioData email updated to christian@dalonelycat.site");
+const fruqitaExp = portfolioData.experiences.find((e) => e.id === "fruqita-cfo");
+assert(fruqitaExp?.highlights.some((h) => h.includes("Ollama")) === true, "Fruqita experience highlights Ollama local AI integration");
+const mybeansExp = portfolioData.experiences.find((e) => e.id === "mybeans-ceo");
+assert(mybeansExp?.role === "CEO & Founder", "MyBeans role is CEO & Founder");
+
 // StatusBadge component and data annotations
 const statusBadgeExists = fs.existsSync(path.join(process.cwd(), "src/components/StatusBadge.tsx"));
 assert(statusBadgeExists, "StatusBadge.tsx component exists");
@@ -379,22 +387,16 @@ assert(fruqitaProject?.previewUrl === "https://fruqitamlg.vercel.app/", "Fruqita
 assert(rocketUpdated.includes("data-rocket-dock") && rocketUpdated.includes("rounded-full"), "RocketCursor.tsx includes nose-tip docking reticle when hovering clickable targets");
 
 // ----------------------------------------------------
-// 16. Solar System Direct Desktop Orbit & Satellite Relay Isolation
+// 16. Solar System Direct Desktop Orbit & Interactive Target Guards
 // ----------------------------------------------------
-console.log("\n--- 16. Solar System Direct Desktop Orbit & Satellite Relay Isolation ---");
+console.log("\n--- 16. Solar System Direct Desktop Orbit & Interactive Target Guards ---");
 
 // SolarSystemBackground: direct desktop background dragging restored as highlight
 assert(!solarContent.includes("isOrbitMode"), "SolarSystemBackground removes isOrbitMode gating so desktop background drag is restored");
 assert(solarContent.includes('if (e.pointerType === "touch") return;'), "SolarSystemBackground suppresses touch events to protect mobile and touchpad page scrolling");
-assert(solarContent.includes("[data-satellite-relay]"), "SolarSystemBackground isInteractiveElement explicitly guards SatelliteRelay terminal");
 assert(!solarContent.includes("celestial-select"), "SolarSystemBackground removes distracting planet hit-testing popups");
-
-// SatelliteRelay pointer isolation, touch-action and subsystem controls
-const satelliteContent = fs.readFileSync(path.join(process.cwd(), "src/components/SatelliteRelay.tsx"), "utf-8");
-assert(satelliteContent.includes("e.stopPropagation()"), "SatelliteRelay calls e.stopPropagation on pointer events to isolate 3D spacecraft controls");
-assert(satelliteContent.includes('touchAction = "none"') && satelliteContent.includes("touch-none"), "SatelliteRelay enforces touch-action none on canvas container");
-assert(satelliteContent.includes('data-satellite-relay="true"'), "SatelliteRelay annotates root container with data-satellite-relay attribute");
-assert(satelliteContent.includes("wingsDeployed") && satelliteContent.includes("thrusterFiring") && satelliteContent.includes("dishTracking"), "SatelliteRelay provides deployable wings, ion thruster, and dish tracking subsystems");
+assert(solarContent.includes("article") && solarContent.includes('[role="button"]'), "SolarSystemBackground isInteractiveElement guards buttons and article cards");
+assert(!solarContent.includes("main > section"), "SolarSystemBackground removes main > section selector to allow dragging on background void and margins");
 
 console.log("\n=================================================");
 console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);

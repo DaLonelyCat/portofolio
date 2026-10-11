@@ -57,8 +57,7 @@ Space and Cyberpunk palette engineered for maximum legibility and high contrast:
 4. **Experience**: Compact 2-column layout pairing Work & Leadership roles on the left with Education & Academics on the right.
 5. **Skills**: 4-column capability matrix.
 6. **Contact**: Direct email console and official platform vector logos (GitHub, LinkedIn, CV PDF).
-7. **Orbital Satellite Relay**: Interactive 3D deep space communications terminal at the page bottom featuring deployable photovoltaic wings, rotatable dish antenna, dynamic ion propulsion plasma particles, and subsystem diagnostics.
-8. **Colophon Footer**: Centered footer with edge deployment status and back-to-top button.
+7. **Colophon Footer**: Centered footer with edge deployment status and back-to-top button.
 
 ## Design Decisions & Verification
 - **Direct & Grounded Hero**: Removed all flashing dots, Hero tags, and corny one-liners to focus purely on Christian's identity, headline, and bio. Name deduplicated next to avatar.
