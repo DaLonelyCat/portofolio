@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Project } from "../types/portfolio";
 import { ProjectModal } from "./ProjectModal";
+import { StatusBadge } from "./StatusBadge";
 
 interface ProjectsProps {
   projects: Project[];
@@ -26,6 +27,7 @@ export function Projects({ projects, categories }: ProjectsProps) {
   const [selectedTag, setSelectedTag] = useState("All Tags");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [sortMode, setSortMode] = useState<"default" | "newest">("default");
 
   const filteredProjects = projects.filter((project) => {
     // 1. Category filter
@@ -51,12 +53,18 @@ export function Projects({ projects, categories }: ProjectsProps) {
     return matchesCategory && matchesTag && matchesSearch;
   });
 
+  // Optional newest-first ordering (Array.sort is stable, so ties keep the default order)
+  const sortedProjects =
+    sortMode === "newest"
+      ? [...filteredProjects].sort((a, b) => Number(b.year) - Number(a.year))
+      : filteredProjects;
+
   // Separate featured UniCash POS when no active search query is filtering results
   const isSearching = Boolean(searchQuery.trim() || selectedTag !== "All Tags");
-  const featuredProject = !isSearching ? filteredProjects.find((p) => p.id === "unicash-pos") : undefined;
+  const featuredProject = !isSearching ? sortedProjects.find((p) => p.id === "unicash-pos") : undefined;
   const regularProjects = !isSearching
-    ? filteredProjects.filter((p) => p.id !== "unicash-pos")
-    : filteredProjects;
+    ? sortedProjects.filter((p) => p.id !== "unicash-pos")
+    : sortedProjects;
 
   return (
     <section id="projects" className="py-20 md:py-28">
@@ -144,6 +152,34 @@ export function Projects({ projects, categories }: ProjectsProps) {
                     Reset Filters
                   </button>
                 )}
+              </div>
+
+              {/* Sort Order */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider shrink-0 mr-1">
+                  Sort:
+                </span>
+                {([
+                  { id: "default", label: "Featured" },
+                  { id: "newest", label: "Newest first" },
+                ] as const).map((option) => {
+                  const isSortActive = sortMode === option.id;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setSortMode(option.id)}
+                      aria-pressed={isSortActive}
+                      className={`text-[11px] font-mono px-3 py-1 rounded-full whitespace-nowrap transition-all ${
+                        isSortActive
+                          ? "bg-cyan-950/80 text-cyan-300 border border-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.3)] font-semibold"
+                          : "border border-white/5 bg-white/5 text-slate-400 hover:text-slate-200 hover:border-white/15"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -288,7 +324,7 @@ export function Projects({ projects, categories }: ProjectsProps) {
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2 mb-3">
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <span className="text-xs font-mono text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950/40 border border-cyan-500/30">
                                 {project.category}
                               </span>
@@ -300,6 +336,7 @@ export function Projects({ projects, categories }: ProjectsProps) {
                                   {project.screenshots.length} Screens
                                 </span>
                               )}
+                              <StatusBadge status={project.status} />
                             </div>
                             <span className="text-xs font-mono text-slate-400">
                               {project.year}

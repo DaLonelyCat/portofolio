@@ -304,6 +304,17 @@ export function RocketCursor() {
               : "scale-100"
           }`}
         >
+          {/* Docking ring centered on the nose tip (hotspot) while hovering clickable targets */}
+          <span
+            aria-hidden="true"
+            data-rocket-dock={isHovering ? "on" : "off"}
+            className={`absolute left-[3px] top-[3px] w-9 h-9 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none transition-all duration-200 ${
+              isHovering
+                ? "opacity-100 scale-100 bg-cyan-400/10 ring-1 ring-cyan-300/60 shadow-[0_0_18px_rgba(0,240,255,0.5)]"
+                : "opacity-0 scale-50"
+            }`}
+          />
+
           {/* Cyberpunk Vector Rocket SVG (32x32) */}
           <svg
             width="32"

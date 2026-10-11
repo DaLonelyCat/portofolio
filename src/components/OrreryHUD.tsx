@@ -46,7 +46,7 @@ export const CELESTIAL_BODIES: CelestialBodyInfo[] = [
     speed: "35.0 km/s",
     milestoneTitle: "Human-Computer Interaction & UX",
     milestoneDesc:
-      "Completed Minor in Multimedia at Bina Nusantara University with GPA 3.82, bridging core computer systems with user experience design.",
+      "Completed Minor in Multimedia at Bina Nusantara University with GPA 3.30, bridging core computer systems with user experience design.",
     sectionLink: "#experience",
     sectionLabel: "View Education",
     color: "#E0B368",

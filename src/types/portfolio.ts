@@ -6,6 +6,8 @@ export interface ProjectScreenshot {
   label?: string;
 }
 
+export type ProjectStatus = "live" | "personal";
+
 export interface Project {
   id: string;
   title: string;
@@ -19,6 +21,9 @@ export interface Project {
   tags: string[];
   screenshots?: ProjectScreenshot[];
   liveUrl?: string;
+  /** Only set for sites that allow being embedded in an iframe (no X-Frame-Options DENY). */
+  previewUrl?: string;
+  status?: ProjectStatus;
   repoUrl?: string;
   figmaUrl?: string;
   featured: boolean;

@@ -15,6 +15,7 @@ import { Toast } from "@/components/Toast";
 import { BackToTop } from "@/components/BackToTop";
 import { RocketCursor } from "@/components/RocketCursor";
 import { OrreryHUD } from "@/components/OrreryHUD";
+import { useLiteMode } from "@/lib/liteMode";
 
 const SolarSystemBackground = dynamic(
   () =>
@@ -27,6 +28,9 @@ const SolarSystemBackground = dynamic(
 export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
+  // null until the client has checked, so WebGL scenes never mount then unmount.
+  // true on low-power devices or reduced-motion users (see lib/liteMode.ts).
+  const lite = useLiteMode();
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -42,11 +46,12 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-page text-ink selection:bg-cyan-500/30 selection:text-white font-sans">
-      {/* Custom Cyberpunk Rocket Ship Mouse Pointer */}
-      <RocketCursor />
+      {/* Custom Cyberpunk Rocket Ship Mouse Pointer (skipped in lite mode) */}
+      {lite === false && <RocketCursor />}
 
-      {/* Interactive 3D Solar System Background with Deep Space Scrim */}
-      <SolarSystemBackground />
+      {/* Interactive 3D Solar System Background with Deep Space Scrim (lite mode: static starfield) */}
+      {lite === false && <SolarSystemBackground />}
+      {lite === true && <div className="static-starfield" aria-hidden="true" />}
 
       <div className="relative z-10">
         {/* Printable Resume Header (visible only when printing) */}
@@ -105,8 +110,8 @@ export default function Home() {
         {/* Back to Top Floating Button */}
         <BackToTop />
 
-        {/* 3D Solar System Orrery Observatory HUD */}
-        <OrreryHUD />
+        {/* 3D Solar System Orrery Observatory HUD (needs the 3D scene, so hidden in lite mode) */}
+        {lite === false && <OrreryHUD />}
       </div>
 
       {/* Notification Toast */}

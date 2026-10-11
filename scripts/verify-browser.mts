@@ -175,6 +175,18 @@ async function runBrowserTests() {
     const nestfitCard = desktopPage.locator("section#projects article:has-text('NestFit Smart Workout Companion')");
     assert(await nestfitCard.isVisible(), "NestFit smart workout companion project card is visible");
 
+    // Test Project Sort Toggle (Featured vs Newest First)
+    console.log("\n--- Testing Project Sort Toggle ---");
+    const newestSortBtn = desktopPage.locator("button:has-text('Newest first')");
+    await newestSortBtn.click();
+    await desktopPage.waitForTimeout(300);
+    const newestFirstYear = await desktopPage.locator("section#projects article").nth(1).locator("span.text-slate-400").first().innerText();
+    assert(newestFirstYear === "2026", "Newest first sort places 2026 project at top of catalog", newestFirstYear);
+
+    const featuredSortBtn = desktopPage.locator("button:has-text('Featured')");
+    await featuredSortBtn.click();
+    await desktopPage.waitForTimeout(300);
+
     // Test Project Modal (UniCash POS)
     console.log("\n--- Testing Semi-Fullscreen Project Modal ---");
     const unicashDetailsBtn = desktopPage.locator("section#projects article:has-text('UniCash POS') button:has-text('View Details')").first();
@@ -197,15 +209,29 @@ async function runBrowserTests() {
     const isModalClosed = !(await modalDialog.isVisible());
     assert(isModalClosed, "Modal closes cleanly on Escape key");
 
-    // Test Fruqita modal screenshot & View Live button
+    // Test Fruqita modal screenshot, Live Preview tab & View Live button
     const fruqitaDetailsBtn = desktopPage.locator("section#projects article:has-text('Fruqita Fruit Chips') button:has-text('View Details')").first();
     await fruqitaDetailsBtn.scrollIntoViewIfNeeded();
     await fruqitaDetailsBtn.click();
     await desktopPage.waitForTimeout(400);
+
     const fruqitaLiveBtn = modalDialog.locator("a:has-text('View Live')");
     assert(await fruqitaLiveBtn.isVisible(), "Fruqita modal renders 'View Live' button");
+
     const fruqitaImg = modalDialog.locator("img[src*='fruqita-storefront']");
     assert(await fruqitaImg.isVisible(), "Fruqita modal displays storefront screenshot");
+
+    // Test Fruqita Live Preview Tab with Sandboxed Iframe
+    const fruqitaLivePreviewTab = modalDialog.locator("button:has-text('Live Preview')");
+    assert(await fruqitaLivePreviewTab.isVisible(), "Fruqita modal features 'Live Preview' tab");
+    await fruqitaLivePreviewTab.click();
+    await desktopPage.waitForTimeout(300);
+
+    const fruqitaIframe = modalDialog.locator("iframe[src='https://fruqitamlg.vercel.app/']");
+    assert(await fruqitaIframe.isVisible(), "Sandboxed Live Preview iframe mounts and displays storefront");
+    const iframeSandbox = await fruqitaIframe.getAttribute("sandbox");
+    assert(iframeSandbox !== null && iframeSandbox.includes("allow-scripts"), "Live Preview iframe enforces sandboxed security attributes", iframeSandbox || "");
+
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
 
@@ -377,6 +403,31 @@ async function runBrowserTests() {
     console.log(`Mobile full-page screenshot saved at: ${mobileFullScreenshotPath}`);
 
     await mobilePage.close();
+
+    // ----------------------------------------------------
+    // Test 3: Lite Mode Query Parameter (?lite=1)
+    // ----------------------------------------------------
+    console.log("\n--- 3. Lite Mode Forced Override (?lite=1) ---");
+    const litePage = await browser.newPage({
+      viewport: { width: 1280, height: 800 },
+    });
+
+    await litePage.goto(`http://localhost:${port}/?lite=1`, { waitUntil: "networkidle" });
+
+    const staticStarfield = litePage.locator(".static-starfield");
+    const isStaticStarfieldPresent = await staticStarfield.isVisible();
+    assert(isStaticStarfieldPresent, "Lite mode mounts lightweight .static-starfield CSS background");
+
+    const canvasCount = await litePage.locator("canvas").count();
+    assert(canvasCount === 0, "Lite mode suppresses all heavy Three.js and particle canvas elements", `Canvas count: ${canvasCount}`);
+
+    const orreryCount = await litePage.locator("button:has-text('Solar Orrery')").count();
+    assert(orreryCount === 0, "Lite mode suppresses Orrery HUD controls", `Orrery count: ${orreryCount}`);
+
+    const connectomicsOptIn = litePage.locator("button:has-text('Load 3D viewer anyway')");
+    assert(await connectomicsOptIn.isVisible(), "Lite mode displays opt-in button for 3D Connectomics viewer");
+
+    await litePage.close();
   } finally {
     await browser.close();
     server.close();

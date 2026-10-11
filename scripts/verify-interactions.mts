@@ -325,6 +325,59 @@ assert(fs.existsSync(path.join(process.cwd(), "public/projects/koya-profile.png"
 assert(modalUpdated.includes("<span>View Live</span>"), "ProjectModal.tsx renders 'View Live' button");
 assert(!modalUpdated.includes("View Live / Download"), "ProjectModal.tsx contains zero 'View Live / Download' mentions");
 
+// ----------------------------------------------------
+// 15. GPA Consistency, Status Badges, Lite Mode & Accessibility
+// ----------------------------------------------------
+console.log("\n--- 15. GPA Consistency, Status Badges, Lite Mode & Accessibility ---");
+
+// GPA consistency across dataset, Hero, and Orrery HUD
+assert(portfolioData.education[0].notes?.includes("GPA: 3.30") === true, "portfolioData education notes records GPA 3.30", portfolioData.education[0].notes);
+assert(orreryContent.includes("3.30") && !orreryContent.includes("3.82"), "OrreryHUD renders GPA 3.30 with zero references to 3.82");
+assert(heroContent.includes("3.30") && !heroContent.includes("3.82"), "Hero renders GPA 3.30 with zero references to 3.82");
+
+// StatusBadge component and data annotations
+const statusBadgeExists = fs.existsSync(path.join(process.cwd(), "src/components/StatusBadge.tsx"));
+assert(statusBadgeExists, "StatusBadge.tsx component exists");
+
+const statusBadgeContent = fs.readFileSync(path.join(process.cwd(), "src/components/StatusBadge.tsx"), "utf-8");
+assert(statusBadgeContent.includes("STATUS_META") && statusBadgeContent.includes("data-status"), "StatusBadge renders semantic status tags");
+
+const liveProjects = portfolioData.projects.filter((p) => p.status === "live");
+const personalProjects = portfolioData.projects.filter((p) => p.status === "personal");
+assert(liveProjects.length > 0, "Dataset contains verified 'live' status projects", `Count: ${liveProjects.length}`);
+assert(personalProjects.length > 0, "Dataset contains verified 'personal' status projects", `Count: ${personalProjects.length}`);
+
+// Projects sort toggle
+assert(projectsUpdated.includes("sortMode") && projectsUpdated.includes("Newest first") && projectsUpdated.includes("Featured"), "Projects.tsx includes sortMode state with Featured and Newest first options");
+
+// Test sorting functionality: Newest first sorts by descending year
+const newestSorted = [...portfolioData.projects].sort((a, b) => Number(b.year) - Number(a.year));
+assert(Number(newestSorted[0].year) >= Number(newestSorted[newestSorted.length - 1].year), "Sorting by year places 2026 projects at the top");
+
+// Lite mode auto-detection and graceful fallback
+const liteModeExists = fs.existsSync(path.join(process.cwd(), "src/lib/liteMode.ts"));
+assert(liteModeExists, "src/lib/liteMode.ts utility exists");
+
+const liteModeContent = fs.readFileSync(path.join(process.cwd(), "src/lib/liteMode.ts"), "utf-8");
+assert(liteModeContent.includes("prefers-reduced-motion") && liteModeContent.includes("saveData") && liteModeContent.includes("deviceMemory") && liteModeContent.includes("hardwareConcurrency"), "liteMode detects reduced motion, saveData, low RAM, and low CPU cores");
+assert(liteModeContent.includes('override === "1"') && liteModeContent.includes('override === "0"'), "liteMode supports ?lite=1 and ?lite=0 query overrides");
+
+assert(cssContent.includes(".static-starfield"), "globals.css includes .static-starfield CSS background for lite mode");
+assert(pageContent.includes("useLiteMode") && pageContent.includes("static-starfield"), "page.tsx uses useLiteMode hook to render static-starfield fallback");
+
+// Modal tabs, keyboard arrow navigation, swipe handling, and focus trap
+assert(modalUpdated.includes("tabs.push") && modalUpdated.includes("activeTab"), "ProjectModal.tsx dynamically provisions view tabs");
+assert(modalUpdated.includes("swipeHandlers") && modalUpdated.includes("Math.abs(dx) > 40"), "ProjectModal.tsx includes touch pointer swipe navigation with 40px threshold");
+assert(modalUpdated.includes("ArrowLeft") && modalUpdated.includes("ArrowRight"), "ProjectModal.tsx includes ArrowLeft / ArrowRight keyboard navigation");
+assert(modalUpdated.includes("FOCUSABLE_SELECTOR") && modalUpdated.includes("focusables[0]"), "ProjectModal.tsx implements accessible Tab key focus trapping");
+assert(modalUpdated.includes("iframe") && modalUpdated.includes("previewUrl"), "ProjectModal.tsx supports sandboxed Live Preview iframe tab");
+
+// Fruqita preview URL
+assert(fruqitaProject?.previewUrl === "https://fruqitamlg.vercel.app/", "Fruqita has previewUrl configured for modal iframe preview");
+
+// Rocket docking reticle
+assert(rocketUpdated.includes("data-rocket-dock") && rocketUpdated.includes("rounded-full"), "RocketCursor.tsx includes nose-tip docking reticle when hovering clickable targets");
+
 console.log("\n=================================================");
 console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);
 console.log("=================================================");

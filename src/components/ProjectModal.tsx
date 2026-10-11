@@ -1,22 +1,108 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Project } from "../types/portfolio";
 import { DumbbellPlayground } from "./DumbbellPlayground";
+import { StatusBadge } from "./StatusBadge";
+
+type ModalTab = "gallery" | "preview" | "playground";
 
 interface ProjectModalProps {
   project: Project | null;
   onClose: () => void;
 }
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input, textarea, select, iframe, [tabindex]:not([tabindex="-1"])';
+
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [activeShot, setActiveShot] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"gallery" | "playground">("gallery");
+  const [activeTab, setActiveTab] = useState<ModalTab>("gallery");
+  const [previewLoaded, setPreviewLoaded] = useState(false);
   const [aspectRatios, setAspectRatios] = useState<Record<string, number>>({});
 
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const lightboxRef = useRef<HTMLDivElement | null>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
+  const suppressClickRef = useRef(false);
+
+  const shotCount = project?.screenshots?.length ?? 0;
+
+  const goShot = (dir: 1 | -1) => {
+    if (shotCount < 2) return;
+    setActiveShot((i) => (i + dir + shotCount) % shotCount);
+  };
+
+  // Horizontal swipe changes the screenshot. After a swipe, the click that
+  // follows the pointer release is ignored so it does not open the lightbox.
+  const swipeHandlers = {
+    onPointerDown: (e: React.PointerEvent) => {
+      swipeStartRef.current = { x: e.clientX, y: e.clientY };
+    },
+    onPointerUp: (e: React.PointerEvent) => {
+      const start = swipeStartRef.current;
+      swipeStartRef.current = null;
+      if (!start || shotCount < 2) return;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        suppressClickRef.current = true;
+        setTimeout(() => {
+          suppressClickRef.current = false;
+        }, 60);
+        goShot(dx < 0 ? 1 : -1);
+      }
+    },
+    onPointerCancel: () => {
+      swipeStartRef.current = null;
+    },
+  };
+
+  // Open/close lifecycle: reset view state, lock page scroll, and return
+  // keyboard focus to the element that opened the modal when it closes.
   useEffect(() => {
+    if (!project) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+    document.body.style.overflow = "hidden";
+    setActiveShot(0);
+    setIsLightboxOpen(false);
+    setPreviewLoaded(false);
+    setActiveTab(
+      project.screenshots && project.screenshots.length > 0
+        ? "gallery"
+        : project.previewUrl
+        ? "preview"
+        : "gallery"
+    );
+
+    return () => {
+      document.body.style.overflow = "unset";
+      returnFocusRef.current?.focus?.();
+    };
+  }, [project]);
+
+  // Show the loading hint again each time the live preview tab is opened
+  useEffect(() => {
+    if (activeTab === "preview") setPreviewLoaded(false);
+  }, [activeTab]);
+
+  // Move focus into the dialog (or the lightbox) so keyboard users start inside it
+  useEffect(() => {
+    if (!project) return;
+    if (isLightboxOpen) {
+      lightboxRef.current?.focus();
+    } else {
+      dialogRef.current?.focus();
+    }
+  }, [project, isLightboxOpen]);
+
+  // Keyboard: Escape, arrow keys for the gallery, and a Tab focus trap
+  useEffect(() => {
+    if (!project) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (isLightboxOpen) {
@@ -24,21 +110,47 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         } else {
           onClose();
         }
+        return;
+      }
+
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("input, textarea, [contenteditable='true']")) return;
+
+      if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && shotCount > 1 && activeTab === "gallery") {
+        e.preventDefault();
+        const dir = e.key === "ArrowRight" ? 1 : -1;
+        setActiveShot((i) => (i + dir + shotCount) % shotCount);
+        return;
+      }
+
+      if (e.key === "Tab") {
+        const root = isLightboxOpen ? lightboxRef.current : dialogRef.current;
+        if (!root) return;
+        const focusables = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+          (el) => el.offsetParent !== null
+        );
+        if (focusables.length === 0) {
+          e.preventDefault();
+          root.focus();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        const outside = !active || !root.contains(active) || active === root;
+        if (e.shiftKey && (active === first || outside)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (active === last || outside)) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
 
-    if (project) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-      setActiveShot(0);
-      setActiveTab("gallery");
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [project, onClose, isLightboxOpen]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [project, onClose, isLightboxOpen, shotCount, activeTab]);
 
   if (!project) return null;
 
@@ -46,6 +158,31 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const currentSrc = screenshots[activeShot]?.src || "";
   const detectedRatio = aspectRatios[currentSrc] ?? (project.id === "nestfit-workout" ? 0.49 : 1.78);
   const isPortrait = detectedRatio < 1.0;
+
+  // Views available for this project (the tab bar shows when there is more than one)
+  const hasPlayground = project.id === "nestfit-workout";
+  const tabs: { id: ModalTab; label: string; activeClass: string }[] = [];
+  if (screenshots.length > 0) {
+    tabs.push({
+      id: "gallery",
+      label: `Screenshot Gallery (${screenshots.length})`,
+      activeClass: "bg-cyan-400 text-black font-semibold shadow-[0_0_12px_rgba(0,240,255,0.4)]",
+    });
+  }
+  if (project.previewUrl) {
+    tabs.push({
+      id: "preview",
+      label: "Live Preview",
+      activeClass: "bg-cyan-400 text-black font-semibold shadow-[0_0_12px_rgba(0,240,255,0.4)]",
+    });
+  }
+  if (hasPlayground) {
+    tabs.push({
+      id: "playground",
+      label: "Try Live Plate Calculator",
+      activeClass: "bg-emerald-400 text-black font-semibold shadow-[0_0_12px_rgba(16,185,129,0.4)]",
+    });
+  }
 
   // Guard: Only display repository button if it points to an actual repository, not just the user's root profile
   const isValidRepo = Boolean(
@@ -56,10 +193,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   return (
     <>
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-black/85 backdrop-blur-md"
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-black/85 backdrop-blur-md outline-none"
         onClick={onClose}
       >
         <div
@@ -83,6 +222,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     </span>
                   </>
                 )}
+                {project.status && (
+                  <>
+                    <span className="text-slate-500">•</span>
+                    <StatusBadge status={project.status} />
+                  </>
+                )}
               </div>
               <h2 id="modal-title" className="text-2xl sm:text-3xl lg:text-4xl font-light text-white tracking-tight">
                 {project.title}
@@ -104,36 +249,33 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </button>
           </div>
 
-          {/* NestFit Interactive Companion Switcher Tabs */}
-          {project.id === "nestfit-workout" && (
-            <div className="flex items-center gap-2 mb-6 p-1.5 rounded-full bg-white/5 border border-white/10 w-fit">
-              <button
-                type="button"
-                onClick={() => setActiveTab("gallery")}
-                className={`text-xs font-mono px-4 py-1.5 rounded-full transition-all ${
-                  activeTab === "gallery"
-                    ? "bg-cyan-400 text-black font-semibold shadow-[0_0_12px_rgba(0,240,255,0.4)]"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Screenshot Gallery (4)
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("playground")}
-                className={`text-xs font-mono px-4 py-1.5 rounded-full transition-all ${
-                  activeTab === "playground"
-                    ? "bg-emerald-400 text-black font-semibold shadow-[0_0_12px_rgba(16,185,129,0.4)]"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Try Live Plate Calculator
-              </button>
+          {/* View Switcher Tabs (gallery, live preview, interactive companion) */}
+          {tabs.length > 1 && (
+            <div
+              role="tablist"
+              className="flex flex-wrap items-center gap-2 mb-6 p-1.5 rounded-full bg-white/5 border border-white/10 w-fit"
+            >
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`text-xs font-mono px-4 py-1.5 rounded-full transition-all ${
+                    activeTab === tab.id
+                      ? tab.activeClass
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           )}
 
-          {/* Conditional Playground View for NestFit */}
-          {project.id === "nestfit-workout" && activeTab === "playground" ? (
+          {/* Conditional Views: Plate Calculator, Live Preview, Screenshots */}
+          {activeTab === "playground" && hasPlayground ? (
             <div className="space-y-6">
               <DumbbellPlayground />
               <div className="flex justify-end pt-2">
@@ -146,15 +288,62 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </button>
               </div>
             </div>
+          ) : activeTab === "preview" && project.previewUrl ? (
+            <div className="space-y-4">
+              <div className="relative w-full h-[60vh] min-h-[420px] rounded-2xl overflow-hidden border border-white/15 bg-black/60">
+                {!previewLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center text-xs font-mono text-slate-400">
+                    Loading live preview...
+                  </div>
+                )}
+                <iframe
+                  src={project.previewUrl}
+                  title={`${project.title} live preview`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                  onLoad={() => setPreviewLoaded(true)}
+                  className="relative w-full h-full bg-transparent"
+                />
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
+                <span>
+                  If the preview stays blank, the site may block embedding. Open it in a new tab instead.
+                </span>
+                <a
+                  href={project.previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-950/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all min-h-[38px]"
+                >
+                  Open in new tab
+                </a>
+              </div>
+              {screenshots.length > 0 && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("gallery")}
+                    className="text-xs font-mono text-cyan-300 hover:text-white px-4 py-2 rounded-full border border-white/10 bg-white/5"
+                  >
+                    Return to Screenshots
+                  </button>
+                </div>
+              )}
+            </div>
           ) : screenshots.length > 0 ? (
             /* Layout with Screenshots */
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Left Column: High-Res Screenshot Viewer & Actions */}
               <div className="lg:col-span-7 space-y-4">
-                {/* Auto-Resizing Adaptive Container with Lightbox Click */}
+                {/* Auto-Resizing Adaptive Container with Lightbox Click (swipe or use arrow keys to change image) */}
                 <div
-                  onClick={() => setIsLightboxOpen(true)}
-                  className={`relative overflow-hidden cursor-zoom-in group transition-all duration-300 ${
+                  onClick={() => {
+                    if (suppressClickRef.current) return;
+                    setIsLightboxOpen(true);
+                  }}
+                  {...swipeHandlers}
+                  className={`relative overflow-hidden cursor-zoom-in group transition-all duration-300 touch-pan-y ${
                     isPortrait
                       ? "w-full max-w-[280px] sm:max-w-[320px] aspect-[9/18.5] max-h-[560px] mx-auto rounded-3xl border-2 border-white/20 bg-black/90 p-1.5 shadow-[0_15px_50px_rgba(0,0,0,0.9)]"
                       : "w-full aspect-video sm:aspect-[16/10] max-h-[460px] rounded-2xl border border-white/15 bg-black/60 shadow-inner flex items-center justify-center p-2"
@@ -165,7 +354,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     src={screenshots[activeShot].src}
                     alt={screenshots[activeShot].caption}
                     fill
-                    className="object-contain"
+                    draggable={false}
+                    className="object-contain select-none"
                     sizes="(max-width: 1024px) 100vw, 680px"
                     priority
                     onLoad={(e) => {
@@ -178,6 +368,38 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                       }
                     }}
                   />
+
+                  {/* Prev / Next image buttons (also available with arrow keys and swipe) */}
+                  {screenshots.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          goShot(-1);
+                        }}
+                        aria-label="Previous screenshot"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          goShot(1);
+                        }}
+                        aria-label="Next screenshot"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </>
+                  )}
 
                   {/* Hover Zoom Pill */}
                   <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 pointer-events-none">
@@ -427,10 +649,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     {/* Fullscreen Lightbox Zoom Overlay */}
     {isLightboxOpen && screenshots.length > 0 && (
       <div
+        ref={lightboxRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label="Image Fullscreen Lightbox"
-        className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-200"
+        className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-200 outline-none"
         onClick={() => setIsLightboxOpen(false)}
       >
         <div
@@ -449,13 +673,42 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </svg>
           </button>
 
-          {/* Full Resolution Image Container */}
-          <div className="relative max-h-[80vh] max-w-[92vw] flex items-center justify-center overflow-hidden rounded-2xl border border-white/20 shadow-2xl bg-black/90 p-2">
+          {/* Full Resolution Image Container (swipe left or right to change image) */}
+          <div
+            className="relative max-h-[80vh] max-w-[92vw] flex items-center justify-center overflow-hidden rounded-2xl border border-white/20 shadow-2xl bg-black/90 p-2 touch-pan-y select-none"
+            {...swipeHandlers}
+          >
             <img
               src={screenshots[activeShot].src}
               alt={screenshots[activeShot].caption}
+              draggable={false}
               className="max-h-[76vh] max-w-[90vw] w-auto h-auto object-contain rounded-lg"
             />
+
+            {screenshots.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => goShot(-1)}
+                  aria-label="Previous image"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goShot(1)}
+                  aria-label="Next image"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
           </div>
 
           <div className="mt-3 flex items-center justify-between w-full max-w-2xl px-3 text-xs font-mono text-slate-300">

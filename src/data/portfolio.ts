@@ -122,6 +122,7 @@ export const portfolioData: PortfolioData = {
         },
       ],
       liveUrl: "https://workout.dalonelycat.site/",
+      status: "personal",
       featured: true,
     },
     {
@@ -284,6 +285,8 @@ export const portfolioData: PortfolioData = {
         },
       ],
       liveUrl: "https://fruqitamlg.vercel.app/",
+      previewUrl: "https://fruqitamlg.vercel.app/",
+      status: "live",
       featured: true,
     },
   ],
