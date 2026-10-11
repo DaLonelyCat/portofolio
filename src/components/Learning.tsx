@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ConnectomicsViewer } from "./ConnectomicsViewer";
 
 export function Learning() {
   const topics = [
@@ -23,9 +24,9 @@ export function Learning() {
 
   return (
     <section id="learning" className="py-20 md:py-28">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Section Header */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
             <h2 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
               Currently Learning
@@ -36,7 +37,7 @@ export function Learning() {
           </span>
         </div>
 
-        {/* 3-Column Grid */}
+        {/* 3-Column Domain Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {topics.map((item, idx) => (
             <div
@@ -60,6 +61,9 @@ export function Learning() {
             </div>
           ))}
         </div>
+
+        {/* Live Interactive 3D Drosophila Connectomics Neural Graph */}
+        <ConnectomicsViewer />
       </div>
     </section>
   );

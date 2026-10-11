@@ -9,18 +9,54 @@ interface ProjectsProps {
   categories: string[];
 }
 
+const POPULAR_TAGS = [
+  "All Tags",
+  "React",
+  "TypeScript",
+  "Java",
+  "Python",
+  "Unity",
+  "Tailwind CSS",
+  "Offline-first",
+  "Electron",
+];
+
 export function Projects({ projects, categories }: ProjectsProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedTag, setSelectedTag] = useState("All Tags");
+  const [searchQuery, setSearchQuery] = useState("");
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
-  const filteredProjects =
-    selectedCategory === "All"
-      ? projects
-      : projects.filter((p) => p.category === selectedCategory);
+  const filteredProjects = projects.filter((project) => {
+    // 1. Category filter
+    const matchesCategory =
+      selectedCategory === "All" || project.category === selectedCategory;
 
-  // Separate featured UniCash POS when present in the filtered view
-  const featuredProject = filteredProjects.find((p) => p.id === "unicash-pos");
-  const regularProjects = filteredProjects.filter((p) => p.id !== "unicash-pos");
+    // 2. Tag filter
+    const matchesTag =
+      selectedTag === "All Tags" ||
+      project.tags.some((t) => t.toLowerCase().includes(selectedTag.toLowerCase()));
+
+    // 3. Search query filter
+    const query = searchQuery.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      project.title.toLowerCase().includes(query) ||
+      project.tagline.toLowerCase().includes(query) ||
+      project.overview.toLowerCase().includes(query) ||
+      project.tags.some((t) => t.toLowerCase().includes(query)) ||
+      (project.problem && project.problem.toLowerCase().includes(query)) ||
+      (project.solution && project.solution.toLowerCase().includes(query));
+
+    return matchesCategory && matchesTag && matchesSearch;
+  });
+
+  // Separate featured UniCash POS when no active search query is filtering results
+  const isSearching = Boolean(searchQuery.trim() || selectedTag !== "All Tags");
+  const featuredProject = !isSearching ? filteredProjects.find((p) => p.id === "unicash-pos") : undefined;
+  const regularProjects = !isSearching
+    ? filteredProjects.filter((p) => p.id !== "unicash-pos")
+    : filteredProjects;
 
   return (
     <section id="projects" className="py-20 md:py-28">
@@ -44,6 +80,73 @@ export function Projects({ projects, categories }: ProjectsProps) {
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left Column: Projects Catalog */}
           <div className="flex-1 min-w-0 w-full">
+            {/* Search Input Bar & Technology Filter Chips */}
+            <div className="mb-6 space-y-3">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search projects by keyword, tech, or feature (e.g. React, Java, POS, Offline)..."
+                  className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-[#0B0D16]/95 border border-white/10 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all font-mono"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white"
+                    aria-label="Clear project search query"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
+              {/* Quick Tag Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider shrink-0 mr-1">
+                  Stack:
+                </span>
+                {POPULAR_TAGS.map((tag) => {
+                  const isTagActive = selectedTag === tag;
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => setSelectedTag(tag)}
+                      className={`text-[11px] font-mono px-3 py-1 rounded-full whitespace-nowrap transition-all ${
+                        isTagActive
+                          ? "bg-cyan-950/80 text-cyan-300 border border-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.3)] font-semibold"
+                          : "border border-white/5 bg-white/5 text-slate-400 hover:text-slate-200 hover:border-white/15"
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+                {(searchQuery || selectedTag !== "All Tags" || selectedCategory !== "All") && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedTag("All Tags");
+                      setSelectedCategory("All");
+                    }}
+                    className="text-[10px] font-mono text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded-full border border-rose-500/20 bg-rose-950/20 whitespace-nowrap transition-colors ml-auto"
+                  >
+                    Reset Filters
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Mobile Category Filter Rail (< lg screens) */}
             <div className="lg:hidden mb-6 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
               <div className="flex items-center gap-1.5 min-w-max p-1.5 rounded-full bg-[#0B0D16]/95 border border-white/10 shadow-lg">
@@ -70,9 +173,20 @@ export function Projects({ projects, categories }: ProjectsProps) {
             {/* Empty State */}
             {filteredProjects.length === 0 ? (
               <div className="p-12 text-center rounded-3xl border border-white/10 bg-[#0B0D16]/95">
-                <p className="text-sm text-slate-400">
-                  No archive entries match the selected category.
+                <p className="text-sm text-slate-400 mb-3">
+                  No archive entries match the current search filters.
                 </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedTag("All Tags");
+                    setSelectedCategory("All");
+                  }}
+                  className="text-xs font-mono text-cyan-300 hover:text-white px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-950/40"
+                >
+                  Clear Search & Filters
+                </button>
               </div>
             ) : (
               <div className="space-y-8">

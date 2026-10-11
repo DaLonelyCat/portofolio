@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
 import { BackToTop } from "@/components/BackToTop";
 import { RocketCursor } from "@/components/RocketCursor";
+import { OrreryHUD } from "@/components/OrreryHUD";
 
 const SolarSystemBackground = dynamic(
   () =>
@@ -103,6 +104,9 @@ export default function Home() {
 
         {/* Back to Top Floating Button */}
         <BackToTop />
+
+        {/* 3D Solar System Orrery Observatory HUD */}
+        <OrreryHUD />
       </div>
 
       {/* Notification Toast */}

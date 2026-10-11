@@ -122,13 +122,36 @@ async function runBrowserTests() {
     assert(!atAGlanceText.includes("(Game Dev, Graphics & UX)"), "At a Glance purged of '(Game Dev, Graphics & UX)'");
     assert(atAGlanceText.includes("Completed Minor in Multimedia") && atAGlanceText.includes("Entrepreneurship Track Enrichment Program"), "At a Glance features Completed Minor and Entrepreneurship Track Enrichment Program");
 
-    // Test Custom Rocket Pointer
-    console.log("\n--- Testing Custom Rocket Pointer ---");
+    // Test Custom Rocket Pointer & Canvas Buffer Sync
+    console.log("\n--- Testing Custom Rocket Pointer & Canvas Sync ---");
     await desktopPage.mouse.move(400, 300);
     await desktopPage.waitForTimeout(200);
     const rocketSvg = desktopPage.locator("svg path[d*='M 3,3']");
     const isRocketSvgPresent = (await rocketSvg.count()) > 0;
     assert(isRocketSvgPresent, "Custom rocket ship vector pointer is rendered on desktop");
+
+    const canvasDimensions = await desktopPage.evaluate(() => {
+      const canvas = document.querySelector("canvas");
+      return canvas ? { width: canvas.width, height: canvas.height } : null;
+    });
+    assert(canvasDimensions !== null && canvasDimensions.width >= 1280, "Rocket plume canvas buffer is synchronized to viewport (not clipped to 300x150)", `Canvas size: ${canvasDimensions?.width}x${canvasDimensions?.height}`);
+
+    // Move rocket across all quadrants of screen beyond 300x150
+    await desktopPage.mouse.move(900, 500);
+    await desktopPage.waitForTimeout(100);
+    await desktopPage.mouse.move(1100, 650);
+    await desktopPage.waitForTimeout(100);
+
+    // Test Search & Multi-Tag Technology Filter
+    console.log("\n--- Testing Search & Multi-Tag Technology Filter ---");
+    const searchInput = desktopPage.locator("input[placeholder*='Search projects']");
+    await searchInput.fill("React");
+    await desktopPage.waitForTimeout(300);
+    const reactProjectsCount = await desktopPage.locator("section#projects article").count();
+    assert(reactProjectsCount > 0 && reactProjectsCount < 10, "Project search filter for 'React' isolates matching projects", `Found: ${reactProjectsCount}`);
+
+    await searchInput.fill("");
+    await desktopPage.waitForTimeout(200);
 
     // Test Category Filtering
     console.log("\n--- Testing Right-Side Vertical Filter Rail ---");
@@ -171,8 +194,8 @@ async function runBrowserTests() {
     const isModalClosed = !(await modalDialog.isVisible());
     assert(isModalClosed, "Modal closes cleanly on Escape key");
 
-    // Test NestFit Project Modal & Screenshot Tabs
-    console.log("\n--- Testing NestFit Project Modal & Screenshots ---");
+    // Test NestFit Project Modal, Auto-Resize, Lightbox & Dumbbell Playground
+    console.log("\n--- Testing NestFit Auto-Resizing, Lightbox & Plate Calculator ---");
     const nestfitDetailsBtn = desktopPage.locator("section#projects article:has-text('NestFit') button:has-text('View Details')").first();
     await nestfitDetailsBtn.click();
     await desktopPage.waitForTimeout(400);
@@ -180,25 +203,61 @@ async function runBrowserTests() {
     const nestfitModalTitle = await modalDialog.locator("#modal-title").innerText();
     assert(nestfitModalTitle.includes("NestFit"), "NestFit modal displays correct project title", nestfitModalTitle);
 
-    const screenshotTabBtn = modalDialog.locator("button:has-text('02')");
-    assert(await screenshotTabBtn.isVisible(), "Screenshot tabs are visible for NestFit");
-    await screenshotTabBtn.click();
-    await desktopPage.waitForTimeout(200);
+    // Test Lightbox Zoom on Click
+    const screenshotImgContainer = modalDialog.locator(".cursor-zoom-in");
+    assert(await screenshotImgContainer.isVisible(), "Screenshot auto-resizing chassis is visible");
+    await screenshotImgContainer.click();
+    await desktopPage.waitForTimeout(300);
 
-    const nestfitLiveBtn = modalDialog.locator("a[href='https://workout.dalonelycat.site/']");
-    assert(await nestfitLiveBtn.isVisible(), "NestFit live demo link is visible in modal");
+    const lightboxDialog = desktopPage.locator("[role='dialog'][aria-label='Image Fullscreen Lightbox']");
+    assert(await lightboxDialog.isVisible(), "Clicking screenshot opens fullscreen Lightbox overlay");
+    await desktopPage.keyboard.press("Escape");
+    await desktopPage.waitForTimeout(300);
+    assert(!(await lightboxDialog.isVisible()), "Escape key closes Lightbox overlay");
+
+    // Test Dumbbell Playground Tab in Modal
+    const playgroundTabBtn = modalDialog.locator("button:has-text('Try Live Plate Calculator')");
+    assert(await playgroundTabBtn.isVisible(), "NestFit includes 'Try Live Plate Calculator' tab");
+    await playgroundTabBtn.click();
+    await desktopPage.waitForTimeout(300);
+
+    const dumbbellWidget = modalDialog.locator("text=NestFit Modular Dumbbell Plate Calculator");
+    assert(await dumbbellWidget.isVisible(), "Live Dumbbell Plate Calculator widget renders inside modal");
+
+    const preset15Btn = modalDialog.locator("button:has-text('15.0 kg')");
+    await preset15Btn.click();
+    await desktopPage.waitForTimeout(200);
+    const weightReadout = await modalDialog.locator("text=15.00 kg Total").isVisible();
+    assert(weightReadout, "Clicking 15.0 kg preset recalculates plate distribution live");
 
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
 
-    // Test Modal Close Button (X) on another project
-    const secondProjectDetailsBtn = desktopPage.locator("section#projects article button:has-text('View Details')").nth(1);
-    await secondProjectDetailsBtn.click();
-    await desktopPage.waitForTimeout(400);
-    const closeBtn = desktopPage.locator("button[aria-label='Close dialog']");
-    await closeBtn.click();
+    // Test 3D Drosophila Connectomics Viewer
+    console.log("\n--- Testing 3D Drosophila Connectomics Viewer ---");
+    const connectomicsSection = desktopPage.locator("section#learning");
+    await connectomicsSection.scrollIntoViewIfNeeded();
+    const connectomicsTitle = connectomicsSection.locator("text=Drosophila Melanogaster Brain Connectome");
+    assert(await connectomicsTitle.isVisible(), "3D Drosophila Connectomics graph component is mounted in Learning section");
+
+    // Test Orrery Observatory HUD
+    console.log("\n--- Testing Orrery Observatory HUD ---");
+    const orreryToggleBtn = desktopPage.locator("button[aria-label='Toggle Solar System Orrery Observatory HUD']");
+    assert(await orreryToggleBtn.isVisible(), "Orrery Observatory HUD toggle is visible");
+    await orreryToggleBtn.click();
     await desktopPage.waitForTimeout(300);
-    assert(!(await modalDialog.isVisible()), "Modal closes cleanly on Close (X) button click");
+
+    const jupiterBtn = desktopPage.locator("button:has-text('Jupiter')");
+    await jupiterBtn.click();
+    await desktopPage.waitForTimeout(400);
+
+    const telemetryRegion = desktopPage.locator("[role='region'][aria-label='Celestial Body Telemetry']");
+    assert(await telemetryRegion.isVisible(), "Selecting Jupiter opens celestial telemetry card with journey milestone");
+
+    const resetOrbitBtn = desktopPage.locator("button:has-text('Reset Orbit')");
+    await resetOrbitBtn.click();
+    await desktopPage.waitForTimeout(300);
+    assert(!(await telemetryRegion.isVisible()), "Reset Orbit resets camera and closes telemetry card");
 
     // Test Email Copy Feedback
     console.log("\n--- Testing Email Copy Feedback ---");

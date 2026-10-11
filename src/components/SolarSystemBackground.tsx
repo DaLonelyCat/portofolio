@@ -458,7 +458,37 @@ export function SolarSystemBackground() {
       });
     }
 
-    // 5. Interactive Spherical Orbit Controller (Locked to Central Sun)
+    // 5. Interactive Spherical Orbit Controller & Raycaster
+    const raycaster = new THREE.Raycaster();
+    const mouseVec = new THREE.Vector2();
+    let downPointerX = 0;
+    let downPointerY = 0;
+
+    let targetBodyName: string | null = null;
+    const currentLookAt = new THREE.Vector3(0, 0, 0);
+    const targetLookAt = new THREE.Vector3(0, 0, 0);
+    const tempTargetPos = new THREE.Vector3();
+
+    let isWarping = false;
+    let warpSpeed = 1.0;
+
+    const handleFlyTo = (e: Event) => {
+      const customEvent = e as CustomEvent<{ name: string }>;
+      targetBodyName = customEvent.detail?.name || null;
+    };
+
+    const handleResetOrbit = () => {
+      targetBodyName = null;
+    };
+
+    const handleWarpStart = () => { isWarping = true; };
+    const handleWarpEnd = () => { isWarping = false; };
+
+    window.addEventListener("celestial-camera-fly", handleFlyTo);
+    window.addEventListener("celestial-camera-reset", handleResetOrbit);
+    window.addEventListener("rocket-hyperdrive-start", handleWarpStart);
+    window.addEventListener("rocket-hyperdrive-end", handleWarpEnd);
+
     let isDragging = false;
     let lastPointerX = 0;
     let lastPointerY = 0;
@@ -476,6 +506,8 @@ export function SolarSystemBackground() {
       if (e.button !== 0) return; // Only primary left click
       if (isInteractiveElement(e.target)) return; // Never block UI buttons, links, or modals
 
+      downPointerX = e.clientX;
+      downPointerY = e.clientY;
       isDragging = true;
       lastPointerX = e.clientX;
       lastPointerY = e.clientY;
@@ -501,8 +533,27 @@ export function SolarSystemBackground() {
       velocityPhi = deltaPhi;
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e: PointerEvent) => {
       isDragging = false;
+
+      // Click detection: raycast to select clicked celestial body
+      if (Math.hypot(e.clientX - downPointerX, e.clientY - downPointerY) < 6) {
+        if (!isInteractiveElement(e.target)) {
+          mouseVec.x = (e.clientX / window.innerWidth) * 2 - 1;
+          mouseVec.y = -(e.clientY / window.innerHeight) * 2 + 1;
+          raycaster.setFromCamera(mouseVec, camera);
+          const pickables = [sunMesh, ...planetRuntimes.map((p) => p.mesh)];
+          const intersects = raycaster.intersectObjects(pickables, false);
+          if (intersects.length > 0) {
+            const hit = intersects[0].object;
+            const hitName = hit === sunMesh ? "Sun" : planetRuntimes.find((p) => p.mesh === hit)?.data.name;
+            if (hitName) {
+              targetBodyName = hitName;
+              window.dispatchEvent(new CustomEvent("celestial-select", { detail: { name: hitName } }));
+            }
+          }
+        }
+      }
     };
 
     window.addEventListener("pointerdown", handlePointerDown);
@@ -544,23 +595,55 @@ export function SolarSystemBackground() {
       // Update Starfield GPU Twinkling
       starShaderMat.uniforms.uTime.value = elapsed;
 
-      // Update Camera Spherical Orbit (Camera strictly locked to orbiting the Sun at (0, 0, 0))
-      if (!isDragging) {
-        if (Math.abs(velocityTheta) > 0.00005 || Math.abs(velocityPhi) > 0.00005) {
-          orbitTheta += velocityTheta;
-          orbitPhi = Math.max(0.22, Math.min(Math.PI * 0.74, orbitPhi + velocityPhi));
-          velocityTheta *= 0.93;
-          velocityPhi *= 0.93;
-        } else if (!prefersReducedMotion) {
-          // Autonomous celestial spin
-          orbitTheta += delta * 0.035;
+      // Update Camera Position and Target Focus
+      if (targetBodyName) {
+        if (targetBodyName === "Sun") {
+          targetLookAt.set(0, 0, 0);
+          tempTargetPos.set(0, 5, 12);
+        } else {
+          const targetRuntime = planetRuntimes.find(
+            (p) => p.data.name.toLowerCase() === targetBodyName?.toLowerCase()
+          );
+          if (targetRuntime) {
+            targetRuntime.mesh.getWorldPosition(targetLookAt);
+            const offsetDist = Math.max(3.2, targetRuntime.data.radius * 4.2);
+            tempTargetPos.set(
+              targetLookAt.x + offsetDist * 0.75,
+              targetLookAt.y + offsetDist * 0.5,
+              targetLookAt.z + offsetDist * 0.75
+            );
+          }
         }
+        camera.position.lerp(tempTargetPos, delta * 3.0);
+        currentLookAt.lerp(targetLookAt, delta * 3.5);
+        camera.lookAt(currentLookAt);
+      } else {
+        targetLookAt.set(0, 0, 0);
+        currentLookAt.lerp(targetLookAt, delta * 3.0);
+
+        // Update Camera Spherical Orbit (Camera strictly locked to orbiting the Sun at (0, 0, 0))
+        if (!isDragging) {
+          if (Math.abs(velocityTheta) > 0.00005 || Math.abs(velocityPhi) > 0.00005) {
+            orbitTheta += velocityTheta;
+            orbitPhi = Math.max(0.22, Math.min(Math.PI * 0.74, orbitPhi + velocityPhi));
+            velocityTheta *= 0.93;
+            velocityPhi *= 0.93;
+          } else if (!prefersReducedMotion) {
+            orbitTheta += delta * 0.035;
+          }
+        }
+
+        const targetCamX = orbitRadius * Math.sin(orbitPhi) * Math.sin(orbitTheta);
+        const targetCamY = orbitRadius * Math.cos(orbitPhi);
+        const targetCamZ = orbitRadius * Math.sin(orbitPhi) * Math.cos(orbitTheta);
+
+        camera.position.lerp(tempTargetPos.set(targetCamX, targetCamY, targetCamZ), delta * 2.8);
+        camera.lookAt(currentLookAt);
       }
 
-      camera.position.x = orbitRadius * Math.sin(orbitPhi) * Math.sin(orbitTheta);
-      camera.position.y = orbitRadius * Math.cos(orbitPhi);
-      camera.position.z = orbitRadius * Math.sin(orbitPhi) * Math.cos(orbitTheta);
-      camera.lookAt(0, 0, 0);
+      // Starfield warp speed acceleration
+      const targetWarpMult = isWarping ? 5.5 : 1.0;
+      warpSpeed += (targetWarpMult - warpSpeed) * delta * 4;
 
       if (!prefersReducedMotion) {
         // Central Sun axial rotation and corona breathing pulse
@@ -667,6 +750,10 @@ export function SolarSystemBackground() {
       window.removeEventListener("pointercancel", handlePointerUp);
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("celestial-camera-fly", handleFlyTo);
+      window.removeEventListener("celestial-camera-reset", handleResetOrbit);
+      window.removeEventListener("rocket-hyperdrive-start", handleWarpStart);
+      window.removeEventListener("rocket-hyperdrive-end", handleWarpEnd);
 
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);

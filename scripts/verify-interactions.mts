@@ -269,6 +269,43 @@ expectedNestfitFiles.forEach((file) => {
 });
 
 // ----------------------------------------------------
+// 13. Feature Enhancements & Rocket Plume Fix Test
+// ----------------------------------------------------
+console.log("\n--- 13. Feature Enhancements & Rocket Plume Fix Test ---");
+
+// Orrery HUD
+const orreryExists = fs.existsSync(path.join(process.cwd(), "src/components/OrreryHUD.tsx"));
+assert(orreryExists, "OrreryHUD.tsx exists in components");
+assert(pageContent.includes("OrreryHUD"), "page.tsx mounts OrreryHUD");
+
+const orreryContent = fs.readFileSync(path.join(process.cwd(), "src/components/OrreryHUD.tsx"), "utf-8");
+assert(orreryContent.includes("CELESTIAL_BODIES") && orreryContent.includes("celestial-camera-fly"), "OrreryHUD defines celestial bodies and camera fly events");
+
+// Connectomics 3D Neural Graph
+const connectomicsExists = fs.existsSync(path.join(process.cwd(), "src/components/ConnectomicsViewer.tsx"));
+assert(connectomicsExists, "ConnectomicsViewer.tsx exists in components");
+
+const learningUpdated = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
+assert(learningUpdated.includes("ConnectomicsViewer"), "Learning.tsx mounts ConnectomicsViewer component");
+
+// Dumbbell Playground
+const dumbbellExists = fs.existsSync(path.join(process.cwd(), "src/components/DumbbellPlayground.tsx"));
+assert(dumbbellExists, "DumbbellPlayground.tsx exists in components");
+
+const modalUpdated = fs.readFileSync(path.join(process.cwd(), "src/components/ProjectModal.tsx"), "utf-8");
+assert(modalUpdated.includes("DumbbellPlayground"), "ProjectModal.tsx imports DumbbellPlayground");
+assert(modalUpdated.includes("isLightboxOpen") && modalUpdated.includes("aspectRatios"), "ProjectModal.tsx implements auto-resizing chassis and lightbox zoom overlay");
+
+// Project Search & Tag Filters
+const projectsUpdated = fs.readFileSync(path.join(process.cwd(), "src/components/Projects.tsx"), "utf-8");
+assert(projectsUpdated.includes("searchQuery") && projectsUpdated.includes("POPULAR_TAGS"), "Projects.tsx features instant search query input and technology stack tag filters");
+
+// Rocket Plume Canvas Fix & Hyperdrive
+const rocketUpdated = fs.readFileSync(path.join(process.cwd(), "src/components/RocketCursor.tsx"), "utf-8");
+assert(rocketUpdated.includes("syncCanvasSize") && rocketUpdated.includes("setTransform(dpr"), "RocketCursor implements dynamic canvas buffer synchronization with DPR scaling");
+assert(rocketUpdated.includes("triggerHyperdrive") && rocketUpdated.includes("rocket-hyperdrive-start"), "RocketCursor implements Hyperdrive warp speed easter egg");
+
+// ----------------------------------------------------
 // Summary
 // ----------------------------------------------------
 console.log("\n=================================================");

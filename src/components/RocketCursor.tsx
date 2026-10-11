@@ -10,12 +10,16 @@ interface Particle {
   life: number;
   size: number;
   color: string;
+  decay?: number;
+  alphaMultiplier?: number;
+  glow?: boolean;
 }
 
 export function RocketCursor() {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  const [isWarping, setIsWarping] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isTextInput, setIsTextInput] = useState(false);
 
@@ -27,8 +31,21 @@ export function RocketCursor() {
   const animFrameRef = useRef<number | null>(null);
   const prefersReducedMotionRef = useRef(false);
 
+  // Sync canvas bitmap dimensions to real viewport and device pixel ratio
+  const syncCanvasSize = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+    }
+  };
+
   useEffect(() => {
-    // Only enable on desktop devices with fine pointer and hover support (never on mobile touch screens)
+    // Only enable on desktop devices with fine pointer and hover support
     const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
     const isMobileViewport = window.innerWidth < 768;
     if (!mediaQuery.matches || isMobileViewport) return;
@@ -39,6 +56,37 @@ export function RocketCursor() {
     prefersReducedMotionRef.current = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
+
+    const triggerHyperdrive = () => {
+      if (prefersReducedMotionRef.current) return;
+      setIsWarping(true);
+      window.dispatchEvent(new CustomEvent("rocket-hyperdrive-start"));
+
+      // Spawn immediate burst of warp sparks
+      const nozzleX = posRef.current.x + 18;
+      const nozzleY = posRef.current.y + 18;
+      for (let i = 0; i < 12; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1.5 + Math.random() * 3.5;
+        particlesRef.current.push({
+          x: nozzleX,
+          y: nozzleY,
+          vx: Math.cos(angle) * speed + 1.2,
+          vy: Math.sin(angle) * speed + 1.2,
+          life: 1.0,
+          size: 2.5 + Math.random() * 2.5,
+          color: i % 2 === 0 ? "#00F0FF" : "#FFFFFF",
+          decay: 0.02,
+          alphaMultiplier: 1.0,
+          glow: true,
+        });
+      }
+
+      setTimeout(() => {
+        setIsWarping(false);
+        window.dispatchEvent(new CustomEvent("rocket-hyperdrive-end"));
+      }, 1800);
+    };
 
     const handlePointerMove = (e: PointerEvent) => {
       posRef.current.x = e.clientX;
@@ -57,29 +105,49 @@ export function RocketCursor() {
         setIsTextInput(isText);
       }
 
-      // Spawn subtle exhaust particle trail when moving
+      // Spawn continuous interpolated exhaust particle trail across full screen
       if (!prefersReducedMotionRef.current && !isTextInput) {
-        const dx = e.clientX - posRef.current.lastX;
-        const dy = e.clientY - posRef.current.lastY;
+        const lastX = posRef.current.lastX;
+        const lastY = posRef.current.lastY;
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
         const dist = Math.hypot(dx, dy);
 
-        if (dist > 3 && particlesRef.current.length < 24) {
-          // Nozzle position: tail of the rocket (offset ~18px down-right from tip)
-          const nozzleX = e.clientX + 18;
-          const nozzleY = e.clientY + 18;
+        if (dist > 3 && lastX !== -100 && lastY !== -100) {
+          const steps = Math.min(3, Math.max(1, Math.floor(dist / 14)));
+          for (let s = 1; s <= steps; s++) {
+            if (particlesRef.current.length >= 36) break;
+            const frac = s / steps;
+            const px = lastX + dx * frac;
+            const py = lastY + dy * frac;
 
-          const colors = ["#00F0FF", "#38BDF8", "#F59E0B", "#FFFFFF"];
-          const color = colors[Math.floor(Math.random() * colors.length)];
+            // Tail nozzle position
+            const nozzleX = px + 18;
+            const nozzleY = py + 18;
 
-          particlesRef.current.push({
-            x: nozzleX,
-            y: nozzleY,
-            vx: (Math.random() - 0.5) * 0.8 - (dx * 0.08),
-            vy: (Math.random() - 0.5) * 0.8 - (dy * 0.08),
-            life: 1.0,
-            size: 1.8 + Math.random() * 1.8,
-            color,
-          });
+            const colors = isWarping
+              ? ["#FFFFFF", "#00F0FF", "#38BDF8", "#818CF8"]
+              : isHovering
+              ? ["#00F0FF", "#38BDF8", "#FFFFFF", "#F59E0B"]
+              : ["#00F0FF", "#38BDF8", "#F59E0B", "#FFFFFF"];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            const spread = isWarping ? 1.6 : 0.8;
+            const speedMult = isWarping ? 0.22 : 0.08;
+
+            particlesRef.current.push({
+              x: nozzleX,
+              y: nozzleY,
+              vx: (Math.random() - 0.2) * spread + 0.3 - (dx * speedMult),
+              vy: (Math.random() - 0.2) * spread + 0.3 - (dy * speedMult),
+              life: 1.0,
+              size: isWarping ? 3.0 + Math.random() * 2.5 : 2.0 + Math.random() * 1.8,
+              color,
+              decay: isWarping ? 0.025 : 0.035,
+              alphaMultiplier: isWarping ? 1.0 : 0.85,
+              glow: isWarping,
+            });
+          }
         }
       }
 
@@ -88,11 +156,38 @@ export function RocketCursor() {
     };
 
     const handlePointerDown = (e: PointerEvent) => {
-      if (e.button === 0) setIsClicking(true);
+      if (e.button === 0) {
+        setIsClicking(true);
+        if (e.shiftKey) {
+          triggerHyperdrive();
+        } else if (!prefersReducedMotionRef.current) {
+          // Click impulse feedback sparks
+          const nozzleX = posRef.current.x + 18;
+          const nozzleY = posRef.current.y + 18;
+          for (let i = 0; i < 4; i++) {
+            particlesRef.current.push({
+              x: nozzleX,
+              y: nozzleY,
+              vx: (Math.random() - 0.5) * 1.5 + 0.6,
+              vy: (Math.random() - 0.5) * 1.5 + 0.6,
+              life: 1.0,
+              size: 2.2 + Math.random() * 1.5,
+              color: "#00F0FF",
+              decay: 0.045,
+              alphaMultiplier: 0.9,
+              glow: true,
+            });
+          }
+        }
+      }
     };
 
     const handlePointerUp = () => {
       setIsClicking(false);
+    };
+
+    const handleDblClick = () => {
+      triggerHyperdrive();
     };
 
     const handleMouseLeave = () => {
@@ -106,17 +201,13 @@ export function RocketCursor() {
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("dblclick", handleDblClick);
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
-    // Canvas resize handling for particles
     const handleResize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
-      }
+      syncCanvasSize();
     };
-    handleResize();
     window.addEventListener("resize", handleResize);
 
     // Animation Loop: Render rocket position and exhaust particles
@@ -127,31 +218,40 @@ export function RocketCursor() {
         cursorRef.current.style.transform = `translate3d(${x - 3}px, ${y - 3}px, 0)`;
       }
 
-      // 2. Render Canvas exhaust particles
+      // 2. Render Canvas exhaust particles across synchronized viewport buffer
       if (canvasRef.current) {
+        syncCanvasSize();
         const ctx = canvasRef.current.getContext("2d");
         if (ctx) {
-          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          ctx.save();
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
           const particles = particlesRef.current;
           for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
             p.x += p.vx;
             p.y += p.vy;
-            p.life -= 0.04;
+            p.life -= p.decay || 0.035;
 
             if (p.life <= 0) {
               particles.splice(i, 1);
             } else {
               ctx.save();
-              ctx.globalAlpha = p.life * 0.75;
+              ctx.globalAlpha = p.life * (p.alphaMultiplier || 0.85);
               ctx.fillStyle = p.color;
+              if (p.glow) {
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = p.color;
+              }
               ctx.beginPath();
-              ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+              ctx.arc(p.x, p.y, Math.max(0.5, p.size * p.life), 0, Math.PI * 2);
               ctx.fill();
               ctx.restore();
             }
           }
+          ctx.restore();
         }
       }
 
@@ -166,11 +266,12 @@ export function RocketCursor() {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("dblclick", handleDblClick);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [isWarping]);
 
   if (!isEnabled) return null;
 
@@ -194,7 +295,9 @@ export function RocketCursor() {
       >
         <div
           className={`relative transition-transform duration-150 ${
-            isClicking
+            isWarping
+              ? "scale-125"
+              : isClicking
               ? "scale-90"
               : isHovering
               ? "scale-115"
@@ -213,13 +316,15 @@ export function RocketCursor() {
             {/* Dynamic Plasma Thruster Flame */}
             <path
               d={
-                isHovering
+                isWarping
+                  ? "M 18,20 C 22,26 28,32 36,36 C 32,28 26,22 20,18 Z"
+                  : isHovering
                   ? "M 18,20 C 20,24 24,28 31,31 C 28,24 24,20 20,18 Z"
                   : isClicking
                   ? "M 18,20 C 20,23 23,26 29,29 C 26,23 23,20 20,18 Z"
                   : "M 18,20 C 19.5,22 22,24.5 26,26 C 24.5,22 22,19.5 20,18 Z"
               }
-              fill={isHovering ? "url(#plasmaFlame)" : "url(#idleFlame)"}
+              fill={isWarping ? "url(#hyperdriveFlame)" : isHovering ? "url(#plasmaFlame)" : "url(#idleFlame)"}
               className="transition-all duration-150 animate-pulse"
             />
 
@@ -298,6 +403,14 @@ export function RocketCursor() {
                 <stop offset="35%" stopColor="#00F0FF" />
                 <stop offset="75%" stopColor="#38BDF8" />
                 <stop offset="100%" stopColor="rgba(0,240,255,0)" />
+              </linearGradient>
+
+              {/* Hyperdrive Warp Flame (Supernova Violet to Starlight Cyan) */}
+              <linearGradient id="hyperdriveFlame" x1="19" y1="19" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#FFFFFF" />
+                <stop offset="30%" stopColor="#00F0FF" />
+                <stop offset="65%" stopColor="#818CF8" />
+                <stop offset="100%" stopColor="rgba(129,140,248,0)" />
               </linearGradient>
             </defs>
           </svg>
