@@ -306,8 +306,25 @@ assert(rocketUpdated.includes("syncCanvasSize") && rocketUpdated.includes("setTr
 assert(rocketUpdated.includes("triggerHyperdrive") && rocketUpdated.includes("rocket-hyperdrive-start"), "RocketCursor implements Hyperdrive warp speed easter egg");
 
 // ----------------------------------------------------
-// Summary
+// 14. Fruqita & Koya Screenshots and View Live Button Test
 // ----------------------------------------------------
+console.log("\n--- 14. Fruqita & Koya Screenshots and View Live Button Test ---");
+
+const fruqitaProject = portfolioData.projects.find((p) => p.id === "fruqita-web");
+assert(!!fruqitaProject, "Fruqita project exists in dataset");
+assert(fruqitaProject?.screenshots?.length === 1, "Fruqita has 1 screenshot registered", `Count: ${fruqitaProject?.screenshots?.length}`);
+assert(fs.existsSync(path.join(process.cwd(), "public/projects/fruqita-storefront.png")), "Public asset fruqita-storefront.png exists");
+
+const koyaProject = portfolioData.projects.find((p) => p.id === "koya-food-review");
+assert(!!koyaProject, "KOYA project exists in dataset");
+assert(koyaProject?.screenshots?.length === 2, "KOYA has 2 screenshots registered", `Count: ${koyaProject?.screenshots?.length}`);
+assert(fs.existsSync(path.join(process.cwd(), "public/projects/koya-feed.png")), "Public asset koya-feed.png exists");
+assert(fs.existsSync(path.join(process.cwd(), "public/projects/koya-profile.png")), "Public asset koya-profile.png exists");
+
+// Verify View Live button text
+assert(modalUpdated.includes("<span>View Live</span>"), "ProjectModal.tsx renders 'View Live' button");
+assert(!modalUpdated.includes("View Live / Download"), "ProjectModal.tsx contains zero 'View Live / Download' mentions");
+
 console.log("\n=================================================");
 console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);
 console.log("=================================================");

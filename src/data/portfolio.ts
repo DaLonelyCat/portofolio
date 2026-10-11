@@ -139,6 +139,18 @@ export const portfolioData: PortfolioData = {
       impact:
         "Created an engaging community platform with fast browsing and transparent dining ratings.",
       tags: ["Next.js", "React", "Tailwind CSS", "MongoDB", "User Auth"],
+      screenshots: [
+        {
+          src: "/projects/koya-feed.png",
+          label: "Community Feed",
+          caption: "Community home feed with restaurant reviews, rating scorecards, and culinary recommendations",
+        },
+        {
+          src: "/projects/koya-profile.png",
+          label: "User Profile",
+          caption: "User profile dashboard showing personal review history, bookmark collections, and follow telemetry",
+        },
+      ],
       repoUrl: "https://github.com/DaLonelyCat/KOYA_Food_Review_Webapp",
       featured: true,
     },
@@ -264,6 +276,13 @@ export const portfolioData: PortfolioData = {
       impact:
         "Established Fruqita's active digital storefront, elevating brand credibility and directing consumer traffic to verified checkout points.",
       tags: ["Web App", "Tailwind CSS", "Vercel", "E-Commerce", "Brand Strategy"],
+      screenshots: [
+        {
+          src: "/projects/fruqita-storefront.png",
+          label: "Storefront & Catalog",
+          caption: "Artisan fruit chips brand storefront featuring product packaging showcase, Shopee checkout, and direct ordering",
+        },
+      ],
       liveUrl: "https://fruqitamlg.vercel.app/",
       featured: true,
     },

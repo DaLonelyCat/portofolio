@@ -188,11 +188,38 @@ async function runBrowserTests() {
     const modalTitle = await modalDialog.locator("#modal-title").innerText();
     assert(modalTitle.includes("UniCash POS System"), "Modal displays correct project title", modalTitle);
 
+    const modalInner = await modalDialog.innerText();
+    assert(!modalInner.includes("View Live / Download"), "Modal contains zero 'View Live / Download' text");
+
     // Test Modal Escape Key Close
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
     const isModalClosed = !(await modalDialog.isVisible());
     assert(isModalClosed, "Modal closes cleanly on Escape key");
+
+    // Test Fruqita modal screenshot & View Live button
+    const fruqitaDetailsBtn = desktopPage.locator("section#projects article:has-text('Fruqita Fruit Chips') button:has-text('View Details')").first();
+    await fruqitaDetailsBtn.scrollIntoViewIfNeeded();
+    await fruqitaDetailsBtn.click();
+    await desktopPage.waitForTimeout(400);
+    const fruqitaLiveBtn = modalDialog.locator("a:has-text('View Live')");
+    assert(await fruqitaLiveBtn.isVisible(), "Fruqita modal renders 'View Live' button");
+    const fruqitaImg = modalDialog.locator("img[src*='fruqita-storefront']");
+    assert(await fruqitaImg.isVisible(), "Fruqita modal displays storefront screenshot");
+    await desktopPage.keyboard.press("Escape");
+    await desktopPage.waitForTimeout(300);
+
+    // Test KOYA modal screenshots
+    const koyaDetailsBtn = desktopPage.locator("section#projects article:has-text('KOYA') button:has-text('View Details')").first();
+    await koyaDetailsBtn.scrollIntoViewIfNeeded();
+    await koyaDetailsBtn.click();
+    await desktopPage.waitForTimeout(400);
+    const koyaFeedImg = modalDialog.locator("img[src*='koya-feed']");
+    assert(await koyaFeedImg.isVisible(), "KOYA modal displays community feed screenshot");
+    const koyaProfileTab = modalDialog.locator("button:has-text('User Profile')");
+    assert(await koyaProfileTab.isVisible(), "KOYA modal displays User Profile screenshot tab");
+    await desktopPage.keyboard.press("Escape");
+    await desktopPage.waitForTimeout(300);
 
     // Test NestFit Project Modal, Auto-Resize, Lightbox & Dumbbell Playground
     console.log("\n--- Testing NestFit Auto-Resizing, Lightbox & Plate Calculator ---");
