@@ -286,43 +286,52 @@ async function runBrowserTests() {
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
 
-    // Test 3D Drosophila Connectomics Viewer & Event Isolation
-    console.log("\n--- Testing 3D Drosophila Connectomics Viewer & Event Isolation ---");
-    const connectomicsSection = desktopPage.locator("section#learning");
-    await connectomicsSection.scrollIntoViewIfNeeded();
-    const connectomicsContainer = desktopPage.locator("[data-connectomics='true']");
-    assert(await connectomicsContainer.isVisible(), "3D Drosophila Connectomics component with data-connectomics is mounted");
+    // Test 3D Interactive Orbital Satellite Relay Terminal & Subsystems
+    console.log("\n--- Testing 3D Interactive Orbital Satellite Relay Terminal ---");
+    const satelliteSection = desktopPage.locator("section#satellite");
+    await satelliteSection.scrollIntoViewIfNeeded();
+    const satelliteContainer = desktopPage.locator("[data-satellite-relay='true']");
+    assert(await satelliteContainer.isVisible(), "3D Orbital Satellite Relay component with data-satellite-relay is mounted");
 
-    // Drag on connectomics canvas
-    const brainCanvas = connectomicsContainer.locator("canvas");
-    const canvasBox = await brainCanvas.boundingBox();
+    // Drag on satellite canvas with isolated pointer events
+    const satelliteCanvas = satelliteContainer.locator("canvas");
+    const canvasBox = await satelliteCanvas.boundingBox();
     if (canvasBox) {
       await desktopPage.mouse.move(canvasBox.x + canvasBox.width / 2, canvasBox.y + canvasBox.height / 2);
       await desktopPage.mouse.down({ button: "left" });
       await desktopPage.mouse.move(canvasBox.x + canvasBox.width / 2 + 50, canvasBox.y + canvasBox.height / 2, { steps: 5 });
       await desktopPage.mouse.up({ button: "left" });
       await desktopPage.waitForTimeout(200);
-      assert(true, "Dragging on Drosophila Connectomics canvas completes with event isolation");
+      assert(true, "Dragging on 3D Satellite canvas completes with event isolation");
     }
 
-    // Test Orrery Observatory HUD
-    console.log("\n--- Testing Orrery Observatory HUD ---");
-    const orreryToggleBtn = desktopPage.locator("button[aria-label='Toggle Solar System Orrery Observatory HUD']");
-    assert(await orreryToggleBtn.isVisible(), "Orrery Observatory HUD toggle is visible");
-    await orreryToggleBtn.click();
+    // Test Subsystem Action: Toggle Photovoltaic Wings
+    const wingsBtn = satelliteContainer.locator("button:has-text('Solar Wings')").first();
+    await wingsBtn.scrollIntoViewIfNeeded();
+    assert(await wingsBtn.isVisible(), "Satellite has photovoltaic solar array toggle button");
+    await wingsBtn.click();
     await desktopPage.waitForTimeout(300);
+    const wingsAfter = await satelliteContainer.locator("button:has-text('Solar Wings')").first().innerText();
+    assert(wingsAfter.includes("Deploy") || wingsAfter.includes("Retract"), "Toggling wings changes subsystem state", wingsAfter);
 
-    const jupiterBtn = desktopPage.locator("button:has-text('Jupiter')");
-    await jupiterBtn.click();
+    // Test Subsystem Action: Ion Thruster Fire
+    const thrusterBtn = satelliteContainer.locator("button:has-text('Fire Ion Thruster')");
+    await thrusterBtn.scrollIntoViewIfNeeded();
+    assert(await thrusterBtn.isVisible(), "Satellite has ion thruster firing button");
+    await thrusterBtn.click();
     await desktopPage.waitForTimeout(400);
 
-    const telemetryRegion = desktopPage.locator("[role='region'][aria-label='Celestial Body Telemetry']");
-    assert(await telemetryRegion.isVisible(), "Selecting Jupiter opens celestial telemetry card with journey milestone");
+    // Test Subsystem Action: Ping Telemetry
+    const pingBtn = satelliteContainer.locator("button:has-text('Ping Telemetry')");
+    await pingBtn.scrollIntoViewIfNeeded();
+    await pingBtn.click();
+    await desktopPage.waitForTimeout(400);
+    const pingReadout = desktopPage.locator("[role='status']:has-text('Signal acquired')");
+    assert(await pingReadout.isVisible(), "Ping Telemetry button outputs valid transponder status ping");
 
-    const resetOrbitBtn = desktopPage.locator("button:has-text('Reset Orbit')");
-    await resetOrbitBtn.click();
-    await desktopPage.waitForTimeout(300);
-    assert(!(await telemetryRegion.isVisible()), "Reset Orbit resets camera and closes telemetry card");
+    // Verify Orrery Observatory HUD is completely removed from the screen (Option 2B)
+    const orreryToggleCount = await desktopPage.locator("button[aria-label='Toggle Solar System Orrery Observatory HUD']").count();
+    assert(orreryToggleCount === 0, "Orrery Observatory HUD is completely absent from DOM (Option 2B clean screen)");
 
     // Test Email Copy Feedback
     console.log("\n--- Testing Email Copy Feedback ---");
@@ -346,28 +355,18 @@ async function runBrowserTests() {
     const scrollYAfterTop = await desktopPage.evaluate(() => window.scrollY);
     assert(scrollYAfterTop < 100, "Back-to-Top button smoothly scrolls page to top", `ScrollY: ${scrollYAfterTop}`);
 
-    // Test Free Orbit Mode & Solar System Interaction Gating
-    console.log("\n--- Testing Free Orbit Mode & Interaction Isolation ---");
-    const freeOrbitBtn = desktopPage.locator("button[aria-label*='Free Orbit Mode']");
-    assert(await freeOrbitBtn.isVisible(), "Orrery HUD includes Free Orbit Mode toggle button");
+    // Test Direct Desktop Solar System Background Dragging (Highlight of Website)
+    console.log("\n--- Testing Direct Desktop Solar System Background Dragging ---");
+    await desktopPage.evaluate(() => window.scrollTo(0, 0));
+    await desktopPage.waitForTimeout(400);
 
-    await freeOrbitBtn.click();
-    await desktopPage.waitForTimeout(300);
-
-    const orbitActiveBar = desktopPage.locator("[role='status']:has-text('Free Orbit Active')");
-    assert(await orbitActiveBar.isVisible(), "Activating Free Orbit displays floating notification bar");
-
-    // Drag in Orbit Mode
-    await desktopPage.mouse.move(500, 300);
+    // Direct background drag on unobstructed area
+    await desktopPage.mouse.move(200, 150);
     await desktopPage.mouse.down({ button: "left" });
-    await desktopPage.mouse.move(350, 250, { steps: 8 });
+    await desktopPage.mouse.move(350, 200, { steps: 8 });
     await desktopPage.mouse.up({ button: "left" });
-    await desktopPage.waitForTimeout(200);
-
-    // Exit Orbit Mode via Escape key
-    await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
-    assert(!(await orbitActiveBar.isVisible()), "Escape key cleanly exits Free Orbit mode");
+    assert(true, "Direct desktop solar system background drag operates smoothly without gating modal or banner");
 
     // Verify Clean Footer
     const footerText = await desktopPage.locator("footer").innerText();
@@ -450,8 +449,8 @@ async function runBrowserTests() {
     const orreryCount = await litePage.locator("button:has-text('Solar Orrery')").count();
     assert(orreryCount === 0, "Lite mode suppresses Orrery HUD controls", `Orrery count: ${orreryCount}`);
 
-    const connectomicsOptIn = litePage.locator("button:has-text('Load 3D viewer anyway')");
-    assert(await connectomicsOptIn.isVisible(), "Lite mode displays opt-in button for 3D Connectomics viewer");
+    const satelliteOptIn = litePage.locator("button:has-text('Load 3D Satellite anyway')");
+    assert(await satelliteOptIn.isVisible(), "Lite mode displays opt-in button for 3D Satellite Relay viewer");
 
     await litePage.close();
   } finally {

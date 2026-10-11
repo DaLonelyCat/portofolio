@@ -14,13 +14,20 @@ import { Footer } from "@/components/Footer";
 import { Toast } from "@/components/Toast";
 import { BackToTop } from "@/components/BackToTop";
 import { RocketCursor } from "@/components/RocketCursor";
-import { OrreryHUD } from "@/components/OrreryHUD";
 import { useLiteMode } from "@/lib/liteMode";
 
 const SolarSystemBackground = dynamic(
   () =>
     import("@/components/SolarSystemBackground").then(
       (mod) => mod.SolarSystemBackground
+    ),
+  { ssr: false }
+);
+
+const SatelliteRelay = dynamic(
+  () =>
+    import("@/components/SatelliteRelay").then(
+      (mod) => mod.SatelliteRelay
     ),
   { ssr: false }
 );
@@ -102,6 +109,9 @@ export default function Home() {
             onCopyEmail={(email) => showToast(`Copied ${email} to clipboard`)}
             onPrintCV={handleExportCV}
           />
+
+          {/* 7. Orbital Satellite Relay Terminal (Interactive 3D Deep Space Comms Unit) */}
+          <SatelliteRelay />
         </main>
 
         {/* Colophon Footer */}
@@ -109,9 +119,6 @@ export default function Home() {
 
         {/* Back to Top Floating Button */}
         <BackToTop />
-
-        {/* 3D Solar System Orrery Observatory HUD (needs the 3D scene, so hidden in lite mode) */}
-        {lite === false && <OrreryHUD />}
       </div>
 
       {/* Notification Toast */}

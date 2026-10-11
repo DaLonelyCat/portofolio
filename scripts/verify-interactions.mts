@@ -273,20 +273,21 @@ expectedNestfitFiles.forEach((file) => {
 // ----------------------------------------------------
 console.log("\n--- 13. Feature Enhancements & Rocket Plume Fix Test ---");
 
-// Orrery HUD
+// Orrery HUD removed in favor of clean screen
 const orreryExists = fs.existsSync(path.join(process.cwd(), "src/components/OrreryHUD.tsx"));
-assert(orreryExists, "OrreryHUD.tsx exists in components");
-assert(pageContent.includes("OrreryHUD"), "page.tsx mounts OrreryHUD");
+assert(!orreryExists, "OrreryHUD.tsx deleted from components");
+assert(!pageContent.includes("OrreryHUD"), "page.tsx contains zero imports or references to OrreryHUD");
 
-const orreryContent = fs.readFileSync(path.join(process.cwd(), "src/components/OrreryHUD.tsx"), "utf-8");
-assert(orreryContent.includes("CELESTIAL_BODIES") && orreryContent.includes("celestial-camera-fly"), "OrreryHUD defines celestial bodies and camera fly events");
-
-// Connectomics 3D Neural Graph
+// Satellite Relay 3D Terminal (replaces Connectomics)
 const connectomicsExists = fs.existsSync(path.join(process.cwd(), "src/components/ConnectomicsViewer.tsx"));
-assert(connectomicsExists, "ConnectomicsViewer.tsx exists in components");
+assert(!connectomicsExists, "ConnectomicsViewer.tsx deleted from components");
 
 const learningUpdated = fs.readFileSync(path.join(process.cwd(), "src/components/Learning.tsx"), "utf-8");
-assert(learningUpdated.includes("ConnectomicsViewer"), "Learning.tsx mounts ConnectomicsViewer component");
+assert(!learningUpdated.includes("ConnectomicsViewer"), "Learning.tsx contains zero ConnectomicsViewer references");
+
+const satelliteExists = fs.existsSync(path.join(process.cwd(), "src/components/SatelliteRelay.tsx"));
+assert(satelliteExists, "SatelliteRelay.tsx exists in components");
+assert(pageContent.includes("SatelliteRelay"), "page.tsx imports and mounts SatelliteRelay at page bottom");
 
 // Dumbbell Playground
 const dumbbellExists = fs.existsSync(path.join(process.cwd(), "src/components/DumbbellPlayground.tsx"));
@@ -330,9 +331,8 @@ assert(!modalUpdated.includes("View Live / Download"), "ProjectModal.tsx contain
 // ----------------------------------------------------
 console.log("\n--- 15. GPA Consistency, Status Badges, Lite Mode & Accessibility ---");
 
-// GPA consistency across dataset, Hero, and Orrery HUD
+// GPA consistency across dataset and Hero
 assert(portfolioData.education[0].notes?.includes("GPA: 3.30") === true, "portfolioData education notes records GPA 3.30", portfolioData.education[0].notes);
-assert(orreryContent.includes("3.30") && !orreryContent.includes("3.82"), "OrreryHUD renders GPA 3.30 with zero references to 3.82");
 assert(heroContent.includes("3.30") && !heroContent.includes("3.82"), "Hero renders GPA 3.30 with zero references to 3.82");
 
 // StatusBadge component and data annotations
@@ -379,25 +379,22 @@ assert(fruqitaProject?.previewUrl === "https://fruqitamlg.vercel.app/", "Fruqita
 assert(rocketUpdated.includes("data-rocket-dock") && rocketUpdated.includes("rounded-full"), "RocketCursor.tsx includes nose-tip docking reticle when hovering clickable targets");
 
 // ----------------------------------------------------
-// 16. Solar System Free Orbit Mode & Connectomics Event Isolation
+// 16. Solar System Direct Desktop Orbit & Satellite Relay Isolation
 // ----------------------------------------------------
-console.log("\n--- 16. Solar System Free Orbit Mode & Connectomics Event Isolation ---");
+console.log("\n--- 16. Solar System Direct Desktop Orbit & Satellite Relay Isolation ---");
 
-// Orrery HUD Free Orbit Mode toggle and status notification
-assert(orreryContent.includes("isOrbitMode") && orreryContent.includes("toggleOrbitMode"), "OrreryHUD implements Free Orbit mode state and toggle");
-assert(orreryContent.includes("Free Orbit Active") && orreryContent.includes("Exit Orbit (Esc)"), "OrreryHUD mounts floating Free Orbit notification bar with Escape dismissal");
-assert(orreryContent.includes("celestial-orbit-mode-change"), "OrreryHUD dispatches celestial-orbit-mode-change custom events");
-
-// SolarSystemBackground interaction gating and touch protection
-assert(solarContent.includes("isOrbitMode") && solarContent.includes("if (!isOrbitMode) return;"), "SolarSystemBackground strictly ignores pointer drag when Free Orbit mode is inactive");
+// SolarSystemBackground: direct desktop background dragging restored as highlight
+assert(!solarContent.includes("isOrbitMode"), "SolarSystemBackground removes isOrbitMode gating so desktop background drag is restored");
 assert(solarContent.includes('if (e.pointerType === "touch") return;'), "SolarSystemBackground suppresses touch events to protect mobile and touchpad page scrolling");
-assert(solarContent.includes("[data-connectomics]") && solarContent.includes("#learning"), "SolarSystemBackground isInteractiveElement explicitly guards Connectomics viewer and Learning section");
+assert(solarContent.includes("[data-satellite-relay]"), "SolarSystemBackground isInteractiveElement explicitly guards SatelliteRelay terminal");
+assert(!solarContent.includes("celestial-select"), "SolarSystemBackground removes distracting planet hit-testing popups");
 
-// ConnectomicsViewer pointer isolation and touch-action
-const connectomicsContent = fs.readFileSync(path.join(process.cwd(), "src/components/ConnectomicsViewer.tsx"), "utf-8");
-assert(connectomicsContent.includes("e.stopPropagation()"), "ConnectomicsViewer calls e.stopPropagation on pointer events to isolate 3D brain rotation");
-assert(connectomicsContent.includes('touchAction = "none"') && connectomicsContent.includes("touch-none"), "ConnectomicsViewer enforces touch-action none on canvas container");
-assert(connectomicsContent.includes('data-connectomics="true"'), "ConnectomicsViewer annotates root container with data-connectomics attribute");
+// SatelliteRelay pointer isolation, touch-action and subsystem controls
+const satelliteContent = fs.readFileSync(path.join(process.cwd(), "src/components/SatelliteRelay.tsx"), "utf-8");
+assert(satelliteContent.includes("e.stopPropagation()"), "SatelliteRelay calls e.stopPropagation on pointer events to isolate 3D spacecraft controls");
+assert(satelliteContent.includes('touchAction = "none"') && satelliteContent.includes("touch-none"), "SatelliteRelay enforces touch-action none on canvas container");
+assert(satelliteContent.includes('data-satellite-relay="true"'), "SatelliteRelay annotates root container with data-satellite-relay attribute");
+assert(satelliteContent.includes("wingsDeployed") && satelliteContent.includes("thrusterFiring") && satelliteContent.includes("dishTracking"), "SatelliteRelay provides deployable wings, ion thruster, and dish tracking subsystems");
 
 console.log("\n=================================================");
 console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);

@@ -9,7 +9,7 @@ interface NavigatorWithHints extends Navigator {
 
 /**
  * Decides whether the heavy visuals (WebGL solar system, rocket plume canvas,
- * Connectomics viewer) should be skipped. Conservative on purpose so normal
+ * Satellite relay 3D viewer) should be skipped. Conservative on purpose so normal
  * laptops keep the full experience.
  *
  * Lite mode turns on for: reduced-motion preference, Data Saver, very low

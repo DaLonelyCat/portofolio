@@ -5,7 +5,7 @@ export const portfolioData: PortfolioData = {
     name: "Christian Emanuel Ikajaya",
     role: "Software Engineer & Builder",
     tagline: "Hello im Christian",
-    bio: "I am a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring 3D Drosophila brain connectomics and agentic AI systems. Completed a Minor in Multimedia at Bina Nusantara University, bridging core software systems with interactive game programming, computer graphics, and user experience design.",
+    bio: "I am a builder and problem solver at heart who uses tech to turn cool ideas into actual, working projects. Currently exploring autonomous multi-agent AI systems, real-time 3D graphics, and spatial computing. Completed a Minor in Multimedia at Bina Nusantara University, bridging core software systems with interactive game programming, computer graphics, and user experience design.",
     philosophy: "Hello im Christian",
     location: "Indonesia (Bina Nusantara University, Open for Remote)",
     status: "Available for software engineering and builder roles",
