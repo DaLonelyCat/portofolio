@@ -471,6 +471,7 @@ export function SolarSystemBackground() {
 
     let isWarping = false;
     let warpSpeed = 1.0;
+    let isOrbitMode = false;
 
     const handleFlyTo = (e: Event) => {
       const customEvent = e as CustomEvent<{ name: string }>;
@@ -484,10 +485,21 @@ export function SolarSystemBackground() {
     const handleWarpStart = () => { isWarping = true; };
     const handleWarpEnd = () => { isWarping = false; };
 
+    const handleOrbitModeChange = (e: Event) => {
+      const customEvent = e as CustomEvent<{ active: boolean }>;
+      isOrbitMode = Boolean(customEvent.detail?.active);
+      if (!isOrbitMode) {
+        isDragging = false;
+        velocityTheta = 0;
+        velocityPhi = 0;
+      }
+    };
+
     window.addEventListener("celestial-camera-fly", handleFlyTo);
     window.addEventListener("celestial-camera-reset", handleResetOrbit);
     window.addEventListener("rocket-hyperdrive-start", handleWarpStart);
     window.addEventListener("rocket-hyperdrive-end", handleWarpEnd);
+    window.addEventListener("celestial-orbit-mode-change", handleOrbitModeChange);
 
     let isDragging = false;
     let lastPointerX = 0;
@@ -498,13 +510,19 @@ export function SolarSystemBackground() {
     const isInteractiveElement = (target: EventTarget | null): boolean => {
       if (!(target instanceof Element)) return false;
       return !!target.closest(
-        'a, button, input, textarea, select, [role="button"], [role="dialog"], [role="menuitem"], summary, pre, code'
+        'a, button, input, textarea, select, [role="button"], [role="dialog"], [role="menuitem"], summary, pre, code, [data-connectomics], #learning'
       );
     };
 
     const handlePointerDown = (e: PointerEvent) => {
+      // Strictly disabled during normal browsing to keep scrolling and page interaction 100% clean
+      if (!isOrbitMode) return;
+      if (e.pointerType === "touch") return; // Touch scrolling on mobile never moves solar system
       if (e.button !== 0) return; // Only primary left click
       if (isInteractiveElement(e.target)) return; // Never block UI buttons, links, or modals
+
+      // Release any previously focused celestial body so the user can look around freely
+      targetBodyName = null;
 
       downPointerX = e.clientX;
       downPointerY = e.clientY;
@@ -516,7 +534,7 @@ export function SolarSystemBackground() {
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
+      if (!isOrbitMode || !isDragging) return;
 
       const dx = e.clientX - lastPointerX;
       const dy = e.clientY - lastPointerY;
@@ -534,9 +552,10 @@ export function SolarSystemBackground() {
     };
 
     const handlePointerUp = (e: PointerEvent) => {
+      if (!isOrbitMode) return;
       isDragging = false;
 
-      // Click detection: raycast to select clicked celestial body
+      // Click detection in Orbit Mode: raycast to select clicked celestial body
       if (Math.hypot(e.clientX - downPointerX, e.clientY - downPointerY) < 6) {
         if (!isInteractiveElement(e.target)) {
           mouseVec.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -754,6 +773,7 @@ export function SolarSystemBackground() {
       window.removeEventListener("celestial-camera-reset", handleResetOrbit);
       window.removeEventListener("rocket-hyperdrive-start", handleWarpStart);
       window.removeEventListener("rocket-hyperdrive-end", handleWarpEnd);
+      window.removeEventListener("celestial-orbit-mode-change", handleOrbitModeChange);
 
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);

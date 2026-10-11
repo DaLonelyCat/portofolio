@@ -332,6 +332,7 @@ export function ConnectomicsViewer() {
     let rotVelY = 0;
 
     const onPointerDown = (e: PointerEvent) => {
+      e.stopPropagation();
       isDragging = true;
       prevX = e.clientX;
       prevY = e.clientY;
@@ -341,6 +342,7 @@ export function ConnectomicsViewer() {
 
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return;
+      e.stopPropagation();
       const dx = e.clientX - prevX;
       const dy = e.clientY - prevY;
       prevX = e.clientX;
@@ -353,14 +355,19 @@ export function ConnectomicsViewer() {
       rotVelX = dy * 0.008;
     };
 
-    const onPointerUp = () => {
-      isDragging = false;
+    const onPointerUp = (e?: PointerEvent) => {
+      if (isDragging) {
+        e?.stopPropagation();
+        isDragging = false;
+      }
     };
 
     const domEl = renderer.domElement;
+    domEl.style.touchAction = "none";
     domEl.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
 
     // Animation Loop
     let animId: number;
@@ -423,6 +430,7 @@ export function ConnectomicsViewer() {
       domEl.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
       window.removeEventListener("resize", onResize);
       renderer.dispose();
     };
@@ -436,7 +444,10 @@ export function ConnectomicsViewer() {
       : NEUROPIL_NODES.filter((n) => n.circuit === activeCircuit);
 
   return (
-    <div className="rounded-3xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-2xl p-6 sm:p-7 shadow-[0_4px_25px_rgba(0,0,0,0.8)]">
+    <div
+      data-connectomics="true"
+      className="rounded-3xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-2xl p-6 sm:p-7 shadow-[0_4px_25px_rgba(0,0,0,0.8)]"
+    >
       {/* Visualizer Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-4 border-b border-white/10">
         <div>
@@ -470,7 +481,7 @@ export function ConnectomicsViewer() {
         {/* Left: 3D Interactive WebGL Brain Canvas */}
         <div className="lg:col-span-7">
           <div className="relative w-full h-[320px] rounded-2xl overflow-hidden border border-white/10 bg-black/60 shadow-inner flex items-center justify-center">
-            <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+            <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing touch-none" />
             
             {/* Visualizer Watermark overlay */}
             <div className="absolute top-3 left-3 text-[10px] font-mono text-slate-400 bg-black/70 px-2.5 py-1 rounded-full border border-white/10 backdrop-blur-md pointer-events-none">

@@ -128,6 +128,7 @@ export const CELESTIAL_BODIES: CelestialBodyInfo[] = [
 export function OrreryHUD() {
   const [selectedBody, setSelectedBody] = useState<CelestialBodyInfo | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOrbitMode, setIsOrbitMode] = useState(false);
 
   useEffect(() => {
     const handleSelect = (e: Event) => {
@@ -159,8 +160,55 @@ export function OrreryHUD() {
     window.dispatchEvent(new CustomEvent("celestial-camera-reset"));
   };
 
+  const toggleOrbitMode = () => {
+    const next = !isOrbitMode;
+    setIsOrbitMode(next);
+    window.dispatchEvent(
+      new CustomEvent("celestial-orbit-mode-change", { detail: { active: next } })
+    );
+  };
+
+  const exitOrbitMode = () => {
+    setIsOrbitMode(false);
+    window.dispatchEvent(
+      new CustomEvent("celestial-orbit-mode-change", { detail: { active: false } })
+    );
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOrbitMode) {
+        exitOrbitMode();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOrbitMode]);
+
   return (
     <>
+      {/* Floating Free Orbit Mode Notification Bar (Top Center) */}
+      {isOrbitMode && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-2.5 rounded-full border border-cyan-400/50 bg-[#0B0D16]/95 backdrop-blur-2xl shadow-[0_0_30px_rgba(0,240,255,0.3)] text-xs font-mono text-white animate-in fade-in slide-in-from-top-4 duration-300 no-print"
+        >
+          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
+          <span className="font-semibold text-cyan-300">Free Orbit Active</span>
+          <span className="text-slate-400 hidden sm:inline">•</span>
+          <span className="text-slate-300 hidden sm:inline">Drag anywhere to rotate camera</span>
+          <button
+            type="button"
+            onClick={exitOrbitMode}
+            className="ml-2 px-3 py-1 rounded-full bg-cyan-400 text-black font-semibold hover:bg-cyan-300 transition-colors shadow-sm"
+            aria-label="Exit Solar System Free Orbit Mode"
+          >
+            Exit Orbit (Esc)
+          </button>
+        </div>
+      )}
+
       {/* Floating Orrery Controller Pill (Bottom Left) */}
       <div className="fixed bottom-6 left-6 z-40 flex flex-col items-start gap-3 no-print">
         {/* Active Celestial Telemetry Drawer / Card */}
@@ -234,9 +282,13 @@ export function OrreryHUD() {
                 </svg>
               </a>
 
-              <span className="text-[10px] font-mono text-slate-500">
-                Left-click & drag to spin
-              </span>
+              <button
+                type="button"
+                onClick={toggleOrbitMode}
+                className="text-[10px] font-mono text-cyan-400 hover:text-cyan-300 hover:underline"
+              >
+                {isOrbitMode ? "Exit Free Orbit" : "Enter Free Orbit"}
+              </button>
             </div>
           </div>
         )}
@@ -277,7 +329,7 @@ export function OrreryHUD() {
           </div>
         )}
 
-        {/* Orrery Observatory Toggle Button */}
+        {/* Orrery Observatory & Orbit Mode Toggle Buttons */}
         <div className="flex items-center gap-2">
           {selectedBody && (
             <button
@@ -288,6 +340,24 @@ export function OrreryHUD() {
               Reset Camera
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={toggleOrbitMode}
+            className={`flex items-center gap-2 text-xs font-mono px-4 py-2.5 rounded-full border backdrop-blur-2xl transition-all shadow-xl ${
+              isOrbitMode
+                ? "border-cyan-400 bg-cyan-400 text-black font-semibold shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+                : "border-white/15 bg-[#0B0D16]/95 text-slate-300 hover:text-white hover:border-cyan-400/50"
+            }`}
+            aria-pressed={isOrbitMode}
+            aria-label="Toggle Free Orbit Mode to freely look around the solar system"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <span>{isOrbitMode ? "Exit Orbit" : "Free Orbit"}</span>
+          </button>
 
           <button
             type="button"

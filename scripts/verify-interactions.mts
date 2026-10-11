@@ -378,6 +378,27 @@ assert(fruqitaProject?.previewUrl === "https://fruqitamlg.vercel.app/", "Fruqita
 // Rocket docking reticle
 assert(rocketUpdated.includes("data-rocket-dock") && rocketUpdated.includes("rounded-full"), "RocketCursor.tsx includes nose-tip docking reticle when hovering clickable targets");
 
+// ----------------------------------------------------
+// 16. Solar System Free Orbit Mode & Connectomics Event Isolation
+// ----------------------------------------------------
+console.log("\n--- 16. Solar System Free Orbit Mode & Connectomics Event Isolation ---");
+
+// Orrery HUD Free Orbit Mode toggle and status notification
+assert(orreryContent.includes("isOrbitMode") && orreryContent.includes("toggleOrbitMode"), "OrreryHUD implements Free Orbit mode state and toggle");
+assert(orreryContent.includes("Free Orbit Active") && orreryContent.includes("Exit Orbit (Esc)"), "OrreryHUD mounts floating Free Orbit notification bar with Escape dismissal");
+assert(orreryContent.includes("celestial-orbit-mode-change"), "OrreryHUD dispatches celestial-orbit-mode-change custom events");
+
+// SolarSystemBackground interaction gating and touch protection
+assert(solarContent.includes("isOrbitMode") && solarContent.includes("if (!isOrbitMode) return;"), "SolarSystemBackground strictly ignores pointer drag when Free Orbit mode is inactive");
+assert(solarContent.includes('if (e.pointerType === "touch") return;'), "SolarSystemBackground suppresses touch events to protect mobile and touchpad page scrolling");
+assert(solarContent.includes("[data-connectomics]") && solarContent.includes("#learning"), "SolarSystemBackground isInteractiveElement explicitly guards Connectomics viewer and Learning section");
+
+// ConnectomicsViewer pointer isolation and touch-action
+const connectomicsContent = fs.readFileSync(path.join(process.cwd(), "src/components/ConnectomicsViewer.tsx"), "utf-8");
+assert(connectomicsContent.includes("e.stopPropagation()"), "ConnectomicsViewer calls e.stopPropagation on pointer events to isolate 3D brain rotation");
+assert(connectomicsContent.includes('touchAction = "none"') && connectomicsContent.includes("touch-none"), "ConnectomicsViewer enforces touch-action none on canvas container");
+assert(connectomicsContent.includes('data-connectomics="true"'), "ConnectomicsViewer annotates root container with data-connectomics attribute");
+
 console.log("\n=================================================");
 console.log(`TEST SUITE RESULTS: ${passedTests} / ${totalTests} TESTS PASSED`);
 console.log("=================================================");

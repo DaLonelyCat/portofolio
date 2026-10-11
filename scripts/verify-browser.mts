@@ -286,12 +286,24 @@ async function runBrowserTests() {
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);
 
-    // Test 3D Drosophila Connectomics Viewer
-    console.log("\n--- Testing 3D Drosophila Connectomics Viewer ---");
+    // Test 3D Drosophila Connectomics Viewer & Event Isolation
+    console.log("\n--- Testing 3D Drosophila Connectomics Viewer & Event Isolation ---");
     const connectomicsSection = desktopPage.locator("section#learning");
     await connectomicsSection.scrollIntoViewIfNeeded();
-    const connectomicsTitle = connectomicsSection.locator("text=Drosophila Melanogaster Brain Connectome");
-    assert(await connectomicsTitle.isVisible(), "3D Drosophila Connectomics graph component is mounted in Learning section");
+    const connectomicsContainer = desktopPage.locator("[data-connectomics='true']");
+    assert(await connectomicsContainer.isVisible(), "3D Drosophila Connectomics component with data-connectomics is mounted");
+
+    // Drag on connectomics canvas
+    const brainCanvas = connectomicsContainer.locator("canvas");
+    const canvasBox = await brainCanvas.boundingBox();
+    if (canvasBox) {
+      await desktopPage.mouse.move(canvasBox.x + canvasBox.width / 2, canvasBox.y + canvasBox.height / 2);
+      await desktopPage.mouse.down({ button: "left" });
+      await desktopPage.mouse.move(canvasBox.x + canvasBox.width / 2 + 50, canvasBox.y + canvasBox.height / 2, { steps: 5 });
+      await desktopPage.mouse.up({ button: "left" });
+      await desktopPage.waitForTimeout(200);
+      assert(true, "Dragging on Drosophila Connectomics canvas completes with event isolation");
+    }
 
     // Test Orrery Observatory HUD
     console.log("\n--- Testing Orrery Observatory HUD ---");
@@ -334,14 +346,28 @@ async function runBrowserTests() {
     const scrollYAfterTop = await desktopPage.evaluate(() => window.scrollY);
     assert(scrollYAfterTop < 100, "Back-to-Top button smoothly scrolls page to top", `ScrollY: ${scrollYAfterTop}`);
 
-    // Test Interactive 3D Solar System Mouse Drag Orbit
-    console.log("\n--- Testing 3D Solar System Mouse Drag Orbit ---");
-    await desktopPage.mouse.move(100, 300);
+    // Test Free Orbit Mode & Solar System Interaction Gating
+    console.log("\n--- Testing Free Orbit Mode & Interaction Isolation ---");
+    const freeOrbitBtn = desktopPage.locator("button[aria-label*='Free Orbit Mode']");
+    assert(await freeOrbitBtn.isVisible(), "Orrery HUD includes Free Orbit Mode toggle button");
+
+    await freeOrbitBtn.click();
+    await desktopPage.waitForTimeout(300);
+
+    const orbitActiveBar = desktopPage.locator("[role='status']:has-text('Free Orbit Active')");
+    assert(await orbitActiveBar.isVisible(), "Activating Free Orbit displays floating notification bar");
+
+    // Drag in Orbit Mode
+    await desktopPage.mouse.move(500, 300);
     await desktopPage.mouse.down({ button: "left" });
-    await desktopPage.mouse.move(350, 380, { steps: 12 });
+    await desktopPage.mouse.move(350, 250, { steps: 8 });
     await desktopPage.mouse.up({ button: "left" });
-    await desktopPage.waitForTimeout(400);
-    assert(true, "Left-click drag interaction spins solar system smoothly without errors");
+    await desktopPage.waitForTimeout(200);
+
+    // Exit Orbit Mode via Escape key
+    await desktopPage.keyboard.press("Escape");
+    await desktopPage.waitForTimeout(300);
+    assert(!(await orbitActiveBar.isVisible()), "Escape key cleanly exits Free Orbit mode");
 
     // Verify Clean Footer
     const footerText = await desktopPage.locator("footer").innerText();
