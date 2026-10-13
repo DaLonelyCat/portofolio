@@ -17,9 +17,12 @@ export function BackToTop() {
   }, []);
 
   const scrollToTop = () => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: prefersReducedMotion ? "auto" : "smooth",
     });
   };
 
@@ -30,7 +33,7 @@ export function BackToTop() {
       onClick={scrollToTop}
       type="button"
       aria-label="Scroll back to top of page"
-      className="fixed bottom-6 right-6 z-40 p-3 rounded-full border border-cyan-500/30 bg-[#0B0D16]/85 backdrop-blur-md text-cyan-400 hover:border-cyan-400 hover:bg-cyan-950/50 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all motion-reduce:transition-none focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-xl"
+      className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] right-[calc(1.5rem+env(safe-area-inset-right,0px))] z-40 p-3 rounded-full border border-cyan-500/30 bg-[#0B0D16]/85 backdrop-blur-md text-cyan-400 hover:border-cyan-400 hover:bg-cyan-950/50 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all motion-reduce:transition-none focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-xl min-h-[44px] min-w-[44px] flex items-center justify-center"
     >
       <svg
         className="w-4 h-4"

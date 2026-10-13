@@ -7,6 +7,13 @@ interface SkillsProps {
   categories: SkillCategory[];
 }
 
+const SKILL_THEMES = [
+  { hoverBorder: "hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.12)]" },
+  { hoverBorder: "hover:border-emerald-500/40 hover:shadow-[0_0_20px_rgba(52,211,153,0.12)]" },
+  { hoverBorder: "hover:border-amber-500/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.12)]" },
+  { hoverBorder: "hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(167,139,250,0.12)]" },
+];
+
 export function SkillsSection({ categories }: SkillsProps) {
   return (
     <section id="skills" className="py-20 md:py-28">
@@ -25,15 +32,17 @@ export function SkillsSection({ categories }: SkillsProps) {
 
         {/* 4-Column Capability Matrix */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((cat, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-2xl border border-white/10 bg-[#0B0D16]/95 shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)] transition-all flex flex-col justify-between"
-            >
-              <div>
-                <h3 className="text-base font-medium text-white mb-2">
-                  {cat.title}
-                </h3>
+          {categories.map((cat, idx) => {
+            const theme = SKILL_THEMES[idx % SKILL_THEMES.length];
+            return (
+              <div
+                key={idx}
+                className={`p-6 rounded-2xl border border-white/10 bg-[#0B0D16]/95 shadow-[0_4px_20px_rgba(0,0,0,0.6)] ${theme.hoverBorder} transition-all flex flex-col justify-between`}
+              >
+                <div>
+                  <h3 className="text-base font-medium text-white mb-2">
+                    {cat.title}
+                  </h3>
                 <p className="text-xs text-slate-400 leading-relaxed mb-6 pb-4 border-b border-white/10">
                   {cat.description}
                 </p>
@@ -44,7 +53,7 @@ export function SkillsSection({ categories }: SkillsProps) {
                       <dt className="text-xs font-normal text-white">
                         {skill.name}
                       </dt>
-                      <dd className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                      <dd className="text-xs text-slate-300 mt-0.5 leading-snug">
                         {skill.context}
                       </dd>
                     </div>
@@ -52,7 +61,8 @@ export function SkillsSection({ categories }: SkillsProps) {
                 </dl>
               </div>
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
     </section>

@@ -210,6 +210,9 @@ export function RocketCursor() {
     };
     window.addEventListener("resize", handleResize);
 
+    syncCanvasSize();
+    let hasClearedWhenEmpty = false;
+
     // Animation Loop: Render rocket position and exhaust particles
     const render = () => {
       // 1. Update Rocket DOM position
@@ -219,39 +222,45 @@ export function RocketCursor() {
       }
 
       // 2. Render Canvas exhaust particles across synchronized viewport buffer
-      if (canvasRef.current) {
-        syncCanvasSize();
-        const ctx = canvasRef.current.getContext("2d");
-        if (ctx) {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          ctx.save();
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      const canvas = canvasRef.current;
+      if (canvas) {
+        if (canvas.width !== Math.floor(window.innerWidth * Math.min(window.devicePixelRatio || 1, 2))) {
+          syncCanvasSize();
+        }
+        const particles = particlesRef.current;
+        if (particles.length > 0 || !hasClearedWhenEmpty) {
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            ctx.save();
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-          const particles = particlesRef.current;
-          for (let i = particles.length - 1; i >= 0; i--) {
-            const p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.life -= p.decay || 0.035;
+            for (let i = particles.length - 1; i >= 0; i--) {
+              const p = particles[i];
+              p.x += p.vx;
+              p.y += p.vy;
+              p.life -= p.decay || 0.035;
 
-            if (p.life <= 0) {
-              particles.splice(i, 1);
-            } else {
-              ctx.save();
-              ctx.globalAlpha = p.life * (p.alphaMultiplier || 0.85);
-              ctx.fillStyle = p.color;
-              if (p.glow) {
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = p.color;
+              if (p.life <= 0) {
+                particles.splice(i, 1);
+              } else {
+                ctx.save();
+                ctx.globalAlpha = p.life * (p.alphaMultiplier || 0.85);
+                ctx.fillStyle = p.color;
+                if (p.glow) {
+                  ctx.shadowBlur = 8;
+                  ctx.shadowColor = p.color;
+                }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(0.5, p.size * p.life), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
               }
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, Math.max(0.5, p.size * p.life), 0, Math.PI * 2);
-              ctx.fill();
-              ctx.restore();
             }
+            ctx.restore();
+            hasClearedWhenEmpty = particles.length === 0;
           }
-          ctx.restore();
         }
       }
 

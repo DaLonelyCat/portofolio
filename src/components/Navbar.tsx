@@ -46,10 +46,23 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500 ease-in-out motion-reduce:transition-none ${
-        isScrolled ? "pt-3 sm:pt-4 px-3 sm:px-6" : "pt-0 px-0"
+        isScrolled
+          ? "pt-3 sm:pt-4 pt-[calc(0.75rem+env(safe-area-inset-top,0px))] px-3 sm:px-6"
+          : "pt-0 pt-[env(safe-area-inset-top,0px)] px-0"
       }`}
     >
       <div
@@ -62,7 +75,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
         {/* Brand (Clean, no /station tag) */}
         <a
           href="#"
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-mono tracking-tight text-white hover:text-cyan-400 transition-colors py-1.5 px-2 rounded-full"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-mono tracking-tight text-white hover:text-cyan-400 transition-colors py-1.5 px-2 rounded-full min-h-[44px]"
           aria-label="Home"
         >
           <span className="font-medium text-white">{personal.name.toLowerCase()}</span>
@@ -98,7 +111,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onPrintCV}
-            className="text-xs font-mono text-cyan-400 px-4 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-950/30 hover:border-cyan-400 hover:bg-cyan-950/60 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] backdrop-blur-md transition-all"
+            className="text-xs font-mono text-cyan-400 px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-950/30 hover:border-cyan-400 hover:bg-cyan-950/60 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] backdrop-blur-md transition-all min-h-[44px] flex items-center"
           >
             Read CV
           </a>
@@ -111,7 +124,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onPrintCV}
-            className="text-xs font-mono text-cyan-400 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-950/30 min-h-[38px] flex items-center"
+            className="text-xs font-mono text-cyan-400 px-3.5 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-950/30 min-h-[44px] flex items-center"
           >
             CV
           </a>
@@ -120,7 +133,8 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             type="button"
             aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMobileMenuOpen}
-            className="p-2 text-white rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all min-h-[38px] min-w-[38px] flex items-center justify-center"
+            aria-controls="mobile-navigation-drawer"
+            className="p-2.5 text-white rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {isMobileMenuOpen ? (
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,7 +151,12 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden mt-2 max-w-sm mx-auto rounded-2xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-md p-4 space-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.8),_inset_0_1px_0_0_rgba(255,255,255,0.1)] pointer-events-auto">
+        <div
+          id="mobile-navigation-drawer"
+          role="dialog"
+          aria-label="Mobile Navigation"
+          className="md:hidden mt-2 max-w-sm mx-auto rounded-2xl border border-cyan-500/30 bg-[#0B0D16]/95 backdrop-blur-md p-4 space-y-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.8),_inset_0_1px_0_0_rgba(255,255,255,0.1)] pointer-events-auto max-h-[calc(100vh-5rem-env(safe-area-inset-top,0px))] overflow-y-auto"
+        >
           {navLinks.map((link) => {
             const isActive = activeSection === link.id;
             return (
@@ -145,7 +164,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block text-sm font-mono px-4 py-2.5 rounded-xl transition-all ${
+                className={`block text-sm font-mono px-4 py-3 rounded-xl transition-all min-h-[44px] flex items-center ${
                   isActive
                     ? "text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 font-medium"
                     : "text-white hover:text-cyan-400 hover:bg-cyan-950/30"

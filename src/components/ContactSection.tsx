@@ -26,7 +26,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
         <div className="rounded-3xl border border-cyan-500/30 bg-[#0B0D16]/95 p-8 sm:p-12 shadow-[0_0_35px_rgba(0,0,0,0.8)]">
           <div className="max-w-2xl">
             {/* Clean Section Label */}
-            <div className="inline-flex items-center px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 font-mono text-[11px] mb-4">
+            <div className="inline-flex items-center px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 font-mono text-xs mb-4">
               <span>Contact</span>
             </div>
 
@@ -86,7 +86,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                   href={personal.socials.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400 hover:text-cyan-400 hover:scale-[1.02] transition-all min-h-[38px]"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400 hover:text-cyan-400 hover:scale-[1.02] transition-all min-h-[44px]"
                   aria-label="GitHub profile"
                 >
                   <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
@@ -101,7 +101,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                   href={personal.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400 hover:text-cyan-400 hover:scale-[1.02] transition-all min-h-[38px]"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400 hover:text-cyan-400 hover:scale-[1.02] transition-all min-h-[44px]"
                   aria-label="LinkedIn profile"
                 >
                   <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
@@ -116,7 +116,7 @@ export function ContactSection({ personal, onCopyEmail, onPrintCV }: ContactSect
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onPrintCV}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400 hover:text-cyan-400 hover:scale-[1.02] transition-all min-h-[38px]"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-cyan-400 hover:text-cyan-400 hover:scale-[1.02] transition-all min-h-[44px]"
                 aria-label="Curriculum Vitae PDF"
               >
                 <svg className="w-4 h-4 fill-none stroke-current shrink-0" viewBox="0 0 24 24" strokeWidth={1.75}>

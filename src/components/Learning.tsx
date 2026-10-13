@@ -8,16 +8,25 @@ export function Learning() {
       category: "Artificial Intelligence",
       title: "Autonomous Multi-Agent AI Systems",
       status: "Currently learning",
+      categoryColor: "text-violet-400",
+      badgeColor: "text-violet-300 bg-violet-950/40 border-violet-500/30",
+      hoverBorder: "hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(167,139,250,0.12)]",
     },
     {
       category: "3D Graphics & Spatial Computing",
       title: "WebXR & Real-Time Three.js Shaders",
       status: "Currently learning",
+      categoryColor: "text-cyan-400",
+      badgeColor: "text-cyan-300 bg-cyan-950/40 border-cyan-500/30",
+      hoverBorder: "hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.12)]",
     },
     {
       category: "Systems & Architecture",
       title: "Offline-First Distributed POS Architecture",
       status: "Currently learning",
+      categoryColor: "text-emerald-400",
+      badgeColor: "text-emerald-300 bg-emerald-950/40 border-emerald-500/30",
+      hoverBorder: "hover:border-emerald-500/40 hover:shadow-[0_0_20px_rgba(52,211,153,0.12)]",
     },
   ];
 
@@ -41,10 +50,10 @@ export function Learning() {
           {topics.map((item, idx) => (
             <div
               key={idx}
-              className="p-6 sm:p-7 rounded-2xl border border-white/10 bg-[#0B0D16]/95 shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)] transition-all flex flex-col justify-between"
+              className={`p-6 sm:p-7 rounded-2xl border border-white/10 bg-[#0B0D16]/95 shadow-[0_4px_20px_rgba(0,0,0,0.6)] ${item.hoverBorder} transition-all flex flex-col justify-between`}
             >
               <div>
-                <span className="text-xs font-mono text-cyan-400/90 block mb-3">
+                <span className={`text-xs font-mono ${item.categoryColor} block mb-3`}>
                   {item.category}
                 </span>
                 <h3 className="text-base sm:text-lg font-normal text-white leading-snug mb-6">
@@ -53,7 +62,7 @@ export function Learning() {
               </div>
 
               <div>
-                <span className="inline-block text-xs font-mono text-amber-400 px-3.5 py-1 rounded-full bg-amber-950/40 border border-amber-500/30">
+                <span className={`inline-block text-xs font-mono px-3.5 py-1 rounded-full border ${item.badgeColor}`}>
                   {item.status}
                 </span>
               </div>

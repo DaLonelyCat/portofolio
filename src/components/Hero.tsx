@@ -47,10 +47,10 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
               <a
                 href="#projects"
-                className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono font-medium text-black bg-cyan-400 hover:bg-cyan-300 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+                className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono font-medium text-black bg-cyan-400 hover:bg-cyan-300 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] text-center w-full sm:w-auto"
               >
                 View Projects
               </a>
@@ -60,14 +60,14 @@ export function Hero({ personal, onPrintCV }: HeroProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onPrintCV}
-                className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono text-cyan-400 bg-[#0B0D16]/90 border border-cyan-500/30 hover:border-cyan-400 rounded-full transition-all duration-300"
+                className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono text-cyan-400 bg-[#0B0D16]/90 border border-cyan-500/30 hover:border-cyan-400 rounded-full transition-all duration-300 text-center w-full sm:w-auto"
               >
                 Read CV
               </a>
 
               <a
                 href="#contact"
-                className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono text-white bg-[#0B0D16]/90 border border-white/10 hover:border-white/30 rounded-full transition-all duration-300"
+                className="inline-flex items-center justify-center px-6 py-2.5 min-h-[44px] text-xs sm:text-sm font-mono text-white bg-[#0B0D16]/90 border border-white/10 hover:border-white/30 rounded-full transition-all duration-300 text-center w-full sm:w-auto"
               >
                 Contact Me
               </a>

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Project } from "../types/portfolio";
 import { DumbbellPlayground } from "./DumbbellPlayground";
-import { StatusBadge } from "./StatusBadge";
+import { StatusBadge, getCategoryBadgeClasses } from "./StatusBadge";
 
 type ModalTab = "gallery" | "preview" | "playground";
 
@@ -114,7 +114,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
       }
 
       const target = e.target as HTMLElement | null;
-      if (target?.closest("input, textarea, [contenteditable='true']")) return;
+      if (target?.closest("input, textarea, [contenteditable='true'], [role='tab']")) return;
 
       if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && shotCount > 1 && activeTab === "gallery") {
         e.preventDefault();
@@ -151,6 +151,30 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [project, onClose, isLightboxOpen, shotCount, activeTab]);
+
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number, totalTabs: number, tabIds: ModalTab[]) => {
+    if (totalTabs <= 1) return;
+    let nextIndex = -1;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      nextIndex = (index + 1) % totalTabs;
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      nextIndex = (index - 1 + totalTabs) % totalTabs;
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      e.preventDefault();
+      nextIndex = totalTabs - 1;
+    }
+    if (nextIndex >= 0) {
+      const nextId = tabIds[nextIndex];
+      setActiveTab(nextId);
+      const tabEl = document.getElementById(`modal-tab-${nextId}`);
+      tabEl?.focus();
+    }
+  };
 
   if (!project) return null;
 
@@ -209,14 +233,14 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           <div className="flex items-start justify-between gap-4 pb-6 border-b border-white/10 mb-6">
             <div className="max-w-3xl">
               <div className="flex flex-wrap items-center gap-2 mb-2 text-xs">
-                <span className="text-cyan-400 font-mono px-3 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30">
+                <span className={`font-mono px-3 py-1 rounded-full border ${getCategoryBadgeClasses(project.category)}`}>
                   {project.category}
                 </span>
-                <span className="text-slate-500">•</span>
+                <span className="text-slate-400">•</span>
                 <span className="font-mono text-slate-400">{project.year}</span>
                 {project.id === "unicash-pos" && (
                   <>
-                    <span className="text-slate-500">•</span>
+                    <span className="text-slate-400">•</span>
                     <span className="text-amber-400 font-mono px-3 py-0.5 rounded-full bg-amber-950/40 border border-amber-500/30">
                       PRODUCTION CORE
                     </span>
@@ -224,7 +248,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 )}
                 {project.status && (
                   <>
-                    <span className="text-slate-500">•</span>
+                    <span className="text-slate-400">•</span>
                     <StatusBadge status={project.status} />
                   </>
                 )}
@@ -253,19 +277,31 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           {tabs.length > 1 && (
             <div
               role="tablist"
+              aria-label="Project view modes"
               className="flex flex-wrap items-center gap-2 mb-6 p-1.5 rounded-full bg-white/5 border border-white/10 w-fit"
             >
-              {tabs.map((tab) => (
+              {tabs.map((tab, idx) => (
                 <button
                   key={tab.id}
+                  id={`modal-tab-${tab.id}`}
                   type="button"
                   role="tab"
                   aria-selected={activeTab === tab.id}
+                  aria-controls={`modal-tabpanel-${tab.id}`}
+                  tabIndex={activeTab === tab.id ? 0 : -1}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`text-xs font-mono px-4 py-1.5 rounded-full transition-all ${
+                  onKeyDown={(e) =>
+                    handleTabKeyDown(
+                      e,
+                      idx,
+                      tabs.length,
+                      tabs.map((t) => t.id)
+                    )
+                  }
+                  className={`text-xs font-mono px-4 py-2 rounded-full transition-all min-h-[44px] flex items-center ${
                     activeTab === tab.id
                       ? tab.activeClass
-                      : "text-slate-400 hover:text-white"
+                      : "text-slate-300 hover:text-white"
                   }`}
                 >
                   {tab.label}
@@ -276,20 +312,32 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
           {/* Conditional Views: Plate Calculator, Live Preview, Screenshots */}
           {activeTab === "playground" && hasPlayground ? (
-            <div className="space-y-6">
+            <div
+              role="tabpanel"
+              id={`modal-tabpanel-${activeTab}`}
+              aria-labelledby={`modal-tab-${activeTab}`}
+              tabIndex={0}
+              className="space-y-6 outline-none"
+            >
               <DumbbellPlayground />
               <div className="flex justify-end pt-2">
                 <button
                   type="button"
                   onClick={() => setActiveTab("gallery")}
-                  className="text-xs font-mono text-cyan-300 hover:text-white px-4 py-2 rounded-full border border-white/10 bg-white/5"
+                  className="text-xs font-mono text-cyan-300 hover:text-white px-4 py-2.5 rounded-full border border-white/10 bg-white/5 min-h-[44px] flex items-center"
                 >
                   Return to Screenshots
                 </button>
               </div>
             </div>
           ) : activeTab === "preview" && project.previewUrl ? (
-            <div className="space-y-4">
+            <div
+              role="tabpanel"
+              id={`modal-tabpanel-${activeTab}`}
+              aria-labelledby={`modal-tab-${activeTab}`}
+              tabIndex={0}
+              className="space-y-4 outline-none"
+            >
               <div className="relative w-full h-[60vh] min-h-[420px] rounded-2xl overflow-hidden border border-white/15 bg-black/60">
                 {!previewLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center text-xs font-mono text-slate-400">
@@ -314,7 +362,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   href={project.previewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-950/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all min-h-[38px]"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-950/30 text-cyan-300 hover:text-white hover:border-cyan-400 transition-all min-h-[44px]"
                 >
                   Open in new tab
                 </a>
@@ -324,7 +372,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <button
                     type="button"
                     onClick={() => setActiveTab("gallery")}
-                    className="text-xs font-mono text-cyan-300 hover:text-white px-4 py-2 rounded-full border border-white/10 bg-white/5"
+                    className="text-xs font-mono text-cyan-300 hover:text-white px-4 py-2.5 rounded-full border border-white/10 bg-white/5 min-h-[44px] flex items-center"
                   >
                     Return to Screenshots
                   </button>
@@ -333,7 +381,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </div>
           ) : screenshots.length > 0 ? (
             /* Layout with Screenshots */
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div
+              role="tabpanel"
+              id={`modal-tabpanel-${activeTab}`}
+              aria-labelledby={`modal-tab-${activeTab}`}
+              tabIndex={0}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start outline-none"
+            >
               {/* Left Column: High-Res Screenshot Viewer & Actions */}
               <div className="lg:col-span-7 space-y-4">
                 {/* Auto-Resizing Adaptive Container with Lightbox Click (swipe or use arrow keys to change image) */}
@@ -379,7 +433,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           goShot(-1);
                         }}
                         aria-label="Previous screenshot"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -392,7 +446,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           goShot(1);
                         }}
                         aria-label="Next screenshot"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -402,7 +456,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   )}
 
                   {/* Hover Zoom Pill */}
-                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 pointer-events-none">
+                  <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 pointer-events-none">
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
                     </svg>
@@ -422,7 +476,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                         key={idx}
                         type="button"
                         onClick={() => setActiveShot(idx)}
-                        className={`text-xs font-mono px-3.5 py-1.5 rounded-full border transition-all ${
+                        className={`text-xs font-mono px-3.5 py-1.5 rounded-full border transition-all min-h-[44px] flex items-center ${
                           activeShot === idx
                             ? "border-cyan-400 bg-cyan-400 text-black font-medium shadow-[0_0_12px_rgba(0,240,255,0.4)]"
                             : "border-white/10 bg-white/5 text-slate-400 hover:text-white"
@@ -468,7 +522,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <button
                   onClick={onClose}
                   type="button"
-                  className="ml-auto px-4 py-2 text-xs font-mono text-slate-400 hover:text-white transition-colors"
+                  className="ml-auto px-4 py-2 text-xs font-mono text-slate-400 hover:text-white transition-colors min-h-[44px] flex items-center"
                 >
                   Close
                 </button>
@@ -599,7 +653,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <button
                   onClick={onClose}
                   type="button"
-                  className="px-4 py-2 text-xs font-mono text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 text-xs font-mono text-slate-400 hover:text-white transition-colors min-h-[44px] flex items-center"
                 >
                   Close
                 </button>
@@ -665,7 +719,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           <button
             type="button"
             onClick={() => setIsLightboxOpen(false)}
-            className="absolute -top-12 right-0 p-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
+            className="fixed top-[max(1rem,env(safe-area-inset-top,0px))] right-[max(1rem,env(safe-area-inset-right,0px))] z-[70] p-2.5 rounded-full border border-white/20 bg-black/80 hover:bg-black/95 text-slate-300 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center shadow-2xl"
             aria-label="Close Lightbox Zoom View"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -691,7 +745,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   type="button"
                   onClick={() => goShot(-1)}
                   aria-label="Previous image"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -701,7 +755,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   type="button"
                   onClick={() => goShot(1)}
                   aria-label="Next image"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-full border border-white/20 bg-black/70 hover:bg-black/90 text-slate-200 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

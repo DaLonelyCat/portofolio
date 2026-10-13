@@ -43,7 +43,7 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                       {exp.period} • {exp.location}
                     </span>
                     {exp.current && (
-                      <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border border-cyan-500/40 bg-cyan-950/40 text-cyan-400">
+                      <span className="text-xs font-mono px-2.5 py-0.5 rounded-full border border-cyan-500/40 bg-cyan-950/40 text-cyan-400">
                         CURRENT
                       </span>
                     )}
@@ -73,7 +73,7 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                     {exp.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="text-[11px] font-mono px-2.5 py-0.5 rounded-full border border-white/10 bg-white/5 text-slate-300"
+                        className="text-xs font-mono px-2.5 py-0.5 rounded-full border border-white/10 bg-white/5 text-slate-300"
                       >
                         {tech}
                       </span>
@@ -120,7 +120,7 @@ export function ExperienceSection({ experiences, education }: ExperienceProps) {
                   <span className="text-xs font-mono text-amber-400 block uppercase tracking-wider">
                     Enrichment Program: Entrepreneurship Track
                   </span>
-                  <span className="text-[10px] font-mono text-amber-300 px-2 py-0.5 rounded-full bg-amber-950/40 border border-amber-500/30">
+                  <span className="text-xs font-mono text-amber-300 px-2 py-0.5 rounded-full bg-amber-950/40 border border-amber-500/30">
                     CURRENT
                   </span>
                 </div>

@@ -120,14 +120,19 @@ export function DumbbellPlayground() {
         </div>
 
         {/* Hardware Mode Toggle */}
-        <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/5 border border-white/10">
+        <div
+          role="group"
+          aria-label="Hardware mode selection"
+          className="flex items-center gap-1.5 p-1 rounded-full bg-white/5 border border-white/10"
+        >
           <button
             type="button"
             onClick={() => setHardwareMode("dumbbell")}
-            className={`text-xs font-mono px-3.5 py-1.5 rounded-full transition-all ${
+            aria-pressed={hardwareMode === "dumbbell"}
+            className={`text-xs font-mono px-4 py-2 rounded-full transition-all min-h-[44px] flex items-center ${
               hardwareMode === "dumbbell"
                 ? "bg-cyan-400 text-black font-semibold shadow-[0_0_12px_rgba(0,240,255,0.4)]"
-                : "text-slate-400 hover:text-white"
+                : "text-slate-300 hover:text-white"
             }`}
           >
             Single DB (1.5 kg Base)
@@ -135,10 +140,11 @@ export function DumbbellPlayground() {
           <button
             type="button"
             onClick={() => setHardwareMode("barbell")}
-            className={`text-xs font-mono px-3.5 py-1.5 rounded-full transition-all ${
+            aria-pressed={hardwareMode === "barbell"}
+            className={`text-xs font-mono px-4 py-2 rounded-full transition-all min-h-[44px] flex items-center ${
               hardwareMode === "barbell"
                 ? "bg-cyan-400 text-black font-semibold shadow-[0_0_12px_rgba(0,240,255,0.4)]"
-                : "text-slate-400 hover:text-white"
+                : "text-slate-300 hover:text-white"
             }`}
           >
             Barbell Mode (2.5 kg Base)
@@ -157,7 +163,11 @@ export function DumbbellPlayground() {
           </span>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div
+          role="group"
+          aria-label="Target weight presets"
+          className="flex flex-wrap gap-2"
+        >
           {presets.map((preset) => {
             const isSelected = targetWeight === preset;
             return (
@@ -165,7 +175,8 @@ export function DumbbellPlayground() {
                 key={preset}
                 type="button"
                 onClick={() => setTargetWeight(preset)}
-                className={`text-xs font-mono px-4 py-2 rounded-xl border transition-all ${
+                aria-pressed={isSelected}
+                className={`text-xs font-mono px-4 py-2 rounded-xl border transition-all min-h-[44px] flex items-center ${
                   isSelected
                     ? "border-cyan-400 bg-cyan-400 text-black font-semibold shadow-[0_0_15px_rgba(0,240,255,0.4)]"
                     : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:text-white"
@@ -180,11 +191,12 @@ export function DumbbellPlayground() {
 
       {/* Visual Symmetrical Plate Stack Diagram */}
       <div className="p-6 rounded-2xl border border-white/10 bg-black/60 shadow-inner flex flex-col items-center justify-center min-h-[220px] mb-6">
-        <div className="text-[11px] font-mono text-slate-400 mb-4 text-center">
+        <div className="text-xs font-mono text-slate-400 mb-4 text-center">
           Symmetrical Plate Loading Distribution (Left Sleeve • Handle Grip • Right Sleeve)
         </div>
 
-        <div className="flex items-center justify-center w-full max-w-xl px-2">
+        <div className="w-full overflow-x-auto no-scrollbar py-2 flex items-center justify-start sm:justify-center">
+          <div className="flex items-center justify-center min-w-max mx-auto px-2">
           {/* Left Collar */}
           <div className="w-3.5 h-10 rounded-sm bg-slate-500 border border-slate-300 shadow-md shrink-0 flex items-center justify-center text-[8px] font-mono text-black font-bold">
             C
@@ -232,8 +244,9 @@ export function DumbbellPlayground() {
             C
           </div>
         </div>
+      </div>
 
-        <div className="text-[11px] font-mono text-cyan-300 mt-5">
+        <div className="text-xs font-mono text-cyan-300 mt-5">
           {sleevePlates.length === 0 ? (
             <span>Base bar only (No plates required)</span>
           ) : (
@@ -250,7 +263,7 @@ export function DumbbellPlayground() {
         <div className="p-3 rounded-xl bg-white/5 border border-white/5">
           <span className="text-slate-400 block mb-1">Base Hardware</span>
           <span className="text-white font-semibold">{baseWeight.toFixed(2)} kg</span>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-xs text-slate-400 block mt-0.5">
             {hardwareMode === "dumbbell" ? "Handle (1.0kg) + Collars" : "Barbell (2.0kg) + Collars"}
           </span>
         </div>
@@ -260,7 +273,7 @@ export function DumbbellPlayground() {
           <span className="text-cyan-300 font-semibold">
             {(actualPerSleeveWeight * 2).toFixed(2)} kg
           </span>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-xs text-slate-400 block mt-0.5">
             {sleevePlates.length * 2} plates across 2 sleeves
           </span>
         </div>
@@ -270,7 +283,7 @@ export function DumbbellPlayground() {
           <span className="text-emerald-400 font-semibold">
             {sleevePlates.length} / 4 Slots
           </span>
-          <span className="text-[10px] text-slate-500 block mt-0.5">
+          <span className="text-xs text-slate-400 block mt-0.5">
             Safe spinlock thread clearance
           </span>
         </div>

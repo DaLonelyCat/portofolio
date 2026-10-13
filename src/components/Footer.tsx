@@ -10,7 +10,7 @@ export function Footer() {
           <div className="flex items-center justify-center gap-2">
             <span className="text-white font-normal">Christian Emanuel Ikajaya</span>
             <span>•</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[11px] text-cyan-400">
+            <span className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-xs text-cyan-400">
               © 2026
             </span>
           </div>
