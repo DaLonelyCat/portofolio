@@ -82,6 +82,10 @@ export const portfolioData: PortfolioData = {
           caption: "Local offline LLM agent interface powered by Ollama for restock checks, store queries, and sales summaries",
         },
       ],
+      liveUrl: "https://unicash.dalonelycat.site/",
+      previewUrl: "https://unicash.dalonelycat.site/",
+      repoUrl: "https://github.com/DaLonelyCat/UniCash",
+      status: "live",
       featured: true,
     },
     {
@@ -286,6 +290,39 @@ export const portfolioData: PortfolioData = {
       ],
       liveUrl: "https://fruqitamlg.vercel.app/",
       previewUrl: "https://fruqitamlg.vercel.app/",
+      status: "live",
+      featured: true,
+    },
+    {
+      id: "catree-link-hub",
+      title: "Catree Personal Link Hub",
+      tagline: "Custom-tailored alternative to Linktree engineered as a lightweight, zero-bloat personal link-in-bio hub.",
+      category: "Web App",
+      year: "2026",
+      overview:
+        "A lightweight, high-performance personal link tree and unified profile hub built with Astro as a self-hosted, custom-tailored alternative to Linktree for Christian (@DaLonelyCat). Connects personal projects, discord connections, and social presence without third-party tracker bloat.",
+      problem:
+        "Commercial link-in-bio services inject tracking scripts, heavy client runtime overhead, slow redirects, and restrictive branding tiers that compromise privacy and load speeds.",
+      solution:
+        "Engineered an Astro-powered, ultra-lightweight link hub featuring clean dark-mode ergonomics, instant client-side routing, zero-bloat asset footprint, and curated navigation to portfolio projects, Discord connections, and verified developer accounts.",
+      impact:
+        "Delivers instantaneous sub-second navigation across Christian's public web presence, centralizing portfolio showcases and social channels under a single fast, branded domain with complete data ownership.",
+      tags: ["Astro", "TypeScript", "Tailwind CSS", "Web Platform", "Link-in-Bio", "Personal Hub", "Zero-Bloat"],
+      screenshots: [
+        {
+          src: "/projects/catree-preview.png",
+          label: "Desktop Hub",
+          caption: "Personal link tree and connected profile hub with curated navigation",
+        },
+        {
+          src: "/projects/catree-mobile.png",
+          label: "Mobile View",
+          caption: "Responsive mobile-first card interface designed for high-density thumb navigation",
+        },
+      ],
+      liveUrl: "https://catree.dalonelycat.site/",
+      previewUrl: "https://catree.dalonelycat.site/",
+      repoUrl: "https://github.com/DaLonelyCat/Catree",
       status: "live",
       featured: true,
     },

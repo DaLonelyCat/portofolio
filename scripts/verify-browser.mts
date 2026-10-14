@@ -116,6 +116,9 @@ async function runBrowserTests() {
     const isScrolledHeader = await desktopPage.locator("header").evaluate((el) => el.classList.contains("pt-3") || el.classList.contains("sm:pt-4"));
     assert(isScrolledHeader, "Navbar fluidly transforms into floating glass capsule upon scrolling");
 
+    const bubbleIndicator = desktopPage.locator("nav[aria-label='Main Navigation'] span.animate-bacteria-pop");
+    assert((await bubbleIndicator.count()) > 0, "Navbar contains sliding bacteria bubble indicator with pop animation");
+
     // Test Category Filtering
     // Verify At a Glance in Hero
     const atAGlanceText = await desktopPage.locator("section#hero dl").innerText();
@@ -148,7 +151,7 @@ async function runBrowserTests() {
     await searchInput.fill("React");
     await desktopPage.waitForTimeout(300);
     const reactProjectsCount = await desktopPage.locator("section#projects article").count();
-    assert(reactProjectsCount > 0 && reactProjectsCount < 10, "Project search filter for 'React' isolates matching projects", `Found: ${reactProjectsCount}`);
+    assert(reactProjectsCount > 0 && reactProjectsCount < 11, "Project search filter for 'React' isolates matching projects", `Found: ${reactProjectsCount}`);
 
     await searchInput.fill("");
     await desktopPage.waitForTimeout(200);
@@ -167,13 +170,16 @@ async function runBrowserTests() {
     await desktopPage.waitForTimeout(300);
 
     const allProjectsCount = await desktopPage.locator("section#projects article").count();
-    assert(allProjectsCount === 10, "Category filter 'All' shows all 10 projects", `Total projects: ${allProjectsCount}`);
+    assert(allProjectsCount === 11, "Category filter 'All' shows all 11 projects", `Total projects: ${allProjectsCount}`);
 
     const fruqitaCard = desktopPage.locator("section#projects article:has-text('Fruqita Fruit Chips Storefront')");
     assert(await fruqitaCard.isVisible(), "Fruqita fruit chips storefront project card is visible");
 
     const nestfitCard = desktopPage.locator("section#projects article:has-text('NestFit Smart Workout Companion')");
     assert(await nestfitCard.isVisible(), "NestFit smart workout companion project card is visible");
+
+    const catreeCard = desktopPage.locator("section#projects article:has-text('Catree Personal Link Hub')");
+    assert(await catreeCard.isVisible(), "Catree personal link hub project card is visible");
 
     // Test Project Sort Toggle (Featured vs Newest First)
     console.log("\n--- Testing Project Sort Toggle ---");
@@ -199,6 +205,9 @@ async function runBrowserTests() {
 
     const modalTitle = await modalDialog.locator("#modal-title").innerText();
     assert(modalTitle.includes("UniCash POS System"), "Modal displays correct project title", modalTitle);
+
+    const unicashLiveBtn = modalDialog.locator("a:has-text('View Live')");
+    assert(await unicashLiveBtn.isVisible(), "UniCash modal renders 'View Live' button");
 
     const modalInner = await modalDialog.innerText();
     assert(!modalInner.includes("View Live / Download"), "Modal contains zero 'View Live / Download' text");

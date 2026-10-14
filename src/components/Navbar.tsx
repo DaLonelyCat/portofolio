@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PersonalInfo } from "../types/portfolio";
 
 interface NavbarProps {
@@ -12,6 +12,17 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [bubbleStyle, setBubbleStyle] = useState<{
+    left: number;
+    width: number;
+    height: number;
+    opacity: number;
+  }>({ left: 0, width: 0, height: 0, opacity: 0 });
+  const [popKey, setPopKey] = useState<number>(0);
+
+  const linkRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+  const isManualNavRef = useRef(false);
+  const manualNavTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navLinks = [
     { label: "Projects", href: "#projects", id: "projects" },
@@ -21,29 +32,98 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
     { label: "Contact", href: "#contact", id: "contact" },
   ];
 
+  // Update bacteria bubble geometry whenever activeSection changes
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    if (activeSection && linkRefs.current[activeSection]) {
+      const el = linkRefs.current[activeSection];
+      if (el) {
+        setBubbleStyle({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          height: el.offsetHeight,
+          opacity: 1,
+        });
+        setPopKey((k) => k + 1);
+      }
+    } else {
+      setBubbleStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  }, [activeSection]);
 
-      // Section tracking for active pill highlight
-      const scrollPosition = window.scrollY + 250;
-      const sectionIds = ["projects", "learning", "experience", "skills", "contact"];
-      
-      let current = "";
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el && el.offsetTop <= scrollPosition) {
-          current = sectionIds[i];
-          break;
+  // Handle window resize to keep bubble aligned
+  useEffect(() => {
+    const handleResize = () => {
+      if (activeSection && linkRefs.current[activeSection]) {
+        const el = linkRefs.current[activeSection];
+        if (el) {
+          setBubbleStyle({
+            left: el.offsetLeft,
+            width: el.offsetWidth,
+            height: el.offsetHeight,
+            opacity: 1,
+          });
         }
       }
-      setActiveSection(current);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeSection]);
+
+  // Robust, throttled section tracking with hysteresis
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const handleScroll = () => {
+      if (rafId !== null) return;
+
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+
+        setIsScrolled(window.scrollY > 20);
+
+        if (isManualNavRef.current) return;
+
+        // Top of page (Hero section)
+        if (window.scrollY < 160) {
+          setActiveSection("");
+          return;
+        }
+
+        // Bottom of page lock to Contact
+        const scrollBottom = window.innerHeight + window.scrollY;
+        const docHeight = document.documentElement.scrollHeight;
+        if (scrollBottom >= docHeight - 90) {
+          setActiveSection("contact");
+          return;
+        }
+
+        const sectionIds = ["projects", "learning", "experience", "skills", "contact"];
+        let matched = "";
+
+        for (const id of sectionIds) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 240 && rect.bottom >= 120) {
+            matched = id;
+            break;
+          }
+        }
+
+        if (matched) {
+          setActiveSection(matched);
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      if (manualNavTimeoutRef.current) clearTimeout(manualNavTimeoutRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,6 +136,17 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen]);
+
+  const handleNavClick = (id: string) => {
+    setActiveSection(id);
+    isManualNavRef.current = true;
+    if (manualNavTimeoutRef.current) {
+      clearTimeout(manualNavTimeoutRef.current);
+    }
+    manualNavTimeoutRef.current = setTimeout(() => {
+      isManualNavRef.current = false;
+    }, 800);
+  };
 
   return (
     <header
@@ -72,7 +163,7 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
             : "w-full max-w-full h-16 px-4 sm:px-8 lg:px-12 rounded-none border-b border-white/10 border-t-0 border-x-0 bg-[#05060A]/80 backdrop-blur-md md:backdrop-blur-xl shadow-none"
         }`}
       >
-        {/* Brand (Clean, no /station tag) */}
+        {/* Brand */}
         <a
           href="#"
           className="flex items-center gap-1.5 text-xs sm:text-sm font-mono tracking-tight text-white hover:text-cyan-400 transition-colors py-1.5 px-2 rounded-full min-h-[44px]"
@@ -81,21 +172,44 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
           <span className="font-medium text-white">{personal.name.toLowerCase()}</span>
         </a>
 
-        {/* Desktop Navigation Links (Frosted Glass Pill Rail with Active Highlight) */}
+        {/* Desktop Navigation Links (Frosted Glass Pill Rail with Bacteria Bubble Indicator) */}
         <nav
           aria-label="Main Navigation"
-          className="hidden md:flex items-center gap-1 bg-white/[0.04] backdrop-blur-md px-2 py-1 rounded-full border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+          className="relative hidden md:flex items-center gap-1 bg-white/[0.04] backdrop-blur-md px-2 py-1 rounded-full border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
         >
+          {/* Sliding Bacteria Bubble Indicator with Spring Pop Physics */}
+          <span
+            key={popKey}
+            aria-hidden="true"
+            className="pointer-events-none absolute rounded-full transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none animate-bacteria-pop"
+            style={{
+              left: `${bubbleStyle.left}px`,
+              width: `${bubbleStyle.width}px`,
+              height: `${bubbleStyle.height}px`,
+              opacity: bubbleStyle.opacity,
+              transform: bubbleStyle.opacity > 0 ? "scale(1)" : "scale(0.5)",
+            }}
+          >
+            {/* Bioluminescent bacteria bubble membrane and cyan glow */}
+            <span className="absolute inset-0 rounded-full bg-cyan-950/80 border border-cyan-400/60 shadow-[0_0_14px_rgba(0,240,255,0.35),_inset_0_0_10px_rgba(0,240,255,0.25)]" />
+            {/* Cellular surface tension highlight */}
+            <span className="absolute inset-x-2 top-0.5 h-[1.5px] rounded-full bg-gradient-to-r from-transparent via-cyan-200/80 to-transparent" />
+          </span>
+
           {navLinks.map((link) => {
             const isActive = activeSection === link.id;
             return (
               <a
                 key={link.href}
+                ref={(el) => {
+                  linkRefs.current[link.id] = el;
+                }}
                 href={link.href}
-                className={`text-xs font-mono transition-all px-3.5 py-1 rounded-full ${
+                onClick={() => handleNavClick(link.id)}
+                className={`relative z-10 text-xs font-mono px-3.5 py-1 rounded-full select-none transition-colors duration-200 border border-transparent ${
                   isActive
-                    ? "text-cyan-400 bg-cyan-950/60 border border-cyan-500/40 shadow-[0_0_10px_rgba(0,240,255,0.2)]"
-                    : "text-slate-300 hover:text-cyan-400 hover:bg-cyan-950/40"
+                    ? "text-cyan-300 font-medium drop-shadow-[0_0_8px_rgba(0,240,255,0.7)]"
+                    : "text-slate-300 hover:text-cyan-300"
                 }`}
               >
                 {link.label}
@@ -163,11 +277,14 @@ export function Navbar({ personal, onPrintCV }: NavbarProps) {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`block text-sm font-mono px-4 py-3 rounded-xl transition-all min-h-[44px] flex items-center ${
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setActiveSection(link.id);
+                }}
+                className={`block text-sm font-mono px-4 py-3 rounded-xl transition-all min-h-[44px] flex items-center border ${
                   isActive
-                    ? "text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 font-medium"
-                    : "text-white hover:text-cyan-400 hover:bg-cyan-950/30"
+                    ? "text-cyan-400 bg-cyan-950/60 border-cyan-500/30 font-medium"
+                    : "text-white border-transparent hover:text-cyan-400 hover:bg-cyan-950/30"
                 }`}
               >
                 {link.label}
