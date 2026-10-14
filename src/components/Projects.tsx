@@ -128,9 +128,9 @@ export function Projects({ projects, categories }: ProjectsProps) {
               <div
                 role="group"
                 aria-label="Technology stack filters"
-                className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5"
+                className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 mask-edge-fade"
               >
-                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider shrink-0 mr-1 pl-1">
                   Stack:
                 </span>
                 {POPULAR_TAGS.map((tag) => {

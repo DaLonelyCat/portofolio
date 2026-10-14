@@ -2,19 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-interface NavigatorWithHints extends Navigator {
-  deviceMemory?: number;
-  connection?: { saveData?: boolean };
-}
-
 /**
  * Decides whether the heavy visuals (WebGL solar system and rocket plume canvas)
- * should be skipped. Conservative on purpose so normal laptops keep the full experience.
+ * should be skipped.
  *
- * Lite mode turns on for: reduced-motion preference, Data Saver, very low
- * memory (2 GB or less) or very few CPU cores (2 or less).
+ * Reduced-motion is handled natively inside SolarSystemBackground to keep the
+ * celestial visuals visible in a calm, static state rather than a blank screen.
  *
- * `?lite=1` forces it on and `?lite=0` forces it off, which is handy for testing.
+ * `?lite=1` forces lite mode on and `?lite=0` forces it off.
  */
 export function detectLiteMode(): boolean {
   if (typeof window === "undefined") return false;
@@ -23,19 +18,12 @@ export function detectLiteMode(): boolean {
   if (override === "1") return true;
   if (override === "0") return false;
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
-
-  const nav = navigator as NavigatorWithHints;
-  if (nav.connection?.saveData) return true;
-  if (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 2) return true;
-  if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 2) return true;
-
   return false;
 }
 
-/** Returns null until the client has checked, so heavy scenes never mount and then unmount. */
-export function useLiteMode(): boolean | null {
-  const [lite, setLite] = useState<boolean | null>(null);
+/** Initializes to false so WebGL and space visuals mount immediately without blank delay. */
+export function useLiteMode(): boolean {
+  const [lite, setLite] = useState<boolean>(false);
 
   useEffect(() => {
     setLite(detectLiteMode());

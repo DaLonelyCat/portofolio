@@ -47,9 +47,9 @@ export function SolarSystemBackground() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       48,
-      window.innerWidth / window.innerHeight,
+      window.innerWidth / Math.max(window.innerHeight, 1),
       0.1,
-      250
+      1000
     );
 
     // Spherical Orbit Coordinates locked to the Sun at (0, 0, 0)
@@ -64,16 +64,21 @@ export function SolarSystemBackground() {
     );
     camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: !isMobile,
-      powerPreference: "high-performance",
-    });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
-    renderer.setClearColor(0x000000, 0);
-    container.appendChild(renderer.domElement);
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: !isMobile,
+        powerPreference: "high-performance",
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
+      renderer.setClearColor(0x000000, 0);
+      container.appendChild(renderer.domElement);
+    } catch (e) {
+      console.warn("WebGL initialization failed:", e);
+      return;
+    }
 
     // Disposables tracking for robust cleanup
     const disposables: { dispose: () => void }[] = [];
@@ -552,21 +557,24 @@ export function SolarSystemBackground() {
 
     // Animation Loop: Isometric planetary revolution with interactive orbiting camera
     let animationFrameId: number;
-    const clock = new THREE.Clock();
+    let lastTimestamp = performance.now();
+    let elapsed = 0;
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       if (!isVisible) return;
 
-      const delta = clock.getDelta();
-      const elapsed = clock.getElapsedTime();
+      const now = performance.now();
+      const delta = Math.min((now - lastTimestamp) / 1000, 0.1);
+      lastTimestamp = now;
+      elapsed += delta;
 
       // Update Starfield GPU Twinkling
       starShaderMat.uniforms.uTime.value = elapsed;
 
       // Update Camera Spherical Orbit (Camera strictly locked to orbiting the Sun at (0, 0, 0))
       targetLookAt.set(0, 0, 0);
-      currentLookAt.lerp(targetLookAt, delta * 3.0);
+      currentLookAt.lerp(targetLookAt, Math.min(1, delta * 3.0));
 
       if (!isDragging) {
         if (Math.abs(velocityTheta) > 0.00005 || Math.abs(velocityPhi) > 0.00005) {
@@ -583,7 +591,7 @@ export function SolarSystemBackground() {
       const targetCamY = orbitRadius * Math.cos(orbitPhi);
       const targetCamZ = orbitRadius * Math.sin(orbitPhi) * Math.cos(orbitTheta);
 
-      camera.position.lerp(tempTargetPos.set(targetCamX, targetCamY, targetCamZ), delta * 2.8);
+      camera.position.lerp(tempTargetPos.set(targetCamX, targetCamY, targetCamZ), Math.min(1, delta * 2.8));
       camera.lookAt(currentLookAt);
 
       // Starfield warp speed acceleration
@@ -698,12 +706,14 @@ export function SolarSystemBackground() {
       window.removeEventListener("rocket-hyperdrive-start", handleWarpStart);
       window.removeEventListener("rocket-hyperdrive-end", handleWarpEnd);
 
-      if (container && renderer.domElement) {
-        container.removeChild(renderer.domElement);
+      if (renderer) {
+        if (container && renderer.domElement && container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
+        renderer.dispose();
       }
 
       disposables.forEach((item) => item.dispose());
-      renderer.dispose();
     };
   }, []);
 
@@ -712,8 +722,8 @@ export function SolarSystemBackground() {
       aria-hidden="true"
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden no-print"
     >
-      {/* 3D Isometric Solar System Canvas (High visibility 90% opacity) */}
-      <div ref={containerRef} className="absolute inset-0 opacity-90" />
+      {/* 3D Isometric Solar System Canvas (High visibility 100% opacity) */}
+      <div ref={containerRef} className="absolute inset-0 opacity-100" />
 
       {/* Subtle depth vignette wash preserving text contrast without hiding 3D space */}
       <div className="absolute inset-0 bg-[#05060A]/35 pointer-events-none" />

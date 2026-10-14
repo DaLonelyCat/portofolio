@@ -27,8 +27,7 @@ const SolarSystemBackground = dynamic(
 export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
-  // null until the client has checked, so WebGL scenes never mount then unmount.
-  // true on low-power devices or reduced-motion users (see lib/liteMode.ts).
+  // true only when forced via ?lite=1 URL query parameter (see lib/liteMode.ts).
   const lite = useLiteMode();
 
   const showToast = (message: string) => {

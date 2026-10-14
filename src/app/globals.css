@@ -53,6 +53,7 @@ body {
 /* Deep space restrained scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: #05060A;
@@ -63,6 +64,23 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #00F0FF;
+}
+
+/* Cross-browser scrollbar suppression utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Horizontal scroll edge fade mask for chip rails */
+.mask-edge-fade {
+  mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
 }
 
 /* GPU layer promotion for smooth scrolling over WebGL space canvas */
@@ -105,7 +123,7 @@ body {
   }
 }
 
-/* Lite mode: lightweight static starfield replaces the WebGL solar system */
+/* Lite mode: lightweight static starfield with central radiant solar aura */
 .static-starfield {
   position: fixed;
   inset: 0;
@@ -113,6 +131,7 @@ body {
   pointer-events: none;
   background-color: #05060d;
   background-image:
+    radial-gradient(circle at 50% 36%, rgba(255, 186, 8, 0.22), rgba(255, 107, 0, 0.08) 30%, transparent 62%),
     radial-gradient(1.5px 1.5px at 8% 14%, rgba(255, 255, 255, 0.9), transparent),
     radial-gradient(1px 1px at 17% 62%, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(1.5px 1.5px at 26% 33%, rgba(0, 240, 255, 0.8), transparent),
