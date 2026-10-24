@@ -151,7 +151,7 @@ async function runBrowserTests() {
     await searchInput.fill("React");
     await desktopPage.waitForTimeout(300);
     const reactProjectsCount = await desktopPage.locator("section#projects article").count();
-    assert(reactProjectsCount > 0 && reactProjectsCount < 11, "Project search filter for 'React' isolates matching projects", `Found: ${reactProjectsCount}`);
+    assert(reactProjectsCount > 0 && reactProjectsCount < 12, "Project search filter for 'React' isolates matching projects", `Found: ${reactProjectsCount}`);
 
     await searchInput.fill("");
     await desktopPage.waitForTimeout(200);
@@ -170,7 +170,10 @@ async function runBrowserTests() {
     await desktopPage.waitForTimeout(300);
 
     const allProjectsCount = await desktopPage.locator("section#projects article").count();
-    assert(allProjectsCount === 11, "Category filter 'All' shows all 11 projects", `Total projects: ${allProjectsCount}`);
+    assert(allProjectsCount === 12, "Category filter 'All' shows all 12 projects", `Total projects: ${allProjectsCount}`);
+
+    const flysimCard = desktopPage.locator("section#projects article:has-text('Drosophila Connectome')");
+    assert(await flysimCard.isVisible(), "Drosophila Connectome Multi-Agent Simulation project card is visible");
 
     const fruqitaCard = desktopPage.locator("section#projects article:has-text('Fruqita Fruit Chips Storefront')");
     assert(await fruqitaCard.isVisible(), "Fruqita fruit chips storefront project card is visible");
@@ -240,6 +243,23 @@ async function runBrowserTests() {
     assert(await fruqitaIframe.isVisible(), "Sandboxed Live Preview iframe mounts and displays storefront");
     const iframeSandbox = await fruqitaIframe.getAttribute("sandbox");
     assert(iframeSandbox !== null && iframeSandbox.includes("allow-scripts"), "Live Preview iframe enforces sandboxed security attributes", iframeSandbox || "");
+
+    await desktopPage.keyboard.press("Escape");
+    await desktopPage.waitForTimeout(300);
+
+    // Test FlySim Live Preview Tab with Sandboxed Iframe
+    const flysimDetailsBtn = desktopPage.locator("section#projects article:has-text('Drosophila Connectome') button:has-text('View Details')").first();
+    await flysimDetailsBtn.scrollIntoViewIfNeeded();
+    await flysimDetailsBtn.click();
+    await desktopPage.waitForTimeout(400);
+
+    const flysimLivePreviewTab = modalDialog.locator("button:has-text('Live Preview')");
+    assert(await flysimLivePreviewTab.isVisible(), "FlySim modal features 'Live Preview' tab");
+    await flysimLivePreviewTab.click();
+    await desktopPage.waitForTimeout(300);
+
+    const flysimIframe = modalDialog.locator("iframe[src='https://flysim.dalonelycat.site/']");
+    assert(await flysimIframe.isVisible(), "Sandboxed Live Preview iframe mounts and displays FlySim simulation");
 
     await desktopPage.keyboard.press("Escape");
     await desktopPage.waitForTimeout(300);

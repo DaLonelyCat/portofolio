@@ -31,6 +31,44 @@ export const portfolioData: PortfolioData = {
 
   projects: [
     {
+      id: "flysim-connectome",
+      title: "Drosophila Connectome Multi-Agent Simulation",
+      tagline: "Interactive multi-agent neuro-simulation driven by 1.19M synapses from the Google DeepMind and Janelia fruit fly connectome.",
+      category: "AI & Machine Learning",
+      year: "2026",
+      overview:
+        "A real-time neuro-computational multi-agent simulation powered by the Google DeepMind and Janelia Male Central Nervous System (CNS) Connectome dataset (male-cns:v1.0). Synthesizes 1,193,723 synaptic connections across 9,398 neurons into functional sensory, central complex (CX_EPG, CX_FB), mushroom body (MB_KC, MB_MBON), and descending motor pathways (DN_WALK, DN_SONG, DN_LUNGE, DN_ESCAPE). Multiple synthetic flies (Romeo, Brawler, Glutton, Skittish, Zen, Cleopatra) navigate a dynamic 2D arena with individual dopamine, octopamine, and serotonin neurochemical profiles, exhibiting emergent behaviors including foraging, courtship songs, territorial aggression, and evasive flight.",
+      problem:
+        "Petabyte-scale connectome datasets like the DeepMind/Janelia fruit fly connectome are typically trapped in static offline graph databases or bulky academic tools, making it difficult for developers and researchers to interactively observe how biological circuit wiring translates into real-time multi-agent behavior in the browser.",
+      solution:
+        "Engineered a high-performance Python and FastAPI backend featuring WebSocket streaming, NumPy-accelerated ring attractor and associative learning networks, and synthetic neurochemical modulation. Designed a 60 FPS HTML5 Canvas arena interface with real-time fly telemetry, stream-of-consciousness thought bubbles, optogenetic stimulus triggers, and mutant genetics controls.",
+      impact:
+        "Demonstrates how authentic connectomic wiring maps drive coherent emergent behaviors in synthetic multi-agent systems, bridging high-end computational neuroscience with modern, accessible web technologies.",
+      tags: [
+        "Python",
+        "FastAPI",
+        "WebSockets",
+        "HTML5 Canvas",
+        "Multi-Agent AI",
+        "Neuroscience",
+        "DeepMind Connectome",
+        "NumPy",
+        "Docker",
+      ],
+      screenshots: [
+        {
+          src: "/projects/flysim-preview.png",
+          label: "Connectome Arena & Telemetry",
+          caption: "Real-time 60 FPS simulation arena with multi-agent neural states, thought streams, and optogenetic controls",
+        },
+      ],
+      liveUrl: "https://flysim.dalonelycat.site/",
+      previewUrl: "https://flysim.dalonelycat.site/",
+      repoUrl: "https://github.com/DaLonelyCat/fruitfly_simulations",
+      status: "live",
+      featured: true,
+    },
+    {
       id: "unicash-pos",
       title: "UniCash POS System",
       tagline: "Point of sale and financial accounting software engineered for Fruqita retail and beverage operations.",
